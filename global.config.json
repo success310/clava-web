@@ -1,0 +1,6 @@
+{
+  "baseurl": "https://app.clava-sports.com",
+  "imgUrl": "https://api.calva-sports.com",
+  "port": "9001",
+  "upload": true
+}
