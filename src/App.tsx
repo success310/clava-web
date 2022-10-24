@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { LanguageLocaleEnum } from './client/api';
 import { fb, initFb } from './config/firebase';
@@ -9,7 +9,7 @@ import Loading from './views/components/Loading';
 
 import './scss/style.scss';
 import { ClavaRootContextType } from './config/types';
-import Main from './views/screens/Main';
+import Main from './views/navigation/Main';
 import { store } from './store';
 
 function isInitialized(c: ClavaRootContextType): boolean {
@@ -48,12 +48,15 @@ const App: React.FC = () => {
     if (theme === 'dark' || theme === 'light')
       setRootContext((c) => ({ ...c, theme }));
   }, []);
-
+  const onAoiChange = useCallback((aoi) => {
+    localStorage.setItem(AS_AOI, aoi.toString());
+    setRootContext((rc) => ({ ...rc, aoi }));
+  }, []);
   if (!isInitialized(rootContext)) return <Loading />;
   return (
     <ClavaRootContext.Provider value={rootContext}>
       <Provider store={store}>
-        <Main />
+        <Main setAoi={onAoiChange} />
       </Provider>
     </ClavaRootContext.Provider>
   );

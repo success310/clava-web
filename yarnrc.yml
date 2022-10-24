@@ -1,0 +1,5 @@
+npmScopes:
+  fortawesome:
+    npmAlwaysAuth: true
+    npmAuthToken: "5769746B-4B86-4F76-9B2F-4117B793F8A9"
+    npmRegistryServer: "https://npm.fontawesome.com/"

@@ -36,5 +36,6 @@ module.exports = {
     '@babel/plugin-transform-runtime',
     '@babel/plugin-transform-modules-commonjs',
     'jsx-control-statements',
+    'macros',
   ],
 };
