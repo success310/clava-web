@@ -1,10 +1,13 @@
 import React from 'react';
+import { ClavaContextType, ClavaRootContextType } from './types';
 import { LanguageLocaleEnum } from '../client/api';
-import { ClavaRootContextType } from './types';
 
 export const ClavaRootContext = React.createContext<ClavaRootContextType>({
-  l: LanguageLocaleEnum.DE,
-  aoi: -1,
   theme: 'dark',
   fbToken: '',
+  initialized: false,
+});
+export const ClavaContext = React.createContext<ClavaContextType>({
+  l: LanguageLocaleEnum.DE,
+  aoi: -1,
 });

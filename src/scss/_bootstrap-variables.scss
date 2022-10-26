@@ -5,16 +5,25 @@
 
 $white: #fff !default;
 
-$gray-100: #deecf9 !default;
-$gray-200: #bdd9f3 !default;
-$gray-300: #add0f0 !default;
-$gray-400: #6baae4 !default;
-$gray-500: #5190cb !default;
-$gray-600: #3f709e !default;
-$gray-700: #2d5071 !default;
-$gray-800: #1b3043 !default;
-$gray-900: #091016 !default;
-
+$primary-100: #deecf9 !default;
+$primary-200: #bdd9f3 !default;
+$primary-300: #add0f0 !default;
+$primary-400: #6baae4 !default;
+$primary-500: #5190cb !default;
+$primary-600: #3f709e !default;
+$primary-700: #2d5071 !default;
+$primary-800: #1b3043 !default;
+$primary-900: #091016 !default;
+$gray-100: #f8f9fa !default;
+$gray-200: #e9ecef !default;
+$gray-300: #dee2e6 !default;
+$gray-400: #ced4da !default;
+$gray-500: #adb5bd !default;
+$gray-600: #6c757d !default;
+$gray-700: #495057 !default;
+$gray-800: #343a40 !default;
+$gray-900: #212529 !default;
+$gray-950: #111519 !default;
 $black: #000 !default;
 
 $blue: #20a8d8 !default;
@@ -73,7 +82,12 @@ $enable-rounded: false;
 // Body
 //
 // Settings for the `<body>` element.
-
+$nav-link-color: $white !default;
+$navbar-dark-color: $white !default;
+$navbar-light-color: $white !default;
+$navbar-toggler-focus-width: 0;
+$modal-content-bg: $gray-900;
+$modal-content-border-width: 0;
 $body-bg: $black !default;
 $body-color: $white !default;
 $border-radius: 0.75rem !default;

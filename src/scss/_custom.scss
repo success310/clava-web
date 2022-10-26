@@ -1,7 +1,198 @@
 * {
-  transition: background-color 1s ease;
+  //transition: background-color 1s ease;
+}
+span, p{
+  font-family: "Lexend ExtraLight", sans-serif;
+  font-weight: 200;
+  color: $white;
+}
+h1, h2, h3, h4, h5, h6{
+  font-family: "Lexend SemiBold", sans-serif;
+  font-weight: 600;
+  color: $white;
+}
+bold, strong {
+  font-family: "Lexend Regular", sans-serif;
+  font-weight: 400;
 }
 
+.main{
+  padding: 2rem;
+}
 button {
   border-radius: var(--bs-btn-border-radius);
+}
+.logo, .logo-vertical{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  margin: 2rem;
+  img{
+    max-width: 200px;
+  }
+}
+
+.spacer{
+  margin: 1rem 0;
+}
+
+.picker{
+  background: $black;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  width: 100%;
+  border:1px solid $primary;
+  position: relative;
+
+  svg{
+    position: absolute;
+    right: 1rem;
+    top: 0.65rem
+  }
+  .options{
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    border:1px solid $primary;
+    border-top-width: 0;
+    opacity: 0;
+    border-image-outset: 1;
+    border-bottom-left-radius: 2rem;
+    border-bottom-right-radius: 2rem;
+    margin: 0 -1px;
+    max-height: 0;
+    background-color: black;
+    display: none;
+  }
+  .option{
+    width: 100%;
+    overflow: hidden;
+    padding: 0.5rem 1rem;
+    color: $white;
+    background-color: transparent;
+    border-color: transparent;
+    border-top: 1px dotted $primary;
+    border-radius: 0;
+    transition: height,opacity 1s linear;
+    &:hover{
+      color: $primary;
+    }
+  }
+  &:hover, &:active, &:focus{
+    border-color: $primary !important;
+
+  }
+  &.open{
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-width: 0;
+    color: $gray-700 !important;
+    .options {
+      max-height: 300rem;
+      opacity: 1;
+      display: block;
+    }
+    svg{
+      top: 0.75rem
+    }
+  }
+}
+
+.btn-secondary{
+  background-color: transparent;
+  border-color: $primary;
+}
+
+.header{
+  position: fixed;
+  top:0;
+  height: 7rem;
+  width: 100%;
+  padding: 0 2rem;
+  border-bottom: 1px solid $gray-900;
+  .logo{
+    display: inline-block;
+    margin: 0.5rem;
+  }
+  .nav-link{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    svg{
+      margin-right: 0.5rem;
+      font-size: 1.5em;
+      color: $gray-600;
+    }
+  }
+}
+
+.sidebar{
+  background-color: $gray-900;
+  flex-direction: column;
+  width: 400px;
+  top: 7rem;
+  transform: translateX(-400px);
+  transition: transform 0.25s linear;
+  &.show{
+    transform: translateX(0);
+  }
+  .navbar-vertical{
+    .container-fluid {
+      flex-direction: column;
+      align-items: stretch;
+      .nav-link{
+        margin: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        svg{
+          margin-right: 0.5rem;
+          font-size: 1.5em;
+          color: $gray-600;
+          flex: 1;
+        }
+        span{
+          flex: 5;
+        }
+      }
+    }
+  }
+}
+
+.content{
+  width: 100%;
+  margin-top: 7rem;
+}
+
+
+
+@media (max-width: 420px) {
+  .first-open{
+    .position-absolute{
+      position: relative !important;
+    }
+  }
+}
+
+@media (min-width: 420px) {
+  .first-open{
+    &:after{
+      content: ' ';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 20rem;
+      height: 7rem;
+      border-bottom:7rem solid $primary;
+      border-left:20rem solid $primary;
+      border-top:7rem solid transparent;
+      border-right:20rem solid transparent;
+    }
+  }
+}@media (min-width: 1600px) {
+  .header{
+    padding-right: calc(100% - 1600px);
+  }
 }

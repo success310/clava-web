@@ -1,5 +1,13 @@
 import * as Sentry from '@sentry/react';
 import { DateTimeFormat } from 'intl';
+import {
+  browserName,
+  isMobile,
+  mobileModel,
+  mobileVendor,
+  osName,
+  osVersion,
+} from 'react-device-detect';
 import { CollectionType, IDType, LanguageISO } from './types';
 import {
   CardEvent,
@@ -10,6 +18,7 @@ import {
   GoalEvent,
   Group,
   GroupEnum,
+  LanguageLocaleEnum,
   League,
   LeagueListElement,
   LineupPosition,
@@ -558,4 +567,25 @@ export function getMainLeague<T extends League | LeagueListElement>(
 
 export function isTeam(elem: Translatable): elem is Team {
   return 'leagues' in elem;
+}
+
+export function getDeviceInfo(): Record<string, string> {
+  return {
+    brand: isMobile ? mobileVendor : osName,
+    buildNumber: '',
+    model: isMobile ? mobileModel : osVersion,
+    modelAlt: browserName,
+    systemName: osName,
+    systemVersion: osVersion,
+    version: '',
+    type: isMobile ? 'Mobile' : 'Desktop',
+    userAgent: navigator.userAgent,
+  };
+}
+
+export function browserLang(): LanguageLocaleEnum {
+  return navigator.language === LanguageLocaleEnum.IT ||
+    navigator.language === LanguageLocaleEnum.DE
+    ? navigator.language
+    : LanguageLocaleEnum.EN;
 }

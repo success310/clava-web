@@ -52,9 +52,14 @@ const generalKeywords = {
     it: 'Whoops',
     en: 'Whoops',
   },
+  chooseLanguage: {
+    de: 'Sprache wählen',
+    it: 'Seleziona lingua',
+    en: 'Choose language',
+  },
   chooseProvince: {
     de: 'Provinz wählen',
-    it: 'Provinz wählen',
+    it: 'Seleziona provincia',
     en: 'Choose province',
   },
   no_user_found: {
@@ -93,9 +98,9 @@ const generalKeywords = {
     en: '-- Choose --',
   },
   first_open: {
-    de: 'Das erste mal hier',
-    it: 'Prima volta qui',
-    en: 'First open',
+    de: 'Willkommen auf Clava-Sports, Sie sind das erste mal hier? Zwei kurze schritte bevor wir beginnen:',
+    it: 'Benvenuto in Clava-Sports, sei qui per la prima volta? Due rapidi passaggi prima di iniziare:',
+    en: 'Welcome to Clava-Sports, are you here for the first time? Two quick steps before we begin:',
   },
   error_occurred: {
     de: 'Ups... da ist ein Fehler aufgetreten!',

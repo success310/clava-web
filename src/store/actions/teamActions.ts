@@ -1,8 +1,8 @@
-import {Action, Dispatch} from 'redux';
+import { Action, Dispatch } from 'redux';
 import client from '../../client';
-import {IDType} from '../../config/types';
-import {defaultGet, fetchError} from './all';
-import {TeamActions, TeamActionTypes} from './types';
+import { IDType } from '../../config/types';
+import { defaultGet, fetchError } from './all';
+import { TeamActions, TeamActionTypes } from './types';
 import {
   LocationCreate,
   PlayerCreate,
@@ -12,7 +12,7 @@ import {
   StatisticKeyEnum,
   TeamPatch,
 } from '../../client/api';
-import {numberedHash} from '../../config/utils';
+import { numberedHash } from '../../config/utils';
 
 export function fetchTeamsOfLeague(
   dispatch: Dispatch<TeamActions>,
@@ -25,7 +25,7 @@ export function fetchTeamsOfLeague(
     TeamActionTypes.FETCH_TEAMS_OF_LEAGUE,
     client().getTeamsOfLeague,
     false,
-    {id},
+    { id },
     id,
   );
 }
@@ -47,7 +47,7 @@ export function searchTeamAutocomplete(
   dispatch: Dispatch<Action<TeamActionTypes>>,
   query: string,
 ) {
-  if (query === '') dispatch({type: TeamActionTypes.TEAM_FOUND, payload: []});
+  if (query === '') dispatch({ type: TeamActionTypes.TEAM_FOUND, payload: [] });
   else {
     defaultGet(
       dispatch,
@@ -69,7 +69,7 @@ export function fetchPlayers(dispatch: Dispatch<TeamActions>, id: IDType) {
     TeamActionTypes.FETCH_PLAYERS,
     client().getPlayersOfTeam,
     false,
-    {id},
+    { id },
     id,
   );
 }
@@ -100,7 +100,7 @@ export function patchPlayer(
     TeamActionTypes.FETCH_PLAYER,
     client().patchPlayer,
     false,
-    {id: teamId},
+    { id: teamId },
     playerID,
     player,
   );
@@ -112,14 +112,14 @@ export function patchPlayerSquad(
   teamId: IDType,
   player: PlayerPatch,
 ) {
-  dispatch({type: TeamActionTypes.FETCH_SQUAD});
+  dispatch({ type: TeamActionTypes.FETCH_SQUAD });
   client()
     .patchPlayer(playerID, player)
     .then(
-      _ => {
+      () => {
         getSquad(dispatch, teamId);
       },
-      e => fetchError(e, TeamActionTypes.FETCH_ERROR, dispatch),
+      (e) => fetchError(e, TeamActionTypes.FETCH_ERROR, dispatch),
     );
 }
 
@@ -129,15 +129,15 @@ export function doTransfer(
   teamId: IDType,
   newTeamId: IDType,
 ) {
-  dispatch({type: TeamActionTypes.FETCH_SQUAD});
+  dispatch({ type: TeamActionTypes.FETCH_SQUAD });
   client()
     .doTransfer(playerId, teamId, newTeamId)
     .then(
-      _ => {
+      () => {
         getSquad(dispatch, teamId);
         getSquad(dispatch, newTeamId);
       },
-      e => fetchError(e, TeamActionTypes.FETCH_ERROR, dispatch),
+      (e) => fetchError(e, TeamActionTypes.FETCH_ERROR, dispatch),
     );
 }
 export function addPlayer(
@@ -145,14 +145,14 @@ export function addPlayer(
   teamID: IDType,
   playerPost: PlayerCreate,
 ) {
-  dispatch({type: TeamActionTypes.FETCH_SQUAD});
+  dispatch({ type: TeamActionTypes.FETCH_SQUAD });
   client()
     .addPlayer(playerPost)
     .then(
-      _ => {
+      () => {
         getSquad(dispatch, teamID);
       },
-      e => fetchError(e, TeamActionTypes.FETCH_ERROR, dispatch),
+      (e) => fetchError(e, TeamActionTypes.FETCH_ERROR, dispatch),
     );
 }
 export function removePlayer(
@@ -160,14 +160,14 @@ export function removePlayer(
   teamID: IDType,
   playerID: IDType,
 ) {
-  dispatch({type: TeamActionTypes.FETCH_SQUAD});
+  dispatch({ type: TeamActionTypes.FETCH_SQUAD });
   client()
     .removePlayer(playerID)
     .then(
-      _ => {
+      () => {
         getSquad(dispatch, teamID);
       },
-      e => fetchError(e, TeamActionTypes.FETCH_ERROR, dispatch),
+      (e) => fetchError(e, TeamActionTypes.FETCH_ERROR, dispatch),
     );
 }
 
@@ -194,7 +194,7 @@ export function getSquad(
     TeamActionTypes.FETCH_SQUAD,
     client().getSquad,
     false,
-    {id},
+    { id },
     id,
   );
 }
@@ -210,7 +210,7 @@ export function fetchTeamStatistics(
     TeamActionTypes.FETCH_STATISTICS,
     client().getTeamStatistics,
     false,
-    {id},
+    { id },
     id,
   );
 }
@@ -227,7 +227,7 @@ export function fetchTeamStatisticsDetail(
     TeamActionTypes.FETCH_STATISTICS,
     client().getTeamStatisticsDetail,
     false,
-    {id, date: numberedHash(key)},
+    { id, date: numberedHash(key) },
     id,
     key,
   );
@@ -263,7 +263,7 @@ export function addSponsor(
     TeamActionTypes.ADD_SPONSOR,
     client().addSponsor,
     false,
-    {id},
+    { id },
     id,
     body,
   );
@@ -301,7 +301,7 @@ export function patchSponsor(
     TeamActionTypes.ADD_SPONSOR,
     client().patchSponsor,
     false,
-    {id: teamId},
+    { id: teamId },
     sponsorId,
     body,
   );
@@ -319,7 +319,7 @@ export function removeSponsor(
     TeamActionTypes.REMOVE_SPONSOR,
     client().removeSponsor,
     false,
-    {id: teamId},
+    { id: teamId },
     sponsorId,
   );
 }

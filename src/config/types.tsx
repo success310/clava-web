@@ -67,10 +67,14 @@ export declare type Notification = {
 };
 
 export declare type ClavaRootContextType = {
-  l: LanguageLocaleEnum;
-  aoi: IDType;
   theme: 'dark' | 'light';
   fbToken: string | null;
+  initialized: boolean;
+};
+
+export declare type ClavaContextType = {
+  l: LanguageLocaleEnum;
+  aoi: IDType;
 };
 
 export declare type PlayerInFocusMatch = {

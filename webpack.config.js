@@ -8,6 +8,9 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.css', '.scss'],
   },
+  watchOptions: {
+    aggregateTimeout: 500,
+  },
   module: {
     rules: [
       {

@@ -1,8 +1,8 @@
-import {Action, Dispatch} from 'redux';
+import { Action, Dispatch } from 'redux';
 import client from '../../client';
-import {IDType} from '../../config/types';
-import {defaultGet} from './all';
-import {StandingActionTypes} from './types';
+import { IDType } from '../../config/types';
+import { defaultGet } from './all';
+import { StandingActionTypes } from './types';
 
 export function fetchByLeague(
   dispatch: Dispatch<Action<StandingActionTypes>>,
@@ -15,7 +15,7 @@ export function fetchByLeague(
     StandingActionTypes.FETCH_BY_LEAGUE,
     client().getTable,
     false,
-    {id: leagueID},
+    { id: leagueID },
     leagueID,
   );
 }

@@ -125,6 +125,7 @@ const reducer: Reducer<UserState> = (
         userStatus: 'ok',
         value: action.payload,
         areaOfInterest: action.payload.areaOfInterest,
+        language: action.payload.language,
         error: null,
       };
     }

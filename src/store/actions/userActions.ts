@@ -14,32 +14,6 @@ import {
   AS_LANG,
 } from '../../config/constants';
 
-export function fetchMe(dispatch: Dispatch<Action<UserActionTypes>>): Action {
-  if (client().loggedIn()) {
-    client()
-      .me()
-      .then(
-        (response) => {
-          client().setLang(response.language.locale);
-          dispatch({
-            type: UserActionTypes.FETCH_SUCCESS,
-            payload: response,
-          });
-        },
-        () => {
-          dispatch({
-            type: UserActionTypes.UNAUTHORIZED,
-          });
-        },
-      );
-    return dispatch({ type: UserActionTypes.FETCH_ME });
-  }
-  return dispatch({
-    type: UserActionTypes.FETCH_ERROR,
-    payload: 'not_registered',
-  });
-}
-
 export function register(
   dispatch: Dispatch<Action<UserActionTypes>>,
   user: UserCreate,
@@ -68,7 +42,7 @@ export function refreshToken(
           payload: response,
         });
       },
-      (error) => {
+      () => {
         const res = window.localStorage.getItem('user_login_required');
         if (res) {
           dispatch({
@@ -95,7 +69,7 @@ export function initBaseData(
   const favorites = window.localStorage.getItem(AS_FAVORITES);
   const language = window.localStorage.getItem(AS_LANG);
   dispatch({ type: UserActionTypes.GET_BASE_DATA });
-  if (aoi && favorites && language) {
+  if (aoi && language) {
     client()
       .getAoi(parseInt(aoi, 10), store)
       .then(
@@ -109,7 +83,7 @@ export function initBaseData(
                     type: UserActionTypes.BASE_DATA_SUCCESS,
                     payload: {
                       areaOfInterest: aoiObject,
-                      favorites: JSON.parse(favorites),
+                      favorites: JSON.parse(favorites || '[]'),
                       language: languageObject,
                     },
                   });

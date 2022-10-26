@@ -81,7 +81,7 @@ class EventsSocket implements EventSocketType {
 
   private constructor(endpoint: string) {
     this.endpoint = `wss://${endpoint}/ws/updates`;
-    this.open();
+    // TODO remove comment this.open();
   }
 
   static getInstance(endpoint?: string): EventsSocket {
