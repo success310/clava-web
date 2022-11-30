@@ -3,9 +3,11 @@
 /* eslint-disable */
 
 import type { File } from './File';
+import type { JerseyModeEnum } from './JerseyModeEnum';
 import type { LeagueListElement } from './LeagueListElement';
 import type { Location } from './Location';
 import type { Person } from './Person';
+import type { Punishment } from './Punishment';
 import type { Sponsor } from './Sponsor';
 import type { Translation } from './Translation';
 
@@ -14,6 +16,9 @@ export type Team = {
     name: Translation;
     thumb: File;
     leagues: Array<LeagueListElement>;
+    jerseyColor1: string;
+    jerseyColor2: string;
+    jerseyMode: JerseyModeEnum;
     leader?: Person;
     titles: Array<Translation>;
     sponsors: Array<Sponsor>;
@@ -23,4 +28,5 @@ export type Team = {
     phone: string;
     mail: string;
     locations: Array<Location>;
+    punishments: Array<Punishment>;
 };

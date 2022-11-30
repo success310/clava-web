@@ -1,9 +1,12 @@
 import {
+  Ad,
   AreaOfInterest,
   Blog,
+  Bulletin,
   CardType,
   ChanceType,
   EventType,
+  ExternalVideo,
   File,
   GoalDistributionMatch,
   GoalType,
@@ -34,10 +37,10 @@ import {
   User,
 } from '../../client/api';
 import { TranslatorKeys } from '../../config/translator';
-import { Favorite } from '../../config/firebase';
 import { FormResponses, ValueStore } from '../constants';
 import {
   AllStanding,
+  Favorite,
   IDType,
   LineupExtended,
   Notification,
@@ -411,6 +414,27 @@ export declare type UserActions =
         language: Language;
       };
     };
+export enum AdActionTypes {
+  FETCH_BY_POS = '@@ad/FETCH_BY_POS',
+  FETCH = '@@ad/FETCH',
+  FETCH_SUCCESS = '@@ad/FETCH_SUCCESS',
+  FETCH_SUCCESS_TEMP = '@@ad/FETCH_SUCCESS_TEMP',
+  FETCH_ERROR = '@@ad/FETCH_ERROR',
+  RESET = '@@ad/RESET',
+}
+
+export type AdActions =
+  | {
+      type: AdActionTypes.FETCH_ERROR;
+      payload: TranslatorKeys;
+    }
+  | {
+      type:
+        | AdActionTypes.FETCH_BY_POS
+        | AdActionTypes.RESET
+        | AdActionTypes.FETCH;
+    }
+  | { type: AdActionTypes.FETCH_SUCCESS; payload: ValueStore<Ad[]> };
 
 export enum ServerActionTypes {
   GONE = '@@server/gone',
@@ -615,10 +639,16 @@ export type MatchActions =
     };
 
 export enum NewsActionTypes {
+  FETCH_MIXED_SUCCESS = '@@news/FETCH_MIXED_SUCCESS',
   FETCH_NEWS = '@@news/FETCH_NEWS',
+  FETCH_TRANSFERS = '@@news/FETCH_TRANSFERS',
+  FETCH_BULLETINS = '@@news/FETCH_BULLETINS',
+  FETCH_VIDEOS = '@@news/FETCH_VIDEOS',
   FETCH_NEWS_SUCCESS = '@@news/FETCH_NEWS_SUCCESS',
   FETCH_TRANSFERS_SUCCESS = '@@news/FETCH_TRANSFERS_SUCCESS',
   FETCH_VIDEOS_SUCCESS = '@@news/FETCH_VIDEOS_SUCCESS',
+  CREATE_VIDEOS_SUCCESS = '@@news/CREATE_VIDEOS_SUCCESS',
+  FETCH_BULLETINS_SUCCESS = '@@news/FETCH_BULLETINS_SUCCESS',
   FETCH_ERROR = '@@news/FETCH_ERROR',
   REFRESH = '@@news/REFRESH',
   RESET = '@@news/RESET',
@@ -626,13 +656,18 @@ export enum NewsActionTypes {
 
 export type NewsActions =
   | {
-      type: NewsActionTypes.FETCH_NEWS | NewsActionTypes.RESET;
+      type:
+        | NewsActionTypes.FETCH_NEWS
+        | NewsActionTypes.FETCH_BULLETINS
+        | NewsActionTypes.FETCH_TRANSFERS
+        | NewsActionTypes.FETCH_VIDEOS
+        | NewsActionTypes.RESET;
     }
   | {
       type: NewsActionTypes.REFRESH;
       payload: {
         news: Blog[];
-        videos: TranslatorKeys[];
+        videos: ExternalVideo[];
         transfers: Transfer[];
       };
     }
@@ -641,12 +676,28 @@ export type NewsActions =
       payload: Blog[];
     }
   | {
+      type: NewsActionTypes.FETCH_BULLETINS_SUCCESS;
+      payload: Bulletin[];
+    }
+  | {
+      type: NewsActionTypes.FETCH_MIXED_SUCCESS;
+      payload: {
+        news: Blog[];
+        transfers: Transfer[];
+        videos: ExternalVideo[];
+      };
+    }
+  | {
       type: NewsActionTypes.FETCH_TRANSFERS_SUCCESS;
       payload: Transfer[];
     }
   | {
       type: NewsActionTypes.FETCH_VIDEOS_SUCCESS;
-      payload: TranslatorKeys[];
+      payload: ExternalVideo[];
+    }
+  | {
+      type: NewsActionTypes.CREATE_VIDEOS_SUCCESS;
+      payload: ExternalVideo;
     }
   | {
       type: NewsActionTypes.FETCH_ERROR;
@@ -663,6 +714,7 @@ export declare type AllActionTypes =
   | LeagueActionTypes
   | LanguageActionTypes
   | RouteActionTypes
+  | AdActionTypes
   | SearchActionTypes;
 
 export declare type AllActions =
@@ -675,6 +727,7 @@ export declare type AllActions =
   | AoiActions
   | RouteActions
   | NewsActions
+  | AdActions
   | SearchActions;
 
 export declare type PayloadAction<T extends AllActions> = T extends {

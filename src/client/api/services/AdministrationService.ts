@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Body_change_team_icon_admin_change_team_icon__team_id__post } from '../models/Body_change_team_icon_admin_change_team_icon__team_id__post';
 import type { Body_create_register_user_admin_create_register_user_post } from '../models/Body_create_register_user_admin_create_register_user_post';
 import type { GroupEnum } from '../models/GroupEnum';
 import type { ScopeEnum } from '../models/ScopeEnum';
@@ -285,6 +286,42 @@ key?: string,
             query: {
                 'key': key,
             },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Change Team Icon
+     * @param teamId 
+     * @param caption 
+     * @param filename 
+     * @param formData 
+     * @param key 
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static changeTeamIconAdminChangeTeamIconTeamIdPost(
+teamId: number,
+caption: string,
+filename: string,
+formData: Body_change_team_icon_admin_change_team_icon__team_id__post,
+key?: string,
+): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/admin/change_team_icon/{team_id}',
+            path: {
+                'team_id': teamId,
+            },
+            query: {
+                'caption': caption,
+                'filename': filename,
+                'key': key,
+            },
+            formData: formData,
+            mediaType: 'multipart/form-data',
             errors: {
                 422: `Validation Error`,
             },

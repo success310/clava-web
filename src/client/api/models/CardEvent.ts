@@ -10,15 +10,6 @@ export type CardEvent = {
     id: number;
     teamId: number;
     cardType: CardType;
-    type: CardEvent.type;
+    type: 'CARD';
     player: PlayerListElement;
 };
-
-export namespace CardEvent {
-
-    export enum type {
-        CARD = 'CARD',
-    }
-
-
-}

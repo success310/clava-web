@@ -8,60 +8,21 @@ import { request as __request } from '../core/request';
 export class TemporaryService {
 
     /**
-     * Delete Wrong Teams
+     * Add Trophy 3
+     * @param dryRun 
      * @param key 
      * @returns any Successful Response
      * @throws ApiError
      */
-    public static deleteWrongTeamsTempDeleteWrongTeamsPost(
+    public static addTrophy3TempAddTrophy3Post(
+dryRun: boolean = true,
 key?: string,
 ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/temp/delete_wrong_teams',
+            url: '/temp/add_trophy_3',
             query: {
-                'key': key,
-            },
-            errors: {
-                422: `Validation Error`,
-            },
-        });
-    }
-
-    /**
-     * Test Get Sportnews
-     * @param key 
-     * @returns any Successful Response
-     * @throws ApiError
-     */
-    public static testGetSportnewsTempTestGetSportnewsPost(
-key?: string,
-): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/temp/test_get_sportnews',
-            query: {
-                'key': key,
-            },
-            errors: {
-                422: `Validation Error`,
-            },
-        });
-    }
-
-    /**
-     * Test Match Groups
-     * @param key 
-     * @returns any Successful Response
-     * @throws ApiError
-     */
-    public static testMatchGroupsTempTestMatchGroupsPost(
-key?: string,
-): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/temp/test_match_groups',
-            query: {
+                'dry_run': dryRun,
                 'key': key,
             },
             errors: {
@@ -92,6 +53,30 @@ key?: string,
     }
 
     /**
+     * Test Refresh Squad Statistics
+     * @param teamId 
+     * @param key 
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static testRefreshSquadStatisticsTempTestRefreshSquadStatisticsPost(
+teamId: number,
+key?: string,
+): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/temp/test_refresh_squad_statistics',
+            query: {
+                'team_id': teamId,
+                'key': key,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
      * Test Refresh Squads
      * @param key 
      * @returns any Successful Response
@@ -113,17 +98,107 @@ key?: string,
     }
 
     /**
-     * Fix Kuens Delete Tscherms
+     * Add Lineup
      * @param key 
      * @returns any Successful Response
      * @throws ApiError
      */
-    public static fixKuensDeleteTschermsTempFixKuensDeleteTschermsPost(
+    public static addLineupTempAddLineupPost(
 key?: string,
 ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/temp/fix_kuens_delete_tscherms',
+            url: '/temp/add_lineup',
+            query: {
+                'key': key,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Change Jugend
+     * @param dryRun 
+     * @param key 
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static changeJugendTempChangeJugendPost(
+dryRun: boolean = true,
+key?: string,
+): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/temp/change_jugend',
+            query: {
+                'dry_run': dryRun,
+                'key': key,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Add Ligapokal
+     * @param dryRun 
+     * @param key 
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static addLigapokalTempAddLigapokalPost(
+dryRun: boolean = true,
+key?: string,
+): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/temp/add_ligapokal',
+            query: {
+                'dry_run': dryRun,
+                'key': key,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Add Amateur
+     * @param key 
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static addAmateurTempAddAmateurPost(
+key?: string,
+): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/temp/add_amateur',
+            query: {
+                'key': key,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Add Pokal 2
+     * @param key 
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static addPokal2TempAddPokal2Post(
+key?: string,
+): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/temp/add_pokal_2',
             query: {
                 'key': key,
             },

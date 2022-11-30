@@ -3,6 +3,7 @@ import { AnyAction } from 'redux';
 import { connect } from 'react-redux';
 import { performAction } from '../../../store/actions/all';
 import {
+  getInsiderByTeam,
   initBaseData,
   login,
   refreshToken,
@@ -29,6 +30,10 @@ const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
   initBaseDataUser: () => {
     initBaseData(dispatch, store);
   },
+
+  getInsidersByTeam: (teamId: IDType) => {
+    performAction({ f: getInsiderByTeam, p: [dispatch, teamId] });
+  },
 });
 
 const props = (state: RootState) => ({
@@ -40,3 +45,4 @@ const props = (state: RootState) => ({
 });
 
 export const connector = connect(props, mapper);
+// reload

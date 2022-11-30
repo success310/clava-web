@@ -10,15 +10,6 @@ export type ChangeEvent = {
     teamId: number;
     playerIn: PlayerListElement;
     injured: boolean;
-    type: ChangeEvent.type;
+    type: 'CHANGE';
     player: PlayerListElement;
 };
-
-export namespace ChangeEvent {
-
-    export enum type {
-        CHANGE = 'CHANGE',
-    }
-
-
-}

@@ -2,27 +2,30 @@ import * as Sentry from '@sentry/react';
 import {
   Analytics,
   getAnalytics,
+  logEvent,
   setAnalyticsCollectionEnabled,
 } from 'firebase/analytics';
-import firebase from 'firebase/compat';
-import { getToken, Messaging, onMessage } from '@firebase/messaging';
+import {
+  getToken,
+  MessagePayload,
+  Messaging,
+  onMessage,
+} from '@firebase/messaging';
 import { getMessaging } from 'firebase/messaging/sw';
 import { initializeApp } from 'firebase/app';
-import { IDType, LanguageISO, Notification } from './types';
+import { Favorite, LanguageISO, Notification } from './types';
 import { GroupEnum, LanguageLocaleEnum, User } from '../client/api';
-// eslint-disable-next-line import/no-cycle
 import client from '../client';
 import { addLog } from '../store/middleware/logger';
 import { BETA_ENDPOINT } from './constants';
 
-export declare type FavoriteType = 'team' | 'league' | 'match';
-
-export declare type Favorite = {
-  id: IDType;
-  type: FavoriteType;
-  belled: boolean;
-};
-
+export type AD_SHOWN_EVENT = 'ad_view_web';
+export type AD_CLICK_EVENT = 'ad_clicked_web';
+export type COMMUNICATO_OPENED = 'communicato_opened_web';
+export declare type ClavaFbEvent =
+  | AD_SHOWN_EVENT
+  | AD_CLICK_EVENT
+  | COMMUNICATO_OPENED;
 export declare type NotificationSettings =
   | { all: true }
   | {
@@ -103,7 +106,7 @@ class FirebaseFactory {
     return FirebaseFactory.instance;
   }
 
-  private static async onMessage(message: firebase.messaging.MessagePayload) {
+  private static async onMessage(message: MessagePayload) {
     if (
       FirebaseFactory.instance &&
       message.notification &&
@@ -250,6 +253,10 @@ class FirebaseFactory {
         }
       });
     });
+  }
+
+  public logEvent(eventName: ClavaFbEvent, params: Record<string, any>) {
+    logEvent(this.analytics, eventName, params);
   }
 }
 export const initFb = FirebaseFactory.initialize;

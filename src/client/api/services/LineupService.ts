@@ -65,6 +65,27 @@ requestBody: LineupCreate,
     }
 
     /**
+     * Get Last Lineup By Team
+     * @param teamId 
+     * @returns Lineup Successful Response
+     * @throws ApiError
+     */
+    public static getLastLineupByTeamLineupTeamTeamIdGet(
+teamId: number,
+): CancelablePromise<Lineup> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/lineup/team/{team_id}',
+            path: {
+                'team_id': teamId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
      * Get Lineup Types
      * @returns LineupTypeList Successful Response
      * @throws ApiError

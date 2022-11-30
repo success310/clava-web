@@ -42,4 +42,25 @@ formData: Body_upload_image_upload_image_post,
         });
     }
 
+    /**
+     * Get File
+     * @param fileId 
+     * @returns File Successful Response
+     * @throws ApiError
+     */
+    public static getFileUploadFileIdGet(
+fileId: number,
+): CancelablePromise<File> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/upload/{file_id}',
+            path: {
+                'file_id': fileId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
 }

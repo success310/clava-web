@@ -5,6 +5,7 @@
 import type { AreaOfInterest } from './AreaOfInterest';
 import type { LeagueCategoryEnum } from './LeagueCategoryEnum';
 import type { LeagueRatingEnum } from './LeagueRatingEnum';
+import type { Punishment } from './Punishment';
 import type { Translation } from './Translation';
 
 export type League = {
@@ -18,4 +19,5 @@ export type League = {
     officialName: string;
     currentMatchDay: number;
     areasOfInterest: Array<AreaOfInterest>;
+    punishments: Array<Punishment>;
 };

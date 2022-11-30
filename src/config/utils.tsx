@@ -8,13 +8,20 @@ import {
   osName,
   osVersion,
 } from 'react-device-detect';
-import { CollectionType, IDType, LanguageISO } from './types';
+import {
+  CollectionType,
+  Favorite,
+  FavoriteType,
+  IDType,
+  LanguageISO,
+} from './types';
 import {
   CardEvent,
   CardTypeEnum,
   ChanceEvent,
   ChangeEvent,
   EventType,
+  EventTypeEnum,
   GoalEvent,
   Group,
   GroupEnum,
@@ -266,23 +273,23 @@ export function sortLeagueMatches(
 }
 
 export function isGoalEvent(event: EventType | undefined): event is GoalEvent {
-  return !!event && event.type === GoalEvent.type.GOAL;
+  return !!event && event.type === EventTypeEnum.GOAL;
 }
 
 export function isCardEvent(event: EventType | undefined): event is CardEvent {
-  return !!event && event.type === CardEvent.type.CARD;
+  return !!event && event.type === EventTypeEnum.CARD;
 }
 
 export function isChangeEvent(
   event: EventType | undefined,
 ): event is ChangeEvent {
-  return !!event && event.type === ChangeEvent.type.CHANGE;
+  return !!event && event.type === EventTypeEnum.CHANGE;
 }
 
 export function isChanceEvent(
   event: EventType | undefined,
 ): event is ChanceEvent {
-  return !!event && event.type === ChanceEvent.type.CHANCE;
+  return !!event && event.type === EventTypeEnum.CHANCE;
 }
 
 export function getLineupPos(
@@ -328,7 +335,7 @@ export function calcNewMatchStanding(
   let goal1 = 0;
   let goal2 = 0;
   events.forEach((e) => {
-    if (e.type === GoalEvent.type.GOAL) {
+    if (e.type === EventTypeEnum.GOAL) {
       if (e.teamId === team1ID) goal1++;
       else goal2++;
     }
@@ -339,6 +346,16 @@ export function calcNewMatchStanding(
 export function isAdmin(user: User | undefined | null): boolean {
   return !!(
     user && !!user.scopes.find((scope) => scope.key === ScopeEnum.ADMIN)
+  );
+}
+
+export function isContentCreator(user: User | undefined | null): boolean {
+  return (
+    isAdmin(user) ||
+    !!(
+      user &&
+      !!user.scopes.find((scope) => scope.key === ScopeEnum.CONTENT_CREATOR)
+    )
   );
 }
 
@@ -379,6 +396,10 @@ export function isTeamInsider(
       )
     )
   );
+}
+
+export function isPremium(user: User | null | undefined): boolean {
+  return !!user && user.premium /* || isAdmin(user)*/;
 }
 
 export function isRegistered(user: User | undefined | null): boolean {
@@ -555,18 +576,19 @@ export function getPlayersForEvent(
     ) */
 }
 
-export function getMainLeague<T extends League | LeagueListElement>(
-  leagues: T[],
-): T | undefined {
-  let max = 0;
-  leagues.forEach((l) => {
-    if (l.main && l.year > max) max = l.year;
-  });
-  return leagues.find((l) => l.main && l.year === max);
-}
-
-export function isTeam(elem: Translatable): elem is Team {
-  return 'leagues' in elem;
+export function isFavorite(
+  favorites: Favorite[],
+  id: IDType,
+  type: FavoriteType,
+  team1Id: IDType,
+  team2Id: IDType,
+): boolean {
+  return !!favorites.find(
+    (fav) =>
+      (fav.id === id && fav.type === type) ||
+      (fav.type === 'team' && fav.id === team1Id) ||
+      (fav.type === 'team' && fav.id === team2Id),
+  );
 }
 
 export function getDeviceInfo(): Record<string, string> {
@@ -588,4 +610,36 @@ export function browserLang(): LanguageLocaleEnum {
     navigator.language === LanguageLocaleEnum.DE
     ? navigator.language
     : LanguageLocaleEnum.EN;
+}
+
+export function sortEventsMinute(e1: EventType, e2: EventType): number {
+  return e1.minute - e2.minute;
+}
+
+export function getMainLeague<T extends League | LeagueListElement>(
+  leagues: T[],
+): T | undefined {
+  let max = 0;
+  leagues.forEach((l) => {
+    if (l.main && l.year > max) max = l.year;
+  });
+  return leagues.find((l) => l.main && l.year === max);
+}
+
+export function isTeam(elem: Translatable): elem is Team {
+  return 'leagues' in elem;
+}
+
+export const MIN_AD_DISTANCE = 8;
+export const MAX_AD_DISTANCE = 20;
+
+export function shouldAdBePlaced(
+  matchCounter: number,
+  numOfAds: number,
+): boolean {
+  return (
+    numOfAds === 0 ||
+    (matchCounter > MIN_AD_DISTANCE &&
+      matchCounter - MIN_AD_DISTANCE > Math.random() * MAX_AD_DISTANCE * 3)
+  );
 }

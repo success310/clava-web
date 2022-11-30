@@ -7,15 +7,22 @@ import {
   LineupPositionPlayersExtended,
 } from '../config/types';
 import {
+  AdPositionEnum,
+  AdService,
   ApiError,
   AppService,
   AreaOfInterest,
   AreaOfInterestService,
   AuthenticationService,
   AuthResponse,
+  Blog,
   BlogService,
+  BulletinService,
   CancelablePromise,
   EventService,
+  ExternalVideo,
+  ExternalVideoCreateRaw,
+  ExternalVideoService,
   GoalDistributionService,
   Language,
   LanguageLocaleEnum,
@@ -51,6 +58,7 @@ import {
   TeamListElement,
   TeamPatch,
   TeamService,
+  Transfer,
   TransferService,
   User,
   UserCreate,
@@ -917,13 +925,25 @@ class Client {
   }
 
   fetchNews(aoiId: IDType, offset: number, limit: number) {
-    return BlogService.getBlogsBlogGet(limit);
+    return BlogService.getBlogsBlogGet(limit, offset);
   }
 
   fetchVideos(aoiId: IDType, offset: number, limit: number) {
-    return new CancelablePromise<string[]>((resolve) => {
-      resolve([]);
-    });
+    return ExternalVideoService.getExternalVideosExternalVideoGet(
+      limit,
+      offset,
+      aoiId,
+    );
+  }
+
+  createVideo(createVideoRaw: ExternalVideoCreateRaw) {
+    return ExternalVideoService.createExternalVideoExternalVideoRawPost(
+      createVideoRaw,
+    );
+  }
+
+  fetchBulletins(aoiId: IDType, offset: number, limit: number) {
+    return BulletinService.getBulletinsBulletinGet(aoiId, limit, offset);
   }
 
   fetchTransfers(aoiId: IDType, offset: number, limit: number) {
@@ -934,6 +954,32 @@ class Client {
       offset,
       limit,
     );
+  }
+
+  fetchMixed(aoiId: IDType) {
+    return new CancelablePromise<{
+      news: Blog[];
+      transfers: Transfer[];
+      videos: ExternalVideo[];
+    }>((resolve, reject) => {
+      BlogService.getBlogsBlogGet(5, 0).then((news) => {
+        ExternalVideoService.getExternalVideosExternalVideoGet(
+          5,
+          0,
+          aoiId,
+        ).then((videos) => {
+          TransferService.getTransferTransferAreaOfInterestAreaOfInterestIdGet(
+            aoiId,
+            undefined,
+            undefined,
+            0,
+            5,
+          ).then((transfers) => {
+            resolve({ news, transfers, videos });
+          }, reject);
+        }, reject);
+      }, reject);
+    });
   }
 
   doTransfer(playerId: IDType, oldTeamId: IDType, newTeamId: IDType) {
@@ -980,6 +1026,10 @@ class Client {
 
   startMatch(id: IDType, minutes: number) {
     return MatchService.startMatchMatchStartMatchIdPost(id, minutes);
+  }
+
+  getAds(pos: AdPositionEnum) {
+    return AdService.getAdsByPositionAdPositionPositionGet(pos);
   }
 
   private filterAoi(

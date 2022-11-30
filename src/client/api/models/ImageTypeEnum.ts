@@ -10,4 +10,7 @@ export enum ImageTypeEnum {
     TEAM_PHOTO = 'team_photo',
     SPONSOR_LOGO = 'sponsor_logo',
     BLOG_PHOTO = 'blog_photo',
+    AD_MOBILE_SMALL = 'ad_mobile_small',
+    AD_MOBILE_MEDIUM = 'ad_mobile_medium',
+    AD_DESKTOP = 'ad_desktop',
 }

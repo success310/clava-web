@@ -13,5 +13,8 @@ export const $MatchPatch = {
         refereeId: {
     type: 'number',
 },
+        cancelled: {
+    type: 'boolean',
+},
     },
 } as const;

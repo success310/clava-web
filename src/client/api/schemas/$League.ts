@@ -45,5 +45,12 @@ export const $League = {
     },
     isRequired: true,
 },
+        punishments: {
+    type: 'array',
+    contains: {
+        type: 'Punishment',
+    },
+    isRequired: true,
+},
     },
 } as const;

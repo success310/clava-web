@@ -20,7 +20,7 @@ export const $CardEvent = {
     isRequired: true,
 },
         type: {
-    type: 'Enum',
+    type: 'string',
     isRequired: true,
 },
         player: {

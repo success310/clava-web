@@ -22,6 +22,18 @@ export const $Team = {
     },
     isRequired: true,
 },
+        jerseyColor1: {
+    type: 'string',
+    isRequired: true,
+},
+        jerseyColor2: {
+    type: 'string',
+    isRequired: true,
+},
+        jerseyMode: {
+    type: 'JerseyModeEnum',
+    isRequired: true,
+},
         leader: {
     type: 'Person',
 },
@@ -62,6 +74,13 @@ export const $Team = {
     type: 'array',
     contains: {
         type: 'Location',
+    },
+    isRequired: true,
+},
+        punishments: {
+    type: 'array',
+    contains: {
+        type: 'Punishment',
     },
     isRequired: true,
 },

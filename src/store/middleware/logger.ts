@@ -23,7 +23,8 @@ import { Middleware } from 'redux';
 
 function replaceArrays(object: any): any {
   return object;
-  /* this is only needed on web, here we have a proper console
+  /*
+  this is only needed on web, here we have a proper console
   if (object) {
     if (Array.isArray(object)) {
       return {
@@ -41,7 +42,8 @@ function replaceArrays(object: any): any {
       return retval;
     }
   }
-  return object;*/
+  return object;
+  */
 }
 
 export declare type LogType =

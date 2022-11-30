@@ -6,8 +6,8 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { DeviceUUID } from 'device-uuid';
+import { Route, Routes } from 'react-router';
 import { connector } from './redux';
 import socket from '../../../client/Websockets/events';
 import { browserLang, getDeviceInfo } from '../../../config/utils';
@@ -15,6 +15,9 @@ import FirstOpen from '../../screens/FirstOpen';
 import client from '../../../client';
 import Loading from '../../components/Loading';
 import { ClavaContext, ClavaRootContext } from '../../../config/contexts';
+import { fb } from '../../../config/firebase';
+import { AS_ENDPOINT, PROD_ENDPOINT } from '../../../config/constants';
+import { GroupEnum, User } from '../../../client/api';
 import Header from '../../components/Header';
 import Home from '../Home';
 
@@ -25,15 +28,18 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
   languageObject,
   aoi,
   error,
+  getInsidersByTeam,
   initBaseDataUser,
   status,
+  getLeagues,
 }) => {
   const [firstOpen, setFirstOpen] = useState(false);
   const { fbToken } = useContext(ClavaRootContext);
   useEffect(() => {
-    socket().open();
+    const endpoint = window.localStorage.getItem(AS_ENDPOINT);
+    socket(endpoint ?? PROD_ENDPOINT).open();
     initBaseDataUser();
-    client().setLang(browserLang());
+    client(endpoint ?? PROD_ENDPOINT).setLang(browserLang());
     return () => {
       socket().close();
     };
@@ -61,32 +67,46 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
     } else if (status !== 'loading' && aoi && languageObject && !user) {
       refreshToken();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status, error, aoi, languageObject, user, fbToken]);
-
+  }, [
+    status,
+    error,
+    aoi,
+    languageObject,
+    user,
+    fbToken,
+    createUser,
+    refreshToken,
+  ]);
+  useEffect(() => {
+    if (user) {
+      getLeagues(user.areaOfInterest.id);
+      fb().subscribeUserSpecific(user);
+      socket().setUser(user.id, user.areaOfInterest.id);
+      client().setLang(user.language.locale);
+      const teamInsider = user.groups.filter(
+        (u) => u.key === GroupEnum.TEAM_INSIDER,
+      );
+      if (teamInsider.length !== null) {
+        teamInsider.forEach((group) => {
+          getInsidersByTeam(group.team.id);
+        });
+      }
+    }
+  }, [getInsidersByTeam, getLeagues, user]);
   const clavaContext = useMemo(
     () =>
       user
-        ? { l: user.language.locale, aoi: user.areaOfInterest.id }
+        ? { l: user.language.locale, aoi: user.areaOfInterest.id, user }
         : {
             l: browserLang(),
             aoi: -1,
+            user: {} as User,
           },
     [user],
   );
   const onFirstOpenFinish = useCallback(() => {
     setFirstOpen(false);
   }, []);
-  const router = useMemo(
-    () =>
-      createBrowserRouter([
-        {
-          path: '/',
-          element: <Home />,
-        },
-      ]),
-    [],
-  );
   if (firstOpen) {
     return (
       <FirstOpen language={clavaContext.l} finalCallback={onFirstOpenFinish} />
@@ -97,10 +117,15 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
     <ClavaContext.Provider value={clavaContext}>
       <Header />
       <div className="content">
-        <RouterProvider router={router} />
+        <Routes>
+          <Route path="*" element={<Home />} />
+          <Route index element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Home />} />
+        </Routes>
       </div>
     </ClavaContext.Provider>
   );
 };
-// reload
+// relo ad
 export default connector(Main);

@@ -44,6 +44,10 @@ export const $Match = {
     type: 'LeagueListElement',
     isRequired: true,
 },
+        cancelled: {
+    type: 'boolean',
+    isRequired: true,
+},
         location: {
     type: 'Location',
 },
@@ -60,6 +64,13 @@ export const $Match = {
     type: 'array',
     contains: {
         type: 'EventType',
+    },
+    isRequired: true,
+},
+        punishments: {
+    type: 'array',
+    contains: {
+        type: 'Punishment',
     },
     isRequired: true,
 },

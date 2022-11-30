@@ -11,4 +11,5 @@ export type BlogCreate = {
     body: TranslationCreate;
     pictureId: number;
     date?: string;
+    uid: string;
 };

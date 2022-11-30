@@ -11,15 +11,6 @@ export type GoalEvent = {
     teamId: number;
     assist?: PlayerListElement;
     goalType?: GoalType;
-    type: GoalEvent.type;
+    type: 'GOAL';
     player?: PlayerListElement;
 };
-
-export namespace GoalEvent {
-
-    export enum type {
-        GOAL = 'GOAL',
-    }
-
-
-}

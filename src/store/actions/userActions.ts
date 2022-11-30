@@ -2,8 +2,8 @@ import { Action, Dispatch } from 'redux';
 import { EnhancedStore } from '@reduxjs/toolkit';
 import { AreaOfInterest, Language, UserCreate } from '../../client/api';
 import client from '../../client';
-import { IDType } from '../../config/types';
-import { Favorite, fb } from '../../config/firebase';
+import { Favorite, IDType } from '../../config/types';
+import { fb } from '../../config/firebase';
 import { MatchActionTypes, UserActions, UserActionTypes } from './types';
 import { defaultGet } from './all';
 import { checkMail } from '../../config/utils';
@@ -624,3 +624,5 @@ export function deleteAccount(dispatch: Dispatch<UserActions>) {
     false,
   );
 }
+
+// as f

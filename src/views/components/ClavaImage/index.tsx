@@ -3,7 +3,7 @@ import { File } from '../../../client/api';
 
 const ClavaImage: React.FC<{
   image: File;
-  width: number;
+  width: number | string;
   isEditable?: boolean;
 }> = ({ image, width, isEditable }) => {
   const { formats, url, caption } = image;

@@ -30,5 +30,14 @@ export const $TeamPatch = {
     type: 'number',
 },
 },
+        jerseyColor1: {
+    type: 'string',
+},
+        jerseyColor2: {
+    type: 'string',
+},
+        jerseyMode: {
+    type: 'JerseyModeEnum',
+},
     },
 } as const;

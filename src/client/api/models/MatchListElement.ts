@@ -16,4 +16,5 @@ export type MatchListElement = {
     matchDay: number;
     leagueId: number;
     league: LeagueListElement;
+    cancelled: boolean;
 };

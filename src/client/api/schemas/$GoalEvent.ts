@@ -22,7 +22,7 @@ export const $GoalEvent = {
     type: 'GoalType',
 },
         type: {
-    type: 'Enum',
+    type: 'string',
     isRequired: true,
 },
         player: {

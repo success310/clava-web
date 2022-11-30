@@ -1,21 +1,15 @@
-import React, { useContext, useEffect } from 'react';
-import { ConnectedProps } from 'react-redux';
-import { ClavaContext } from '../../../config/contexts';
-import { translate } from '../../../config/translator';
-import { connector } from './redux';
+import React from 'react';
+import LeagueMatches from './LeagueMatches';
+import Leagues from '../../components/League';
+import News from '../News';
 
-const Home: React.FC<ConnectedProps<typeof connector>> = ({
-  leagueMatches,
-  fetchLeagueMatchesOfDay,
-}) => {
-  const { l, aoi } = useContext(ClavaContext);
-
-  useEffect(() => {
-    console.log(`something changed: ${aoi}`);
-    fetchLeagueMatchesOfDay(aoi, new Date());
-  }, [aoi, fetchLeagueMatchesOfDay]);
-  return <span>{translate('welcome', l)}</span>;
-};
+const Home: React.FC = () => (
+  <div className="home">
+    <Leagues small />
+    <LeagueMatches />
+    <News small />
+  </div>
+);
 
 // reload
-export default connector(Home);
+export default Home;

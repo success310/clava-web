@@ -447,6 +447,16 @@ const generalKeywords = {
     it: 'Privacy',
     en: 'Privacy',
   },
+  tos: {
+    de: 'Agb',
+    it: 'Tos',
+    en: 'Tos',
+  },
+  cancelledShort: {
+    de: 'Abges.',
+    it: 'Cancel',
+    en: 'Cancel',
+  },
   addTeam: {
     de: 'Mannschaft hinzufügen',
     it: 'Aggiungi squadra',
@@ -701,6 +711,36 @@ const generalKeywords = {
     de: 'Mannschaftsfoto ändern',
     it: 'Cambia foto',
     en: 'Change foto',
+  },
+  earlier: {
+    de: 'Früher',
+    it: 'Prima',
+    en: 'Earlier',
+  },
+  later: {
+    de: 'Später',
+    it: 'Dopo',
+    en: 'Later',
+  },
+  today: {
+    de: 'Heute',
+    it: 'Oggi',
+    en: 'Today',
+  },
+  tomorrow: {
+    de: 'Morgen',
+    it: 'Domani',
+    en: 'Tomorrow',
+  },
+  yesterday: {
+    de: 'Gestern',
+    it: 'Ieri',
+    en: 'Yesterday',
+  },
+  featuredNews: {
+    de: 'Featured News',
+    it: 'Featured News',
+    en: 'Featured News',
   },
   modifySponsor: {
     de: 'Sponsor bearbeiten',

@@ -9,6 +9,7 @@ import {
   PlayerSearchElement,
   Standing,
   TeamListElement,
+  User,
 } from '../client/api';
 import { FontAwesome5Glyphs } from './fa5Glyphs';
 
@@ -75,9 +76,18 @@ export declare type ClavaRootContextType = {
 export declare type ClavaContextType = {
   l: LanguageLocaleEnum;
   aoi: IDType;
+  user: User;
 };
 
 export declare type PlayerInFocusMatch = {
   team1: PlayerListElement[];
   team2: PlayerListElement[];
+};
+
+export declare type FavoriteType = 'team' | 'league' | 'match';
+
+export declare type Favorite = {
+  id: IDType;
+  type: FavoriteType;
+  belled: boolean;
 };

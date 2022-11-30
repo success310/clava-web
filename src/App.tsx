@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 import { fb, initFb } from './config/firebase';
 import { AS_THEME } from './config/constants';
 import { ClavaRootContext } from './config/contexts';
@@ -9,6 +10,10 @@ import { ClavaRootContextType } from './config/types';
 import Main from './views/navigation/Main';
 import { store } from './store';
 import Loading from './views/components/Loading';
+
+import 'intl/locale-data/jsonp/de-DE';
+import 'intl/locale-data/jsonp/en-US';
+import 'intl/locale-data/jsonp/it-IT';
 
 const App: React.FC = () => {
   const [rootContext, setRootContext] = useState<ClavaRootContextType>({
@@ -31,12 +36,14 @@ const App: React.FC = () => {
     return (
       <ClavaRootContext.Provider value={rootContext}>
         <Provider store={store}>
-          <Main />
+          <BrowserRouter>
+            <Main />
+          </BrowserRouter>
         </Provider>
       </ClavaRootContext.Provider>
     );
   }
   return <Loading />;
 };
-
+// reloa d
 export default App;

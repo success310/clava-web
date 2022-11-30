@@ -22,5 +22,17 @@ export const $TeamListElement = {
     },
     isRequired: true,
 },
+        jerseyColor1: {
+    type: 'string',
+    isRequired: true,
+},
+        jerseyColor2: {
+    type: 'string',
+    isRequired: true,
+},
+        jerseyMode: {
+    type: 'JerseyModeEnum',
+    isRequired: true,
+},
     },
 } as const;

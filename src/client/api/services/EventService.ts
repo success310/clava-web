@@ -10,6 +10,7 @@ import type { ChanceTypeList } from '../models/ChanceTypeList';
 import type { ChangeEventCreate } from '../models/ChangeEventCreate';
 import type { ChangeEventPatch } from '../models/ChangeEventPatch';
 import type { EventType } from '../models/EventType';
+import type { EventTypeEnum } from '../models/EventTypeEnum';
 import type { EventTypeList } from '../models/EventTypeList';
 import type { GoalEventCreate } from '../models/GoalEventCreate';
 import type { GoalEventPatch } from '../models/GoalEventPatch';
@@ -88,18 +89,23 @@ matchId: number,
      * Add Goal Event
      * @param matchId 
      * @param requestBody 
+     * @param ignoreChecks 
      * @returns EventType Successful Response
      * @throws ApiError
      */
     public static addGoalEventEventGoalMatchIdPost(
 matchId: number,
 requestBody: GoalEventCreate,
+ignoreChecks: boolean = false,
 ): CancelablePromise<EventType> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/event/goal/{match_id}',
             path: {
                 'match_id': matchId,
+            },
+            query: {
+                'ignore_checks': ignoreChecks,
             },
             body: requestBody,
             mediaType: 'application/json',
@@ -317,6 +323,18 @@ requestBody: CardEventPatch,
         return __request(OpenAPI, {
             method: 'GET',
             url: '/event/type/chance',
+        });
+    }
+
+    /**
+     * Get Event Type Enum
+     * @returns EventTypeEnum Successful Response
+     * @throws ApiError
+     */
+    public static getEventTypeEnumEventTypesGet(): CancelablePromise<EventTypeEnum> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/event/types',
         });
     }
 

@@ -10,15 +10,6 @@ export type ChanceEvent = {
     id: number;
     teamId: number;
     chanceType: ChanceType;
-    type: ChanceEvent.type;
+    type: 'CHANCE';
     player?: PlayerListElement;
 };
-
-export namespace ChanceEvent {
-
-    export enum type {
-        CHANCE = 'CHANCE',
-    }
-
-
-}

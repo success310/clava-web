@@ -1,11 +1,10 @@
 import React, { useCallback, useContext, useState } from 'react';
 import { Modal, Navbar, NavbarToggler, NavLink } from 'reactstrap';
 import {
-  faArrowLeftToLine,
+  faArrowRightToLine,
   faBars,
   faHouse,
   faNewspaper,
-  faTrophy,
   faUser,
   faUserNinja,
   faUserTie,
@@ -36,30 +35,31 @@ const Header: React.FC<ConnectedProps<typeof connector>> = ({
   return (
     <>
       <Navbar className="header">
-        <NavbarToggler onClick={onToggle}>
-          <FontAwesomeIcon icon={toggleSidebar ? faArrowLeftToLine : faBars} />
+        <NavLink to="/home">
           <Logo onPress={undefined} />
-        </NavbarToggler>
-        <NavLink href="/home">
+        </NavLink>
+        <NavLink to="/home">
           <FontAwesomeIcon icon={faHouse} />
           {translate('home', l)}
         </NavLink>
-        <NavLink href="/leagues">
-          <FontAwesomeIcon icon={faTrophy} />
-          {translate('leagues', l)}
-        </NavLink>
-        <NavLink href="/news">
+        <NavLink to="/news">
           <FontAwesomeIcon icon={faNewspaper} />
           {translate('news', l)}
         </NavLink>
-        <NavLink href="/profile">
+        <NavLink to="/profile">
           <FontAwesomeIcon
             icon={
               isAdmin(user) ? faUserNinja : isInsider(user) ? faUserTie : faUser
             }
           />
-          <span>{translate('profile', l)}</span>
+
+          <span>
+            {translate(!user || user.anonymous ? 'login' : 'profile', l)}
+          </span>
         </NavLink>
+        <NavbarToggler onClick={onToggle}>
+          <FontAwesomeIcon icon={toggleSidebar ? faArrowRightToLine : faBars} />
+        </NavbarToggler>
       </Navbar>
       <Modal
         isOpen={toggleSidebar}

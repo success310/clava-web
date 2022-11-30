@@ -1,8 +1,11 @@
 import {
+  Ad,
   AreaOfInterest,
   Blog,
+  Bulletin,
   CardType,
   ChanceType,
+  ExternalVideo,
   GoalDistributionMatch,
   GoalType,
   Group,
@@ -33,13 +36,13 @@ import {
 import { TranslatorKeys } from '../../config/translator';
 import {
   AllStanding,
+  Favorite,
   IDType,
   LineupExtended,
   Notification,
   PlayerInFocusMatch,
   SearchQuery,
 } from '../../config/types';
-import { Favorite } from '../../config/firebase';
 
 export interface UserState {
   readonly value: User | null;
@@ -91,11 +94,16 @@ export interface LeagueState {
   readonly playerStatisticsDetail: ValueStore<PlayerStatisticDetail>[];
   readonly tow: ValueStore<LineupExtended>[];
 }
+
 export interface NewsState {
   readonly news: Blog[];
   readonly transfers: Transfer[];
-  readonly videos: TranslatorKeys[];
-  readonly status: 'idle' | 'loading' | 'failed';
+  readonly bulletins: Bulletin[];
+  readonly videos: ExternalVideo[];
+  readonly statusNews: 'idle' | 'loading' | 'failed';
+  readonly statusTransfers: 'idle' | 'loading' | 'failed';
+  readonly statusBulletins: 'idle' | 'loading' | 'failed';
+  readonly statusVideos: 'idle' | 'loading' | 'failed';
   readonly error: TranslatorKeys | null;
 }
 export interface TeamState {
@@ -145,6 +153,12 @@ export interface MatchState {
 
 export interface StandingState {
   readonly value: ValueStore<AllStanding>[];
+  readonly error: TranslatorKeys | null;
+  readonly status: 'idle' | 'loading' | 'failed';
+}
+
+export interface AdState {
+  readonly value: ValueStore<Ad[]>[];
   readonly error: TranslatorKeys | null;
   readonly status: 'idle' | 'loading' | 'failed';
 }

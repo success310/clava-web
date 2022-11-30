@@ -20,7 +20,7 @@ export const $ChanceEvent = {
     isRequired: true,
 },
         type: {
-    type: 'Enum',
+    type: 'string',
     isRequired: true,
 },
         player: {

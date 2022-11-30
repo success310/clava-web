@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export const $EventType = {
-    type: 'any-of',
+    type: 'one-of',
     contains: [{
     type: 'CardEvent',
 }, {

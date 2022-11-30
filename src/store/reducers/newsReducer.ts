@@ -4,10 +4,14 @@ import { NewsActions, NewsActionTypes } from '../actions/types';
 import { unique } from '../../config/utils';
 
 const initialState: NewsState = {
-  status: 'idle',
+  statusBulletins: 'idle',
+  statusNews: 'idle',
+  statusTransfers: 'idle',
+  statusVideos: 'idle',
   news: [],
   videos: [],
   transfers: [],
+  bulletins: [],
   error: null,
 };
 
@@ -18,43 +22,84 @@ const reducer: Reducer<NewsState> = (
 ) => {
   switch (action.type) {
     case NewsActionTypes.FETCH_NEWS: {
-      return { ...state, status: 'loading' };
+      return { ...state, statusNews: 'loading' };
+    }
+    case NewsActionTypes.FETCH_TRANSFERS: {
+      return { ...state, statusTransfers: 'loading' };
+    }
+    case NewsActionTypes.FETCH_VIDEOS: {
+      return { ...state, statusTransfers: 'loading' };
+    }
+    case NewsActionTypes.FETCH_BULLETINS: {
+      return { ...state, statusBulletins: 'loading' };
     }
     case NewsActionTypes.FETCH_NEWS_SUCCESS: {
       return {
         ...state,
-        status: 'idle',
+        statusNews: 'idle',
         news: unique(state.news.concat(action.payload)),
       };
     }
     case NewsActionTypes.FETCH_TRANSFERS_SUCCESS: {
       return {
         ...state,
-        status: 'idle',
+        statusTransfers: 'idle',
         transfers: state.transfers.concat(action.payload),
       };
     }
     case NewsActionTypes.FETCH_VIDEOS_SUCCESS: {
       return {
         ...state,
-        status: 'idle',
+        statusVideos: 'idle',
         videos: state.videos.concat(action.payload),
+      };
+    }
+    case NewsActionTypes.CREATE_VIDEOS_SUCCESS: {
+      return {
+        ...state,
+        statusVideos: 'idle',
+        videos: state.videos.concat([action.payload]),
+      };
+    }
+    case NewsActionTypes.FETCH_BULLETINS_SUCCESS: {
+      return {
+        ...state,
+        statusBulletins: 'idle',
+        bulletins: state.bulletins.concat(action.payload),
+      };
+    }
+    case NewsActionTypes.FETCH_MIXED_SUCCESS: {
+      return {
+        ...state,
+        statusNews: 'idle',
+        ...action.payload,
       };
     }
     case NewsActionTypes.RESET: {
       return {
         ...state,
-        status: 'loading',
+        statusVideos: 'loading',
+        statusBulletins: 'loading',
+        statusTransfers: 'loading',
+        statusNews: 'loading',
         news: [],
         videos: [],
         transfers: [],
+        bulletins: [],
       };
     }
     case NewsActionTypes.REFRESH: {
-      return { ...state, status: 'loading', ...action.payload };
+      return { ...state, ...action.payload };
     }
     case NewsActionTypes.FETCH_ERROR: {
-      return { ...state, error: action.payload };
+      return {
+        ...state,
+        statusNews: 'failed',
+        statusBulletins: 'failed',
+        statusTransfers: 'failed',
+        statusVideos: 'failed',
+        error: action.payload,
+      };
     }
     default: {
       return state;

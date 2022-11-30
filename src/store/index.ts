@@ -14,6 +14,7 @@ import { routeReducer } from './reducers/routeReducer';
 import { searchReducer } from './reducers/searchReducer';
 import { serverReducer } from './reducers/serverReducer';
 import { newsReducer } from './reducers/newsReducer';
+import { adReducer } from './reducers/adReducer';
 
 export const store = configureStore({
   reducer: {
@@ -28,6 +29,7 @@ export const store = configureStore({
     search: searchReducer,
     server: serverReducer,
     news: newsReducer,
+    ads: adReducer,
   },
   middleware: [logger, thunk],
 });
@@ -44,7 +46,7 @@ export function isLoading(state: RootState): boolean {
     state.match.status === 'loading' ||
     state.user.status === 'loading' ||
     state.standing.status === 'loading' ||
-    state.news.status === 'loading' ||
+    state.news.statusNews === 'loading' ||
     state.leagues.status === 'loading' ||
     state.teams.status === 'loading' ||
     state.search.status === 'loading'

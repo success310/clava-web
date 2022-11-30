@@ -25,5 +25,9 @@ export const $BlogCreate = {
     type: 'string',
     format: 'date',
 },
+        uid: {
+    type: 'string',
+    isRequired: true,
+},
     },
 } as const;

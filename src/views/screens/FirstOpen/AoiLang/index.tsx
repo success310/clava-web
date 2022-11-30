@@ -7,6 +7,7 @@ import {
   AreaOfInterest,
   Language,
   LanguageLocaleEnum,
+  User,
 } from '../../../../client/api';
 import { showTranslated, translate } from '../../../../config/translator';
 import Loading from '../../../components/Loading';
@@ -99,7 +100,10 @@ const AoiLang: React.FC<FirstOpenAoiLangProps> = ({
   const onSelectAoi = useCallback((id: IDType) => {
     setSelected(id);
   }, []);
-  const contextValue = useMemo(() => ({ l: realLang, aoi: -1 }), [realLang]);
+  const contextValue = useMemo(
+    () => ({ l: realLang, aoi: -1, user: {} as User }),
+    [realLang],
+  );
   return (
     <ClavaContext.Provider value={contextValue}>
       <Row className="mb-3">
@@ -177,3 +181,5 @@ const AoiLang: React.FC<FirstOpenAoiLangProps> = ({
 };
 
 export default connector(AoiLang);
+
+// asf

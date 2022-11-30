@@ -3,6 +3,7 @@
 /* eslint-disable */
 import type { LeagueMatchList } from '../models/LeagueMatchList';
 import type { Match } from '../models/Match';
+import type { MatchCreate } from '../models/MatchCreate';
 import type { MatchListElementList } from '../models/MatchListElementList';
 import type { MatchPatch } from '../models/MatchPatch';
 
@@ -63,6 +64,7 @@ requestBody: MatchPatch,
      * @param teamId 
      * @param limit 
      * @param playedOnly 
+     * @param notCancelledOnly 
      * @returns MatchListElementList Successful Response
      * @throws ApiError
      */
@@ -70,6 +72,7 @@ requestBody: MatchPatch,
 teamId: number,
 limit: number,
 playedOnly: boolean,
+notCancelledOnly: boolean = false,
 ): CancelablePromise<MatchListElementList> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -80,6 +83,7 @@ playedOnly: boolean,
             query: {
                 'limit': limit,
                 'played_only': playedOnly,
+                'not_cancelled_only': notCancelledOnly,
             },
             errors: {
                 422: `Validation Error`,
@@ -202,6 +206,73 @@ minutes: number,
             query: {
                 'minutes': minutes,
             },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Cancel Match
+     * @param matchId 
+     * @returns Match Successful Response
+     * @throws ApiError
+     */
+    public static cancelMatchMatchCancelMatchIdPost(
+matchId: number,
+): CancelablePromise<Match> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/match/cancel/{match_id}',
+            path: {
+                'match_id': matchId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Uncancel Match
+     * @param matchId 
+     * @param newStartTime 
+     * @returns Match Successful Response
+     * @throws ApiError
+     */
+    public static uncancelMatchMatchUncancelMatchIdPost(
+matchId: number,
+newStartTime: string,
+): CancelablePromise<Match> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/match/uncancel/{match_id}',
+            path: {
+                'match_id': matchId,
+            },
+            query: {
+                'new_start_time': newStartTime,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Create Match
+     * @param requestBody 
+     * @returns Match Successful Response
+     * @throws ApiError
+     */
+    public static createMatchMatchCreatePost(
+requestBody: MatchCreate,
+): CancelablePromise<Match> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/match/create',
+            body: requestBody,
+            mediaType: 'application/json',
             errors: {
                 422: `Validation Error`,
             },

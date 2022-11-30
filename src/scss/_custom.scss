@@ -2,17 +2,17 @@
   //transition: background-color 1s ease;
 }
 span, p{
-  font-family: "Lexend ExtraLight", sans-serif;
+  font-family: "Lexend", sans-serif;
   font-weight: 200;
   color: $white;
 }
 h1, h2, h3, h4, h5, h6{
-  font-family: "Lexend SemiBold", sans-serif;
+  font-family: "Lexend", sans-serif;
   font-weight: 600;
   color: $white;
 }
 bold, strong {
-  font-family: "Lexend Regular", sans-serif;
+  font-family: "Lexend", sans-serif;
   font-weight: 400;
 }
 
@@ -118,12 +118,22 @@ button {
   }
   .nav-link{
     display: flex;
+    cursor: pointer;
     align-items: center;
     justify-content: center;
+    opacity: 0.8;
+    &:hover{
+      opacity: 1;
+    }
     svg{
       margin-right: 0.5rem;
       font-size: 1.5em;
       color: $gray-600;
+    }
+  }
+  .navbar-toggler{
+    svg{
+      width: 25px;
     }
   }
 }
@@ -133,7 +143,8 @@ button {
   flex-direction: column;
   width: 400px;
   top: 7rem;
-  transform: translateX(-400px);
+  left: calc(100vw - 400px);
+  transform: translateX(400px);
   transition: transform 0.25s linear;
   &.show{
     transform: translateX(0);
@@ -142,19 +153,28 @@ button {
     .container-fluid {
       flex-direction: column;
       align-items: stretch;
-      .nav-link{
+      .nav-link {
         margin: 1rem;
+        padding: 0;
+        border: none;
         display: flex;
         align-items: center;
         justify-content: center;
+        height: 2rem;cursor: pointer;
         svg{
           margin-right: 0.5rem;
-          font-size: 1.5em;
+          font-size: 1.5rem;
           color: $gray-600;
           flex: 1;
         }
         span{
-          flex: 5;
+          flex: 6;
+          font-size: 1rem;
+          text-align: left;
+        }
+        small{
+          font-size: 0.75rem;
+          flex: 2;
         }
       }
     }
@@ -166,7 +186,92 @@ button {
   margin-top: 7rem;
 }
 
+.favorite-icon{
+  background-color: transparent;
+  border: none;
+  &:active,&:focus{
+    outline: none;
+  }
+  &.float-right{
+    float: right;
+  }
+}
 
+@keyframes leagueMoveIn {
+  from {
+    max-height: 0;
+  }
+  to{
+    max-height: 200px;
+  }
+}
+
+.home{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+
+  & > *{
+    margin: 1rem;
+    border: solid thin rgba(255,255,255,0.2);
+    border-radius: 1rem;
+  }
+
+  .leagues-small{
+    flex: 1;
+    .search-leagues{
+      padding: 1rem;
+      display: flex;
+      border-bottom: solid thin rgba(255,255,255,0.2);
+      align-items: center;
+      input{
+        padding: 0.5rem;
+        background-color: transparent;
+        border: none;
+        color: $white;
+        &:active,&:focus{
+          outline: none;
+        }
+      }
+    }
+    nav{
+      padding: 1rem;
+      .nav-link{
+        margin: 0.125rem 0;
+        padding: 0.125rem 0;
+        &.new {
+          max-height: 0;
+          animation: leagueMoveIn 0.5s ease-out;
+          animation-fill-mode: forwards;
+          overflow: hidden;
+        }
+      }
+      div.nav-link{
+        font-weight: bold;
+        margin-top: 1rem;
+      }
+      a.nav-link{
+        font-weight: lighter;
+      }
+    }
+  }
+  .league-matches-container{
+    flex: 3;
+
+  }
+  .news-small{
+    flex: 1;
+    .news-list-elem{
+      display: block;
+      border-radius: 1rem;
+      position: relative;
+      img {
+        position: absolute;
+        inset: 0;
+      }
+    }
+  }
+}
 
 @media (max-width: 420px) {
   .first-open{

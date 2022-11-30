@@ -14,17 +14,20 @@ export class BlogService {
     /**
      * Get Blogs
      * @param limit 
+     * @param offset 
      * @returns BlogList Successful Response
      * @throws ApiError
      */
     public static getBlogsBlogGet(
 limit: number,
+offset: number,
 ): CancelablePromise<BlogList> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/blog/',
             query: {
                 'limit': limit,
+                'offset': offset,
             },
             errors: {
                 422: `Validation Error`,

@@ -44,5 +44,9 @@ export const $MatchListElement = {
     type: 'LeagueListElement',
     isRequired: true,
 },
+        cancelled: {
+    type: 'boolean',
+    isRequired: true,
+},
     },
 } as const;

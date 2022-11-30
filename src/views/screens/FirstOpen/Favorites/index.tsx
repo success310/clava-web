@@ -6,7 +6,11 @@ import { faChevronRight } from '@fortawesome/pro-regular-svg-icons';
 import { getSeason } from '../../../../config/utils';
 import { IDType } from '../../../../config/types';
 import { showTranslated, translate } from '../../../../config/translator';
-import { LanguageLocaleEnum, TeamListElement } from '../../../../client/api';
+import {
+  LanguageLocaleEnum,
+  TeamListElement,
+  User,
+} from '../../../../client/api';
 import Loading from '../../../components/Loading';
 import { connector } from './redux';
 import ClavaPicker from '../../../components/Form/ClavaPicker';
@@ -108,7 +112,10 @@ const Favorites: React.FC<FirstOpenFavsProps> = ({
     },
     [getTeams],
   );
-  const contextValue = useMemo(() => ({ l: language, aoi: -1 }), [language]);
+  const contextValue = useMemo(
+    () => ({ l: language, aoi: -1, user: {} as User }),
+    [language],
+  );
   return (
     <ClavaContext.Provider value={contextValue}>
       <Row className="mb-3">
@@ -188,3 +195,5 @@ const Favorites: React.FC<FirstOpenFavsProps> = ({
 };
 
 export default connector(Favorites);
+
+// saf
