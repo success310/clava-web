@@ -707,6 +707,11 @@ const generalKeywords = {
     it: 'Premium Account',
     en: 'Premium Account',
   },
+  noMatchforSearch: {
+    de: 'Nichts gefunden',
+    it: 'Nichts gefunden',
+    en: 'Nichts gefunden',
+  },
   changeTeamThumb: {
     de: 'Mannschaftsfoto ändern',
     it: 'Cambia foto',
@@ -1728,7 +1733,7 @@ const generalKeywords = {
     en: 'Do you want to enter Events?',
   },
   emptyString: {
-    de: '',
+    de: ' ',
     it: '',
     en: '',
   },

@@ -33,7 +33,7 @@ const MatchSmall: React.FC<ConnectedProps<typeof connector>> = ({
   return (
     <NavLink to={`/match/${matchId}`} className="match-small">
       <Row>
-        <Col xs={2}>
+        <Col xs={2} className="match-status">
           {cancelled ? (
             <span className="text-danger">
               {translate('cancelledShort', l)}
@@ -54,7 +54,7 @@ const MatchSmall: React.FC<ConnectedProps<typeof connector>> = ({
             live={live}
           />
         </Col>
-        <Col xs={2} center>
+        <Col xs={2} className="fav-icon">
           {isAdmin(user) && (
             <span className="text-muted">{`[${match.id}]`}</span>
           )}

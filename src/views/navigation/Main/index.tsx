@@ -127,5 +127,5 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
     </ClavaContext.Provider>
   );
 };
-// relo ad
+// rel o ad
 export default connector(Main);

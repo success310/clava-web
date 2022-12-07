@@ -1,4 +1,10 @@
-import React, { useContext, useMemo, useRef } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { ConnectedProps } from 'react-redux';
 import { NavLink } from 'reactstrap';
 import { faSearch } from '@fortawesome/pro-regular-svg-icons';
@@ -9,6 +15,7 @@ import { showTranslated, translate } from '../../../config/translator';
 import FavoriteIcon from '../General/FavoriteIcon';
 import { LEAGUE_CATEGORIES } from '../../../config/constants';
 import { League, LeagueCategoryEnum } from '../../../client/api';
+import { filterTranslatable } from '../../../config/utils';
 
 const Leagues: React.FC<ConnectedProps<typeof connector>> = ({
   leagues,
@@ -17,6 +24,7 @@ const Leagues: React.FC<ConnectedProps<typeof connector>> = ({
 }) => {
   const { l } = useContext(ClavaContext);
   const currentLength = useRef(-1);
+  const [search, setSearch] = useState('');
   const newId = useMemo(() => {
     if (currentLength.current === -1) {
       currentLength.current = favorites.length;
@@ -30,13 +38,17 @@ const Leagues: React.FC<ConnectedProps<typeof connector>> = ({
     return favorites[favorites.length - 1];
   }, [favorites.length]);
   const favLeagues = useMemo(
-    () => leagues.filter((l1) => favorites.indexOf(l1.id) !== -1),
-    [favorites, leagues],
+    () =>
+      leagues
+        .filter((league) => filterTranslatable(league.name, search))
+        .filter((l1) => favorites.indexOf(l1.id) !== -1),
+    [favorites, leagues, search],
   );
   let catIdx = 0;
   const sorted = useMemo(
     () =>
       leagues
+        .filter((league) => filterTranslatable(league.name, search))
         .filter((league) => favorites.indexOf(league.id) === -1)
         .sort(
           (l1, l2) =>
@@ -69,13 +81,24 @@ const Leagues: React.FC<ConnectedProps<typeof connector>> = ({
           },
           [LEAGUE_CATEGORIES[0]],
         ),
-    [leagues, favorites],
+    [leagues, favorites, catIdx, search],
+  );
+  const onSearch = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
+    (e) => {
+      setSearch(e.currentTarget.value);
+    },
+    [],
   );
   return (
     <div className={`leagues${small ? ' leagues-small' : ''}`}>
       <div className="search-leagues">
         <FontAwesomeIcon icon={faSearch} />
-        <input type="text" placeholder={translate('search', l)} />
+        <input
+          type="text"
+          placeholder={translate('search', l)}
+          value={search}
+          onChange={onSearch}
+        />
       </div>
       <nav>
         {favLeagues.length !== 0 && (
@@ -118,10 +141,13 @@ const Leagues: React.FC<ConnectedProps<typeof connector>> = ({
             </NavLink>
           );
         })}
+        {search !== '' && favLeagues.length === 0 && sorted.length === 1 && (
+          <span className="nav-link">{translate('noMatchforSearch', l)}</span>
+        )}
       </nav>
     </div>
   );
 };
 
 export default connector(Leagues);
-// rel
+// re l

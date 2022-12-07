@@ -31,6 +31,10 @@ const MatchDays: React.FC<ConnectedProps<typeof connector>> = ({
   setSelectedDate,
 }) => {
   const scrollView = useRef<HTMLDivElement>(null);
+  const initialOffset = useRef(-1);
+  const swipeOffset = useRef(-1);
+  const swipeStart = useRef(false);
+  const nearestDate = useRef(new Date());
 
   useEffect(() => {
     if (matchDays.length === 0) {
@@ -42,38 +46,10 @@ const MatchDays: React.FC<ConnectedProps<typeof connector>> = ({
   useEffect(() => {
     if (!selectedDate && matchDays.length && !disabled) {
       const closest = getClosestDate(matchDays);
+      nearestDate.current = closest;
       setSelectedDate(closest);
     }
   }, [setSelectedDate, matchDays, selectedDate, disabled]);
-  const selectedPos = useMemo(() => {
-    if (!selectedDate) return 0;
-    const idx = matchDays.findIndex(
-      (day) => day.getTime() === selectedDate.getTime(),
-    );
-    if (idx === -1) {
-      const closest = getClosestDate(matchDays);
-      return matchDays.findIndex((day) => day.getTime() === closest.getTime());
-    }
-    return idx;
-  }, [selectedDate, matchDays]);
-  const scroll = useCallback(() => {
-    requestAnimationFrame(() => {
-      if (scrollView.current) {
-        scrollView.current.scrollTo({
-          top: 0,
-          left: selectedPos * 70,
-          behavior: 'smooth',
-        });
-      }
-    });
-  }, [selectedPos]);
-
-  useEffect(() => {
-    if (shouldScroll.current) {
-      shouldScroll.current = false;
-      scroll();
-    }
-  }, [scroll, shouldScroll]);
 
   const onLoadMonth = useCallback(
     (date: Date) => {
@@ -110,11 +86,13 @@ const MatchDays: React.FC<ConnectedProps<typeof connector>> = ({
 
   const customSelectDate = useCallback(
     (day: number) => {
-      if (day === EARLIER_DAY) onPressSmaller();
-      else if (day === LATER_DAY) onPressBigger();
-      else {
-        shouldScroll.current = true;
-        setSelectedDate(numberToDay(day));
+      if (!swipeStart.current) {
+        if (day === EARLIER_DAY) onPressSmaller();
+        else if (day === LATER_DAY) onPressBigger();
+        else {
+          shouldScroll.current = true;
+          setSelectedDate(numberToDay(day));
+        }
       }
     },
     [onPressSmaller, onPressBigger],
@@ -139,28 +117,103 @@ const MatchDays: React.FC<ConnectedProps<typeof connector>> = ({
     }),
     [disabled, customSelectDate],
   );
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      if (scrollView.current && selectedDate) {
+        const buttons = document.getElementsByClassName('matchday');
+        for (let i = 0; i < buttons.length; i++) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          const item: HTMLButtonElement | null = buttons.item(i);
+
+          if (
+            item &&
+            parseInt(item.getAttribute('data-date') ?? '-1', 10) ===
+              dayToNumber(selectedDate) + SELECTED_DAY
+          ) {
+            scrollView.current.scrollTo({
+              left:
+                item.offsetLeft -
+                scrollView.current.clientWidth / 2 +
+                item.clientWidth / 2,
+              top: 0,
+              behavior: 'smooth',
+            });
+            break;
+          }
+        }
+      }
+    });
+  }, [selectedDate]);
+  const onSwipe = useCallback((e) => {
+    if (swipeStart.current && scrollView.current) {
+      swipeOffset.current = initialOffset.current - e.clientX;
+      initialOffset.current = e.clientX;
+      scrollView.current.scrollBy({
+        left: swipeOffset.current,
+        top: 0,
+        behavior: 'auto',
+      });
+    }
+  }, []);
+  const onSwipeEnd = useCallback(() => {
+    swipeStart.current = false;
+    document.removeEventListener('mousemove', onSwipe);
+    document.removeEventListener('touchmove', onSwipe);
+    document.removeEventListener('mouseup', onSwipeEnd);
+    document.removeEventListener('touchend', onSwipeEnd);
+  }, [onSwipe]);
+  const onSwipeStart = useCallback(
+    (e) => {
+      const timeout = setTimeout(() => {
+        swipeStart.current = true;
+        initialOffset.current = e.clientX;
+        document.addEventListener('mousemove', onSwipe);
+        document.addEventListener('touchmove', onSwipe);
+        document.addEventListener('mouseup', onSwipeEnd);
+        document.addEventListener('touchend', onSwipeEnd);
+      }, 200);
+      document.addEventListener(
+        'mouseup',
+        () => {
+          clearTimeout(timeout);
+        },
+        { once: true },
+      );
+    },
+    [onSwipe, onSwipeEnd],
+  );
+
   return (
     <div className="matchdays-container">
-      <div className="matchdays">
-        {matchDays.length === 0 ? (
-          <Loading small />
-        ) : (
-          <MatchDaysContext.Provider value={matchDaysContextVal}>
-            {matchDaysRender.map((md) => (
-              <MatchDayElement day={md} />
-            ))}
-          </MatchDaysContext.Provider>
-        )}
-      </div>
-      <ClavaCalendar
-        months={months}
-        onDaySelected={setSelectedDate}
-        loadMonth={onLoadMonth}
-        selectedDate={selectedDate}
-      />
+      <MatchDaysContext.Provider value={matchDaysContextVal}>
+        <div className="today">
+          <MatchDayElement day={dayToNumber(nearestDate.current)} live />
+        </div>
+        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+        <div
+          className="matchdays"
+          ref={scrollView}
+          onMouseDown={onSwipeStart}
+          onTouchStart={onSwipeStart}>
+          {matchDays.length === 0 ? (
+            <Loading small />
+          ) : (
+            matchDaysRender.map((md) => (
+              <MatchDayElement day={md} key={`match-day-${md}`} />
+            ))
+          )}
+        </div>
+        <ClavaCalendar
+          months={months}
+          onDaySelected={setSelectedDate}
+          loadMonth={onLoadMonth}
+          selectedDate={selectedDate}
+        />
+      </MatchDaysContext.Provider>
     </div>
   );
 };
-// relo ad
+// r elad
 
 export default connector(MatchDays);

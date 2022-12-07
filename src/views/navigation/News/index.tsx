@@ -77,10 +77,17 @@ const News: React.FC<ConnectedProps<typeof connector>> = ({
   }, [small, news, videos, transfers, l]);
   return (
     <div className={`news ${small ? 'news-small' : ' '}`}>
-      {small && <h2>{translate('featuredNews', l)}</h2>}
-      {items.map((item) => (
-        <NewsListElement {...item} key={`news-elem-${item.id}-${item.type}`} />
-      ))}
+      <div className="news-header">
+        {small && <h5>{translate('featuredNews', l)}</h5>}
+      </div>
+      <div className="news-list">
+        {items.map((item) => (
+          <NewsListElement
+            {...item}
+            key={`news-elem-${item.id}-${item.type}`}
+          />
+        ))}
+      </div>
     </div>
   );
 };

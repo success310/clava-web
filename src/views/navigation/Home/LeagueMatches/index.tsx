@@ -132,12 +132,17 @@ const LeagueMatches: React.FC<ConnectedProps<typeof connector>> = ({
         {filtered.length === 0 ? (
           <Loading small />
         ) : (
-          filtered.map((section) => <LeagueMatchSection section={section} />)
+          filtered.map((section) => (
+            <LeagueMatchSection
+              section={section}
+              key={`lm-section-${section.title.id}`}
+            />
+          ))
         )}
       </div>
     </div>
   );
 };
 
-// reload
+// relo ad
 export default connector(LeagueMatches);

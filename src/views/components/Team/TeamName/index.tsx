@@ -39,10 +39,10 @@ const TeamName: React.FC<TeamNameProps> = ({
   );
   return (
     <Row className="team-name">
-      <Col xs={2}>
+      <Col xs={2} md={1}>
         <ClavaImage image={team.thumb} width={mainLeague ? 32 : 24} />
       </Col>
-      <Col xs={8}>
+      <Col xs={8} md={10}>
         <span
           className={
             (primary ? 'text-primary' : '') + (bold ? 'text-bold' : '')
@@ -60,7 +60,7 @@ const TeamName: React.FC<TeamNameProps> = ({
         )}
       </Col>
       {goal !== undefined ? (
-        <Col xs={2}>
+        <Col xs={2} md={1}>
           <MatchScoreDisplay
             goal1={goal}
             className={`bold${live ? 'live' : ''}`}

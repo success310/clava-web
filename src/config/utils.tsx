@@ -34,6 +34,7 @@ import {
   PlayerListElement,
   ScopeEnum,
   Team,
+  Translation,
   User,
 } from '../client/api';
 import { Translatable } from './translator';
@@ -641,5 +642,14 @@ export function shouldAdBePlaced(
     numOfAds === 0 ||
     (matchCounter > MIN_AD_DISTANCE &&
       matchCounter - MIN_AD_DISTANCE > Math.random() * MAX_AD_DISTANCE * 3)
+  );
+}
+
+export function filterTranslatable(name: Translation, q: string) {
+  return (
+    name.text.toLowerCase().indexOf(q.toLowerCase()) !== -1 ||
+    name.textIT.toLowerCase().indexOf(q.toLowerCase()) !== -1 ||
+    name.textEN.toLowerCase().indexOf(q.toLowerCase()) !== -1 ||
+    name.textDE.toLowerCase().indexOf(q.toLowerCase()) !== -1
   );
 }

@@ -18,8 +18,8 @@ export const MatchDaysContext = React.createContext<MatchDayContextType>({
 export const EARLIER_DAY = 19700001;
 export const LATER_DAY = 99990001;
 export const SELECTED_DAY = 1000000000;
-
-const MatchDayElement: React.ComponentType<{ day: number }> = ({ day }) => {
+type MatchDayProps = { day: number; live?: boolean };
+const MatchDayElement: React.ComponentType<MatchDayProps> = ({ day, live }) => {
   const { l } = useContext(ClavaContext);
   const { disabled, selectDate } = useContext(MatchDaysContext);
   const isSelected = useMemo(
@@ -70,8 +70,15 @@ const MatchDayElement: React.ComponentType<{ day: number }> = ({ day }) => {
     return [weekday, l === 'de' ? dateStr.slice(0, -1) : dateStr];
   }, [realDay, isToday, isTomorrow, isYesterday, l]);
   return (
-    <button type="button" onClick={onPress} className="matchDay">
-      <span className={isSelected ? 'text-primary' : ''}>
+    <button
+      type="button"
+      onClick={onPress}
+      className="matchday"
+      data-date={day.toString(10)}>
+      <span
+        className={
+          isSelected ? 'text-primary bold' : live ? 'text-live bold' : ''
+        }>
         {w}
         {!!date && <br />}
         {date}
@@ -80,4 +87,9 @@ const MatchDayElement: React.ComponentType<{ day: number }> = ({ day }) => {
   );
 };
 
+MatchDayElement.defaultProps = {
+  live: false,
+};
+
 export default MatchDayElement;
+// r eload

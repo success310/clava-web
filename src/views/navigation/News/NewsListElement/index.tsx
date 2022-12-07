@@ -1,10 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { NavLink } from 'reactstrap';
 import { IDType } from '../../../../config/types';
 import ClavaImage from '../../../components/ClavaImage';
 import { File } from '../../../../client/api';
-import { formatDate } from '../../../../config/utils';
-import { ClavaContext } from '../../../../config/contexts';
 
 export declare type NewsListElementType = {
   type: 'news' | 'transfers' | 'videos';
@@ -19,17 +17,13 @@ const NewsListElement: React.FC<NewsListElementType> = ({
   title,
   image,
   date,
-}) => {
-  const { l } = useContext(ClavaContext);
-  return (
-    <NavLink
-      to={`/${type}/${id}/${encodeURI(title)}`}
-      className="news-list-elem">
-      {image && <ClavaImage image={image} width="100%" />}
-      <h3>{title}</h3>
-      <small>{formatDate(date, l, false, false, true)}</small>
-    </NavLink>
-  );
-};
+}) => (
+  <NavLink to={`/${type}/${id}/${encodeURI(title)}`} className="news-list-elem">
+    {image && <ClavaImage image={image} width="100%" />}
+    <div className="backdrop">
+      <h6>{title}</h6>
+    </div>
+  </NavLink>
+);
 export default NewsListElement;
-// rel
+// r  el
