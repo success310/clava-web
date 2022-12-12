@@ -1,6 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Col, NavLink, Row } from 'reactstrap';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { Col, Row } from 'reactstrap';
+import { NavLink } from 'react-router-dom';
 import { ConnectedProps } from 'react-redux';
+import { useParams } from 'react-router';
 import FavoriteIcon from '../../General/FavoriteIcon';
 import TeamName from '../../Team/TeamName';
 import MatchStatusDisplay from '../MatchStatusDisplay';
@@ -8,17 +10,18 @@ import { isAdmin, matchStatusDate } from '../../../../config/utils';
 import { translate } from '../../../../config/translator';
 import { connector } from './redux';
 import { ClavaContext } from '../../../../config/contexts';
+import Match from '../../../screens/Match';
 
 const MatchSmall: React.FC<ConnectedProps<typeof connector>> = ({
   match,
   cancelled,
   startDate,
-  matchId,
+  thisMatchId,
   goal1,
   goal2,
 }) => {
   const { user, l } = useContext(ClavaContext);
-
+  const { leagueId, matchId } = useParams();
   const [status, setStatus] = useState(matchStatusDate(startDate));
   useEffect(() => {
     const interval = setInterval(() => {
@@ -28,10 +31,20 @@ const MatchSmall: React.FC<ConnectedProps<typeof connector>> = ({
       clearInterval(interval);
     };
   }, [startDate]);
+  const realMatchId = useMemo(() => {
+    if (!matchId) return -1;
+    const id = parseInt(matchId, 10);
+    return Number.isNaN(id) ? -1 : id;
+  }, [matchId]);
   const live = typeof status === 'number';
   if (!match) return null;
+  if (realMatchId === match.id) {
+    return <Match match={match} />;
+  }
   return (
-    <NavLink to={`/match/${matchId}`} className="match-small">
+    <NavLink
+      to={`${leagueId ? `/league/${leagueId}` : ''}/match/${thisMatchId}`}
+      className="match-small">
       <Row>
         <Col xs={2} className="match-status">
           {cancelled ? (
@@ -59,7 +72,7 @@ const MatchSmall: React.FC<ConnectedProps<typeof connector>> = ({
             <span className="text-muted">{`[${match.id}]`}</span>
           )}
           <FavoriteIcon
-            id={matchId}
+            id={thisMatchId}
             type="match"
             team2Id={match.team1.id}
             team1Id={match.team2.id}
@@ -71,3 +84,4 @@ const MatchSmall: React.FC<ConnectedProps<typeof connector>> = ({
 };
 
 export default connector(MatchSmall);
+// rel oad

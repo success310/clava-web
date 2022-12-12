@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { faCalendar } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Calendar from 'react-calendar';
+import Calendar, { CalendarTileProperties, ViewCallback } from 'react-calendar';
 import { DAY_IN_MS, dayToNumber } from '../../../../config/utils';
 
 type MonthData = { month: number; year: number; dates: Date[] };
@@ -42,10 +42,7 @@ const ClavaCalendar: React.FC<ClavaCalendarProps> = ({
     setOpen(true);
   }, []);
   const renderTile = useCallback<
-    (props: {
-      date: Date;
-      view: 'month' | 'year' | 'decade';
-    }) => null | JSX.Element
+    (props: CalendarTileProperties) => JSX.Element | null
   >(
     ({ date, view }) => {
       if (view === 'month') {
@@ -56,21 +53,7 @@ const ClavaCalendar: React.FC<ClavaCalendarProps> = ({
     },
     [months],
   );
-  const onActiveStartDateChange = useCallback<
-    (props: {
-      action:
-        | 'prev'
-        | 'prev2'
-        | 'next'
-        | 'next2'
-        | 'drillUp'
-        | 'drillDown'
-        | 'onChange';
-      activeStartDate: Date;
-      view: 'month' | 'year' | 'decade';
-      value: Date;
-    }) => void
-  >(
+  const onActiveStartDateChange = useCallback<ViewCallback>(
     ({ action, activeStartDate, view }) => {
       if (
         (action === 'prev' ||
@@ -84,19 +67,14 @@ const ClavaCalendar: React.FC<ClavaCalendarProps> = ({
     },
     [loadMonth],
   );
-  const onMonthChanged = useCallback<
-    (props: {
-      activeStartDate: Date;
-      view: 'month' | 'year' | 'decade';
-    }) => void
-  >(
-    ({ activeStartDate, view }) => {
+  /* const onMonthChanged = useCallback<DateCallback>(
+    (value) => {
       if (view === 'month') {
         loadMonth(new Date(activeStartDate.getTime() + DAY_IN_MS));
       }
     },
     [loadMonth],
-  );
+  );*/
   return (
     <div className="clava-calendar-container">
       <button type="button" className="label" onClick={onOpenCalendar}>
@@ -109,7 +87,7 @@ const ClavaCalendar: React.FC<ClavaCalendarProps> = ({
             value={selectedDate}
             tileContent={renderTile}
             onActiveStartDateChange={onActiveStartDateChange}
-            onClickMonth={onMonthChanged}
+            /*   onClickMonth={onMonthChanged}*/
           />
         </div>
       )}

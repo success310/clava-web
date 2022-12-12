@@ -5,7 +5,8 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { Navbar, NavLink } from 'reactstrap';
+import { Navbar } from 'reactstrap';
+import { Link, NavLink } from 'react-router-dom';
 import {
   faAd,
   faInfoCircle,
@@ -15,7 +16,6 @@ import {
 } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ConnectedProps } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { ClavaContext } from '../../../config/contexts';
 import { showTranslated, translate } from '../../../config/translator';
 import { connector } from './redux';
@@ -52,7 +52,7 @@ const Sidebar: React.FC<ConnectedProps<typeof connector>> = ({
   );
   return (
     <Navbar className="navbar-vertical">
-      <NavLink onClick={onToggleLang}>
+      <NavLink to="#" onClick={onToggleLang}>
         <FontAwesomeIcon icon={faLanguage} />
         <span>{translate('language', l)}</span>
         <small className="text-end">
@@ -66,6 +66,7 @@ const Sidebar: React.FC<ConnectedProps<typeof connector>> = ({
             return (
               <NavLink
                 key={`lang-${lang.id}`}
+                to="#"
                 onClick={() => {
                   changeLang(lang);
                 }}>
@@ -75,7 +76,7 @@ const Sidebar: React.FC<ConnectedProps<typeof connector>> = ({
           })}
         </>
       )}
-      <NavLink onClick={onToggleAoi}>
+      <NavLink onClick={onToggleAoi} to="#">
         <FontAwesomeIcon icon={faMap} />
         <span>{translate('chooseAoi', l)}</span>
         <small className="text-end">
@@ -89,6 +90,7 @@ const Sidebar: React.FC<ConnectedProps<typeof connector>> = ({
             return (
               <NavLink
                 key={`lang-${item.id}`}
+                to="#"
                 onClick={() => {
                   changeAoi(item);
                 }}>
@@ -98,16 +100,16 @@ const Sidebar: React.FC<ConnectedProps<typeof connector>> = ({
           })}
         </>
       )}
-      <NavLink href="mailto:info@clava-sports.com">
+      <a href="mailto:info@clava-sports.com">
         <FontAwesomeIcon icon={faMailbox} />
         <span>{translate('contactUs', l)}</span>
         <small className="text-end" />
-      </NavLink>
-      <NavLink href="mailto:ad@clava-sports.com">
+      </a>
+      <a href="mailto:ad@clava-sports.com">
         <FontAwesomeIcon icon={faAd} />
         <span>{translate('adsOnClava', l)}</span>
         <small className="text-end" />
-      </NavLink>
+      </a>
       <Link to="/imprint" className="nav-link">
         <FontAwesomeIcon icon={faInfoCircle} />
         <span>{translate('aboutUs', l)}</span>

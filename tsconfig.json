@@ -1,33 +1,23 @@
 {
   "compilerOptions": {
-    "outDir": "build/dist",
-    "module": "esnext",
-    "target": "es6",
-    "lib": ["es6", "dom", "es2020"],
+    "target": "ESNext",
+    "module": "umd",
+    "lib": [
+      "ESNext",
+      "dom"
+    ],
+    "jsx": "react",
+    "noEmit": true,
     "sourceMap": true,
-    "removeComments": false,
-    "allowJs": true,
-    "jsx": "react-jsx",
-    "moduleResolution": "node",
-    "rootDir": "src",
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noImplicitAny": false,
-    "strictNullChecks": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
+    /* Strict Type-Checking Options */
     "strict": true,
-    "noFallthroughCasesInSwitch": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+
+    /* Module Resolution Options */
+    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true
   },
-  "files": ["src/index.tsx"],
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }

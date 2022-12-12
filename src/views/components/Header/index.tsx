@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useState } from 'react';
-import { Modal, Navbar, NavbarToggler, NavLink } from 'reactstrap';
+import { Modal, Navbar, NavbarToggler } from 'reactstrap';
+import { NavLink } from 'react-router-dom';
 import {
   faArrowRightToLine,
   faBars,

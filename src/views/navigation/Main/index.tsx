@@ -107,6 +107,7 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
   const onFirstOpenFinish = useCallback(() => {
     setFirstOpen(false);
   }, []);
+
   if (firstOpen) {
     return (
       <FirstOpen language={clavaContext.l} finalCallback={onFirstOpenFinish} />
@@ -122,10 +123,13 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
           <Route index element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/" element={<Home />} />
+          <Route path="/league/:leagueId" element={<Home />} />
+          <Route path="/league/:leagueId/match/:matchId" element={<Home />} />
+          <Route path="/match/:matchId" element={<Home />} />
         </Routes>
       </div>
     </ClavaContext.Provider>
   );
 };
-// rel o ad
+// reload
 export default connector(Main);

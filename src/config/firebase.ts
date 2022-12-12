@@ -90,7 +90,10 @@ class FirebaseFactory {
       } catch (e) {
         Sentry.captureException(e);
       }
-    } else if (!global.__DEV__) {
+    } else if (
+      !process.env.NODE_ENV ||
+      process.env.NODE_ENV === 'development'
+    ) {
       Sentry.captureMessage('Second initialization of app');
       // throw new Error("Firebase can't be reinitialized");
     }

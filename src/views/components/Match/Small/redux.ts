@@ -30,7 +30,7 @@ const props = (
     match,
     goal1: match ? match.goal1 : 0,
     goal2: match ? match.goal2 : 0,
-    matchId: match ? match.id : -1,
+    thisMatchId: match ? match.id : -1,
     cancelled: match ? match.cancelled : false,
     startDate: match ? getMatchDate(match).getTime() : 0,
   };

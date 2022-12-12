@@ -8,6 +8,7 @@ import {
   osName,
   osVersion,
 } from 'react-device-detect';
+import React from 'react';
 import {
   CollectionType,
   Favorite,
@@ -43,7 +44,7 @@ export function errorLogging(
   error: object | string,
   type?: Sentry.Severity,
 ): void {
-  if (global.__DEV__) {
+  if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
     console.log(JSON.stringify(error));
     console.trace('Error at: ');
   } else {
@@ -652,4 +653,8 @@ export function filterTranslatable(name: Translation, q: string) {
     name.textEN.toLowerCase().indexOf(q.toLowerCase()) !== -1 ||
     name.textDE.toLowerCase().indexOf(q.toLowerCase()) !== -1
   );
+}
+
+export function setHead(title: string) {
+  document.title = `Clava-Sports - ${title}`;
 }

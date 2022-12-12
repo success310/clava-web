@@ -1,12 +1,13 @@
 import React, {
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useRef,
   useState,
 } from 'react';
 import { ConnectedProps } from 'react-redux';
-import { NavLink } from 'reactstrap';
+import { NavLink } from 'react-router-dom';
 import { faSearch } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connector } from './redux';
@@ -15,16 +16,23 @@ import { showTranslated, translate } from '../../../config/translator';
 import FavoriteIcon from '../General/FavoriteIcon';
 import { LEAGUE_CATEGORIES } from '../../../config/constants';
 import { League, LeagueCategoryEnum } from '../../../client/api';
-import { filterTranslatable } from '../../../config/utils';
+import { filterTranslatable, setHead } from '../../../config/utils';
 
 const Leagues: React.FC<ConnectedProps<typeof connector>> = ({
   leagues,
   small,
+  leagueId,
   favorites,
 }) => {
   const { l } = useContext(ClavaContext);
   const currentLength = useRef(-1);
   const [search, setSearch] = useState('');
+  useEffect(() => {
+    if (leagueId !== -1) {
+      const league = leagues.find((lea) => lea.id === leagueId);
+      if (league) setHead(showTranslated(league.name, l));
+    }
+  }, [leagueId, leagues, l]);
   const newId = useMemo(() => {
     if (currentLength.current === -1) {
       currentLength.current = favorites.length;
@@ -129,7 +137,8 @@ const Leagues: React.FC<ConnectedProps<typeof connector>> = ({
           return (
             <NavLink
               to={`/league/${lOrCat.id}`}
-              key={`league-list-${lOrCat.id}`}>
+              key={`league-list-${lOrCat.id}`}
+              className={leagueId === lOrCat.id ? 'active' : ''}>
               {showTranslated(lOrCat.name, l)}
               <FavoriteIcon
                 type="league"

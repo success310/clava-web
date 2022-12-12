@@ -30,6 +30,7 @@ const MatchDays: React.FC<ConnectedProps<typeof connector>> = ({
   disabled,
   setSelectedDate,
 }) => {
+  // TODO do wori des auf liga unpassn
   const scrollView = useRef<HTMLDivElement>(null);
   const initialOffset = useRef(-1);
   const swipeOffset = useRef(-1);
@@ -38,18 +39,19 @@ const MatchDays: React.FC<ConnectedProps<typeof connector>> = ({
 
   useEffect(() => {
     if (matchDays.length === 0) {
-      if (selectedDate) setSelectedDate(undefined);
+      if (selectedDate) {
+        setSelectedDate(undefined);
+      }
       if (!selectedDate) getToday(id, type);
     }
   }, [getToday, id, matchDays.length, selectedDate, setSelectedDate, type]);
-
   useEffect(() => {
     if (!selectedDate && matchDays.length && !disabled) {
       const closest = getClosestDate(matchDays);
       nearestDate.current = closest;
       setSelectedDate(closest);
     }
-  }, [setSelectedDate, matchDays, selectedDate, disabled]);
+  }, [setSelectedDate, matchDays.length, selectedDate, disabled]);
 
   const onLoadMonth = useCallback(
     (date: Date) => {
@@ -145,7 +147,7 @@ const MatchDays: React.FC<ConnectedProps<typeof connector>> = ({
       }
     });
   }, [selectedDate]);
-  const onSwipe = useCallback((e) => {
+  const onSwipe = useCallback((e: MouseEvent) => {
     if (swipeStart.current && scrollView.current) {
       swipeOffset.current = initialOffset.current - e.clientX;
       initialOffset.current = e.clientX;
@@ -159,19 +161,19 @@ const MatchDays: React.FC<ConnectedProps<typeof connector>> = ({
   const onSwipeEnd = useCallback(() => {
     swipeStart.current = false;
     document.removeEventListener('mousemove', onSwipe);
-    document.removeEventListener('touchmove', onSwipe);
+    //  document.removeEventListener('touchmove', onSwipe);
     document.removeEventListener('mouseup', onSwipeEnd);
-    document.removeEventListener('touchend', onSwipeEnd);
+    //    document.removeEventListener('touchend', onSwipeEnd);
   }, [onSwipe]);
-  const onSwipeStart = useCallback(
+  const onSwipeStart = useCallback<React.MouseEventHandler>(
     (e) => {
       const timeout = setTimeout(() => {
         swipeStart.current = true;
         initialOffset.current = e.clientX;
         document.addEventListener('mousemove', onSwipe);
-        document.addEventListener('touchmove', onSwipe);
+        //    document.addEventListener('touchmove', onSwipe);
         document.addEventListener('mouseup', onSwipeEnd);
-        document.addEventListener('touchend', onSwipeEnd);
+        //  document.addEventListener('touchend', onSwipeEnd);
       }, 200);
       document.addEventListener(
         'mouseup',
@@ -191,11 +193,7 @@ const MatchDays: React.FC<ConnectedProps<typeof connector>> = ({
           <MatchDayElement day={dayToNumber(nearestDate.current)} live />
         </div>
         {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
-        <div
-          className="matchdays"
-          ref={scrollView}
-          onMouseDown={onSwipeStart}
-          onTouchStart={onSwipeStart}>
+        <div className="matchdays" ref={scrollView} onMouseDown={onSwipeStart}>
           {matchDays.length === 0 ? (
             <Loading small />
           ) : (

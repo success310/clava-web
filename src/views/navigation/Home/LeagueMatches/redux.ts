@@ -4,8 +4,12 @@ import { connect } from 'react-redux';
 import { performAction } from '../../../../store/actions/all';
 import { RootState } from '../../../../store';
 import { IDType } from '../../../../config/types';
-import { fetchLeagueMatchesOfDay } from '../../../../store/actions/matchActions';
+import {
+  fetchLeagueMatchesOfDay,
+  fetchLeagueMatchesOfDayLeague,
+} from '../../../../store/actions/matchActions';
 import { dayToNumber } from '../../../../config/utils';
+import { LeagueMatch, MatchListElement } from '../../../../client/api';
 
 const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
   fetchLeagueMatchesOfDay: (aoiID: IDType, date: Date) => {
@@ -14,17 +18,33 @@ const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
       p: [dispatch, aoiID, dayToNumber(date)],
     });
   },
+  fetchLeagueMatchesOfDayAndLeague: (leagueId: IDType, date: Date) => {
+    performAction({
+      f: fetchLeagueMatchesOfDayLeague,
+      p: [dispatch, dayToNumber(date), leagueId],
+    });
+  },
 });
 
-const props = (state: RootState) => {
-  const leagueMatches = state.match.leagueMatches?.response ?? [];
+const props = (state: RootState, prevProps: { leagueId: IDType }) => {
+  let leagueMatches: LeagueMatch[] = [];
+  if (prevProps.leagueId === -1) {
+    if (state.match.leagueMatches)
+      leagueMatches = state.match.leagueMatches.response ?? [];
+  }
+  let matches: MatchListElement[] = [];
+  if (
+    prevProps.leagueId !== -1 &&
+    state.match.matchElements &&
+    state.match.matchElements.id === prevProps.leagueId
+  )
+    matches = state.match.matchElements.response;
   return {
     leagueMatches,
-    matchesLength: leagueMatches.reduce(
-      (prev, current) => prev + current.matches.length,
-      0,
-    ),
+    matches,
+    matchesLength: matches.length,
     favorites: state.user.favorites,
+    ...prevProps,
   };
 };
 
