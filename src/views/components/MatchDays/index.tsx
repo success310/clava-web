@@ -1,5 +1,12 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react';
 import { ConnectedProps } from 'react-redux';
+import { useParams } from 'react-router';
 import { connector } from './redux';
 import {
   dayToNumber,
@@ -8,14 +15,14 @@ import {
   sameDay,
 } from '../../../config/utils';
 import MatchDayElement, {
-  EARLIER_DAY,
-  LATER_DAY,
   MatchDayContextType,
   MatchDaysContext,
   SELECTED_DAY,
 } from './MatchDay';
 import Loading from '../Loading';
 import ClavaCalendar from './ClavaCalendar';
+import { translate } from '../../../config/translator';
+import { ClavaContext } from '../../../config/contexts';
 
 const MatchDays: React.FC<ConnectedProps<typeof connector>> = ({
   matchDays,
@@ -33,29 +40,54 @@ const MatchDays: React.FC<ConnectedProps<typeof connector>> = ({
   // TODO do wori des auf liga unpassn
   const scrollView = useRef<HTMLDivElement>(null);
   const initialOffset = useRef(-1);
+  const { date } = useParams();
   const swipeOffset = useRef(-1);
   const swipeStart = useRef(false);
   const nearestDate = useRef(new Date());
-
+  const { l } = useContext(ClavaContext);
+  const hrefDate = useMemo<number | undefined>(() => {
+    if (!date || Number.isNaN(parseInt(date, 10))) return undefined;
+    return parseInt(date, 10);
+  }, [date]);
   useEffect(() => {
     if (matchDays.length === 0) {
-      if (selectedDate) {
+      if (selectedDate && !hrefDate) {
         setSelectedDate(undefined);
       }
-      if (!selectedDate) getToday(id, type);
+      if (!selectedDate && !hrefDate) {
+        getToday(id, type);
+      }
+      if (!selectedDate && hrefDate) {
+        getToday(id, type, numberToDay(hrefDate));
+      }
     }
-  }, [getToday, id, matchDays.length, selectedDate, setSelectedDate, type]);
+  }, [
+    hrefDate,
+    getToday,
+    id,
+    matchDays.length,
+    selectedDate,
+    setSelectedDate,
+    getMonth,
+    type,
+  ]);
   useEffect(() => {
-    if (!selectedDate && matchDays.length && !disabled) {
+    if (
+      hrefDate &&
+      (!selectedDate || hrefDate !== dayToNumber(selectedDate)) &&
+      matchDays.length
+    ) {
+      setSelectedDate(numberToDay(hrefDate));
+    } else if ((!selectedDate || !hrefDate) && matchDays.length && !disabled) {
       const closest = getClosestDate(matchDays);
       nearestDate.current = closest;
       setSelectedDate(closest);
     }
-  }, [setSelectedDate, matchDays.length, selectedDate, disabled]);
+  }, [hrefDate, setSelectedDate, matchDays.length, selectedDate, disabled]);
 
   const onLoadMonth = useCallback(
-    (date: Date) => {
-      getMonth(id, date, type);
+    (day: Date) => {
+      getMonth(id, day, type);
     },
     [getMonth, id, type],
   );
@@ -86,29 +118,20 @@ const MatchDays: React.FC<ConnectedProps<typeof connector>> = ({
     if (matchDays && matchDays.length) getSmaller(id, matchDays[0], type);
   }, [matchDays, type, id]);
 
-  const customSelectDate = useCallback(
-    (day: number) => {
-      if (!swipeStart.current) {
-        if (day === EARLIER_DAY) onPressSmaller();
-        else if (day === LATER_DAY) onPressBigger();
-        else {
-          shouldScroll.current = true;
-          setSelectedDate(numberToDay(day));
-        }
-      }
-    },
-    [onPressSmaller, onPressBigger],
-  );
+  const customSelectDate = useCallback((day: number) => {
+    if (!swipeStart.current) {
+      shouldScroll.current = true;
+      setSelectedDate(numberToDay(day));
+    }
+  }, []);
 
   const matchDaysRender = useMemo(
     () => [
-      EARLIER_DAY,
       ...matchDays.map(
         (d) =>
           dayToNumber(d) +
           (selectedDate && sameDay(d, selectedDate) ? SELECTED_DAY : 0),
       ),
-      LATER_DAY,
     ],
     [matchDays, selectedDate],
   );
@@ -197,14 +220,27 @@ const MatchDays: React.FC<ConnectedProps<typeof connector>> = ({
           {matchDays.length === 0 ? (
             <Loading small />
           ) : (
-            matchDaysRender.map((md) => (
-              <MatchDayElement day={md} key={`match-day-${md}`} />
-            ))
+            <>
+              <button
+                type="button"
+                className="matchday"
+                onClick={onPressSmaller}>
+                <span>{translate('earlier', l)}</span>
+              </button>
+              {matchDaysRender.map((md) => (
+                <MatchDayElement day={md} key={`match-day-${md}`} />
+              ))}
+              <button
+                type="button"
+                className="matchday"
+                onClick={onPressBigger}>
+                <span>{translate('later', l)}</span>
+              </button>
+            </>
           )}
         </div>
         <ClavaCalendar
           months={months}
-          onDaySelected={setSelectedDate}
           loadMonth={onLoadMonth}
           selectedDate={selectedDate}
         />
@@ -212,6 +248,6 @@ const MatchDays: React.FC<ConnectedProps<typeof connector>> = ({
     </div>
   );
 };
-// r elad
+// r elo  ad
 
 export default connector(MatchDays);

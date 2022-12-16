@@ -49,7 +49,7 @@ export function fetchMatchDaysOfLeague(
   type: 'today' | 'bigger' | 'smaller' | 'month',
 ) {
   client()
-    .getMatchDays(new Date(), { type, league })
+    .getMatchDays(date, { type, league })
     .then(
       (response) => {
         dispatch({

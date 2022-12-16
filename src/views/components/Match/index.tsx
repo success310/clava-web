@@ -1,16 +1,20 @@
 import { ConnectedProps } from 'react-redux';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Col, Row } from 'reactstrap';
 import { faClose } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavLink } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { connector } from './redux';
 import { showTranslated, translate } from '../../../config/translator';
-import MatchStatusDisplay from '../../components/Match/MatchStatusDisplay';
+import MatchStatusDisplay from './MatchStatusDisplay';
 import { matchStatusDate } from '../../../config/utils';
 import { ClavaContext } from '../../../config/contexts';
-import MatchScoreDisplay from '../../components/Match/MatchScoreDisplay';
-import ClavaImage from '../../components/ClavaImage';
+import MatchScoreDisplay from './MatchScoreDisplay';
+import ClavaImage from '../ClavaImage';
+import { ChangeEvent, EventTypeEnum } from '../../../client/api';
+import { parseParams } from '../../../config/routes';
+import MatchEvent from './MatchEvent';
 
 const Match: React.FC<ConnectedProps<typeof connector>> = ({
   match,
@@ -24,7 +28,10 @@ const Match: React.FC<ConnectedProps<typeof connector>> = ({
 }) => {
   const [status, setStatus] = useState(matchStatusDate(startDate));
   const { l } = useContext(ClavaContext);
-
+  const params = useParams();
+  const { view } = params;
+  const standing1 = useRef(0);
+  const standing2 = useRef(0);
   useEffect(() => {
     getMatch(thisMatchId);
   }, [thisMatchId, getMatch]);
@@ -36,12 +43,36 @@ const Match: React.FC<ConnectedProps<typeof connector>> = ({
       clearInterval(interval);
     };
   }, [startDate]);
+  const filteredEvents = useMemo(
+    () =>
+      fullMatch
+        ? fullMatch.events
+            .filter(
+              (e) =>
+                e.type === EventTypeEnum.GOAL ||
+                e.type === EventTypeEnum.CHANCE ||
+                e.type === EventTypeEnum.CARD,
+            )
+            .sort((a, b) => a.minute - b.minute)
+        : [],
+    [fullMatch],
+  );
+  const changes = useMemo<ChangeEvent[]>(
+    () =>
+      fullMatch
+        ? (fullMatch.events
+            .filter((e) => e.type === EventTypeEnum.CHANGE)
+            .sort((a, b) => a.minute - b.minute) as ChangeEvent[])
+        : [],
+    [fullMatch],
+  );
   const live = typeof status === 'number';
-
+  standing1.current = 0;
+  standing2.current = 0;
   return (
     <div className="match-big">
       <div className="close-match">
-        <NavLink to="/">
+        <NavLink to={parseParams({ ...params, matchId: undefined })}>
           <FontAwesomeIcon icon={faClose} />
         </NavLink>
       </div>
@@ -94,38 +125,50 @@ const Match: React.FC<ConnectedProps<typeof connector>> = ({
       </Row>
       {fullMatch && (
         <>
-          <Row className="text-center mt-4">
-            <Col xs={12} md={4}>
-              <h6>{translate('highlights', l)}</h6>
+          <Row className="text-center mt-4 border-bottom mx-1">
+            <Col xs={4}>
+              <NavLink
+                to={parseParams({ ...params, view: 'highlights' })}
+                className={
+                  !view || view === 'highlights' ? 'text-primary bold' : ''
+                }>
+                {translate('highlights', l)}
+              </NavLink>
             </Col>
-            <Col xs={0} md={4}>
-              <h6>{translate('lineup', l)}</h6>
+            <Col xs={4}>
+              <NavLink
+                to={parseParams({ ...params, view: 'lineup' })}
+                className={view === 'lineup' ? 'text-primary bold' : ''}>
+                {translate('lineup', l)}
+              </NavLink>
             </Col>
-            <Col xs={0} md={4}>
-              <h6>{translate('table', l)}</h6>
+            <Col xs={4}>
+              <NavLink
+                to={parseParams({ ...params, view: 'table' })}
+                className={view === 'table' ? 'text-primary bold' : ''}>
+                {translate('table', l)}
+              </NavLink>
             </Col>
           </Row>
-          <Row className="text-center mt-3">
-            <Col xs={12} md={4}>
-              <Row>
-                <Col xs={2}>
-                  <span>{`${fullMatch.events[0].minute}'`}</span>
-                </Col>
-                <Col xs={4}>
-                  <span>{fullMatch.events[0].player?.givenName ?? '...'}</span>
-                </Col>
-                <Col xs={2}>
-                  <span>1-2</span>
-                </Col>
-                <Col xs={4}>
-                  <span> </span>
-                </Col>
-              </Row>
+          <Row className="text-center mt-3  mx-1">
+            <Col
+              xs={12}
+              className={!view || view === 'highlights' ? '' : 'invisible'}>
+              {filteredEvents.map((e) => (
+                <MatchEvent
+                  event={e}
+                  team1Id={match.team1.id}
+                  team2Id={match.team2.id}
+                  key={`match-event-${e.id}`}
+                  standing1={standing1}
+                  standing2={standing2}
+                />
+              ))}
             </Col>
-            <Col xs={0} md={4}>
+            <Col xs={12} className={view === 'lineup' ? '' : 'invisible'}>
               <h6>{translate('lineup', l)}</h6>
             </Col>
-            <Col xs={0} md={4}>
+            <Col xs={12} className={view === 'table' ? '' : 'invisible'}>
               <h6>{translate('table', l)}</h6>
             </Col>
           </Row>
@@ -136,4 +179,4 @@ const Match: React.FC<ConnectedProps<typeof connector>> = ({
 };
 
 export default connector(Match);
-// relos ad
+// r elo ad

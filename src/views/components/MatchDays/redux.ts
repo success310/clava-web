@@ -11,16 +11,16 @@ import {
 } from '../../../store/actions/matchActions';
 
 const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
-  getToday: (id: IDType, type: 'aoi' | 'league') => {
+  getToday: (id: IDType, type: 'aoi' | 'league', date?: Date) => {
     if (type === 'aoi')
       performAction({
         f: fetchMatchDays,
-        p: [dispatch, id, new Date(), 'today'],
+        p: [dispatch, id, date || new Date(), 'today'],
       });
     else
       performAction({
         f: fetchMatchDaysOfLeague,
-        p: [dispatch, id, new Date(), 'today'],
+        p: [dispatch, id, date || new Date(), 'today'],
       });
   },
   getBigger: (id: IDType, date: Date, type: 'aoi' | 'league') => {

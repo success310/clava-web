@@ -1,18 +1,17 @@
 import { DateTimeFormat } from 'intl';
-import React, { useCallback, useContext, useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
+import { NavLink } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { translate } from '../../../../config/translator';
 import { dayToNumber, intlLang, numberToDay } from '../../../../config/utils';
 import { ClavaContext } from '../../../../config/contexts';
+import { parseParams } from '../../../../config/routes';
 
 export declare type MatchDayContextType = {
   disabled: boolean;
-  selectDate: (day: number) => void;
 };
 export const MatchDaysContext = React.createContext<MatchDayContextType>({
   disabled: false,
-  selectDate: () => {
-    // nothing
-  },
 });
 
 export const EARLIER_DAY = 19700001;
@@ -21,7 +20,8 @@ export const SELECTED_DAY = 1000000000;
 type MatchDayProps = { day: number; live?: boolean };
 const MatchDayElement: React.ComponentType<MatchDayProps> = ({ day, live }) => {
   const { l } = useContext(ClavaContext);
-  const { disabled, selectDate } = useContext(MatchDaysContext);
+  const { disabled } = useContext(MatchDaysContext);
+  const params = useParams();
   const isSelected = useMemo(
     () => day > SELECTED_DAY && !disabled,
     [disabled, day],
@@ -30,13 +30,7 @@ const MatchDayElement: React.ComponentType<MatchDayProps> = ({ day, live }) => {
     () => (day > SELECTED_DAY ? day - SELECTED_DAY : day),
     [day],
   );
-  const onPress = useCallback(() => {
-    if (!isSelected) {
-      requestAnimationFrame(() => {
-        selectDate(realDay);
-      });
-    }
-  }, [realDay, isSelected, selectDate]);
+
   const todayNumber = dayToNumber(new Date());
 
   const isToday = useMemo(
@@ -53,8 +47,6 @@ const MatchDayElement: React.ComponentType<MatchDayProps> = ({ day, live }) => {
   );
 
   const [w, date] = useMemo(() => {
-    if (realDay === EARLIER_DAY) return [translate('earlier', l), null];
-    if (realDay === LATER_DAY) return [translate('later', l), null];
     let weekday = DateTimeFormat(intlLang(l), {
       weekday: 'short',
     }).format(numberToDay(realDay));
@@ -70,9 +62,13 @@ const MatchDayElement: React.ComponentType<MatchDayProps> = ({ day, live }) => {
     return [weekday, l === 'de' ? dateStr.slice(0, -1) : dateStr];
   }, [realDay, isToday, isTomorrow, isYesterday, l]);
   return (
-    <button
-      type="button"
-      onClick={onPress}
+    <NavLink
+      to={parseParams({
+        ...params,
+        date: day,
+        matchId: undefined,
+        view: undefined,
+      })}
       className="matchday"
       data-date={day.toString(10)}>
       <span
@@ -83,7 +79,7 @@ const MatchDayElement: React.ComponentType<MatchDayProps> = ({ day, live }) => {
         {!!date && <br />}
         {date}
       </span>
-    </button>
+    </NavLink>
   );
 };
 

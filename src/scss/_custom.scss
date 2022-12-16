@@ -23,7 +23,7 @@ h1, h2, h3, h4, h5, h6{
   font-weight: 600;
   color: $white;
 }
-bold, strong, span.bold {
+bold, strong, span.bold , a.bold {
   font-family: "Lexend", sans-serif;
   font-weight: 400;
 }
@@ -337,10 +337,11 @@ button {
         overflow-x: hidden;
         user-select: none;
       }
-      button.matchday{
+      .matchday{
         background-color: transparent;
         border: none;
         margin: 0 1rem;
+        text-align: center;
       }
       .clava-calendar-container{
         position: absolute;
@@ -504,6 +505,7 @@ button {
   }
 }
 
+
 .league-match-section {
   margin: 0.5rem 0.5rem 1rem 0.5rem;
 
@@ -517,6 +519,57 @@ button {
   }
   .league-match-item {
     margin: 0.25rem 0;
+  }
+}
+
+.match-event{
+  border-bottom: 1px solid $gray-800;
+  .standing{
+    display: block;
+    align-self: center;
+    font-size: 75%;
+  }
+  .player, .assist{
+    width: 100%;
+    display: block;
+  }
+  .event-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .card-event {
+      display: block;
+      width: 0.75rem;
+      height: 1rem;
+      border-radius: 0.25rem;
+      position: relative;
+      border: 1px solid $black;
+
+      &.red {
+        background-color: $red;
+      }
+
+      &.yellow {
+        background-color: $yellow;
+      }
+
+      &.yellow-red {
+        background-color: $yellow;
+
+        &:after {
+          position: absolute;
+          width: 0.75rem;
+          height: 1rem;
+          top: 0.25rem;
+          border: 1px solid $black;
+          left: 0.25rem;
+          content: " ";
+          background-color: $red;
+          border-radius: 0.25rem;
+        }
+      }
+    }
   }
 }
 

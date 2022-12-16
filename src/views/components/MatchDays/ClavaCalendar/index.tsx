@@ -2,13 +2,14 @@ import React, { useCallback, useState } from 'react';
 import { faCalendar } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Calendar, { CalendarTileProperties, ViewCallback } from 'react-calendar';
+import { useNavigate, useParams } from 'react-router';
 import { DAY_IN_MS, dayToNumber } from '../../../../config/utils';
+import { parseParams } from '../../../../config/routes';
 
 type MonthData = { month: number; year: number; dates: Date[] };
 
 type ClavaCalendarProps = {
   months: MonthData[];
-  onDaySelected: (date: Date | undefined) => void;
   loadMonth: (date: Date) => void;
   selectedDate: Date | undefined;
 };
@@ -24,19 +25,27 @@ function isActive(months: MonthData[], day: Date) {
 
 const ClavaCalendar: React.FC<ClavaCalendarProps> = ({
   months,
-  onDaySelected,
   selectedDate,
   loadMonth,
 }) => {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const params = useParams();
   const onDayPress = useCallback(
     (date: Date) => {
       if (date && isActive(months, date)) {
-        onDaySelected(date);
+        navigate(
+          parseParams({
+            ...params,
+            date: dayToNumber(date),
+            matchId: undefined,
+            view: undefined,
+          }),
+        );
         setOpen(false);
       }
     },
-    [months, onDaySelected],
+    [months, navigate],
   );
   const onOpenCalendar = useCallback(() => {
     setOpen(true);
@@ -96,4 +105,4 @@ const ClavaCalendar: React.FC<ClavaCalendarProps> = ({
 };
 
 export default ClavaCalendar;
-// relo ad
+// rel o ad

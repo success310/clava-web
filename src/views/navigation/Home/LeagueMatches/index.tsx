@@ -74,11 +74,11 @@ const LeagueMatches: React.FC<ConnectedProps<typeof connector>> = ({
     selectedDate,
   ]);
   const selectDate = useCallback(
-    (date: Date | undefined) => {
-      setSelectedDate(date);
-      if (date) {
-        if (leagueId === -1) fetchLeagueMatchesOfDay(aoi, date);
-        else fetchLeagueMatchesOfDayAndLeague(leagueId, date);
+    (day: Date | undefined) => {
+      setSelectedDate(day);
+      if (day) {
+        if (leagueId === -1) fetchLeagueMatchesOfDay(aoi, day);
+        else fetchLeagueMatchesOfDayAndLeague(leagueId, day);
         adPositions.current = [];
       }
     },
@@ -214,5 +214,5 @@ const LeagueMatches: React.FC<ConnectedProps<typeof connector>> = ({
   );
 };
 
-// relo ad
+// reload
 export default connector(LeagueMatches);

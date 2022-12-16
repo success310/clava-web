@@ -121,15 +121,27 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
         <Routes>
           <Route path="*" element={<Home />} />
           <Route index element={<Home />} />
-          <Route path="/home" element={<Home />} />
+          <Route path="/home/:date" element={<Home />} />
+          <Route path="/home/match/:matchId" element={<Home />} />
+          <Route path="/home/match/:matchId/:view" element={<Home />} />
+          <Route path="/home/:date/match/:matchId" element={<Home />} />
+          <Route path="/home/:date/match/:matchId/:view" element={<Home />} />
           <Route path="/" element={<Home />} />
           <Route path="/league/:leagueId" element={<Home />} />
+          <Route path="/league/:leagueId/:date" element={<Home />} />
           <Route path="/league/:leagueId/match/:matchId" element={<Home />} />
-          <Route path="/match/:matchId" element={<Home />} />
+          <Route
+            path="/league/:leagueId/match/:matchId/:view"
+            element={<Home />}
+          />
+          <Route
+            path="/league/:leagueId/:date/match/:matchId"
+            element={<Home />}
+          />
         </Routes>
       </div>
     </ClavaContext.Provider>
   );
 };
-// reload
+// re load
 export default connector(Main);

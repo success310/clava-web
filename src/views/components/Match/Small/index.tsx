@@ -10,7 +10,8 @@ import { isAdmin, matchStatusDate } from '../../../../config/utils';
 import { translate } from '../../../../config/translator';
 import { connector } from './redux';
 import { ClavaContext } from '../../../../config/contexts';
-import Match from '../../../screens/Match';
+import Match from '../index';
+import { parseParams } from '../../../../config/routes';
 
 const MatchSmall: React.FC<ConnectedProps<typeof connector>> = ({
   match,
@@ -21,7 +22,8 @@ const MatchSmall: React.FC<ConnectedProps<typeof connector>> = ({
   goal2,
 }) => {
   const { user, l } = useContext(ClavaContext);
-  const { leagueId, matchId } = useParams();
+  const params = useParams();
+  const { matchId } = params;
   const [status, setStatus] = useState(matchStatusDate(startDate));
   useEffect(() => {
     const interval = setInterval(() => {
@@ -43,7 +45,7 @@ const MatchSmall: React.FC<ConnectedProps<typeof connector>> = ({
   }
   return (
     <NavLink
-      to={`${leagueId ? `/league/${leagueId}` : ''}/match/${thisMatchId}`}
+      to={parseParams({ ...params, matchId: thisMatchId })}
       className="match-small">
       <Row>
         <Col xs={2} className="match-status">
@@ -84,4 +86,4 @@ const MatchSmall: React.FC<ConnectedProps<typeof connector>> = ({
 };
 
 export default connector(MatchSmall);
-// rel oad
+// rel o ad
