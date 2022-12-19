@@ -8,13 +8,19 @@ import { useParams } from 'react-router';
 import { connector } from './redux';
 import { showTranslated, translate } from '../../../config/translator';
 import MatchStatusDisplay from './MatchStatusDisplay';
-import { matchStatusDate } from '../../../config/utils';
+import {
+  getCardEvents,
+  getChangeEvents,
+  getGoalEvents,
+  matchStatusDate,
+} from '../../../config/utils';
 import { ClavaContext } from '../../../config/contexts';
 import MatchScoreDisplay from './MatchScoreDisplay';
 import ClavaImage from '../ClavaImage';
 import { ChangeEvent, EventTypeEnum } from '../../../client/api';
 import { parseParams } from '../../../config/routes';
 import MatchEvent from './MatchEvent';
+import Lineup from '../Lineup';
 
 const Match: React.FC<ConnectedProps<typeof connector>> = ({
   match,
@@ -153,22 +159,33 @@ const Match: React.FC<ConnectedProps<typeof connector>> = ({
           <Row className="text-center mt-3  mx-1">
             <Col
               xs={12}
-              className={!view || view === 'highlights' ? '' : 'invisible'}>
+              className={!view || view === 'highlights' ? '' : 'hidden'}>
               {filteredEvents.map((e) => (
                 <MatchEvent
                   event={e}
-                  team1Id={match.team1.id}
-                  team2Id={match.team2.id}
+                  team1Id={fullMatch.team1.id}
+                  team2Id={fullMatch.team2.id}
                   key={`match-event-${e.id}`}
                   standing1={standing1}
                   standing2={standing2}
                 />
               ))}
             </Col>
-            <Col xs={12} className={view === 'lineup' ? '' : 'invisible'}>
-              <h6>{translate('lineup', l)}</h6>
+            <Col xs={12} className={view === 'lineup' ? '' : 'hidden'}>
+              <Lineup
+                matchId={fullMatch.id}
+                team1Id={fullMatch.team1.id}
+                team2Id={fullMatch.team2.id}
+                team1={fullMatch.team1}
+                team2={fullMatch.team2}
+                lineup1={fullMatch.lineupTeam1}
+                lineup2={fullMatch.lineupTeam2}
+                cardEvents={getCardEvents(fullMatch.events)}
+                changeEvents={getChangeEvents(fullMatch.events)}
+                goalEvents={getGoalEvents(fullMatch.events)}
+              />
             </Col>
-            <Col xs={12} className={view === 'table' ? '' : 'invisible'}>
+            <Col xs={12} className={view === 'table' ? '' : 'hidden'}>
               <h6>{translate('table', l)}</h6>
             </Col>
           </Row>
