@@ -35,12 +35,14 @@ const ClavaCalendar: React.FC<ClavaCalendarProps> = ({
     (date: Date) => {
       if (date && isActive(months, date)) {
         navigate(
-          parseParams({
-            ...params,
-            date: dayToNumber(date),
-            matchId: undefined,
-            view: undefined,
-          }),
+          parseParams(
+            {
+              date: dayToNumber(date),
+              matchId: undefined,
+              view: undefined,
+            },
+            params,
+          ),
         );
         setOpen(false);
       }

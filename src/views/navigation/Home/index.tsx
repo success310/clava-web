@@ -5,7 +5,7 @@ import Leagues from '../../components/League';
 import News from '../News';
 
 const Home: React.FC = () => {
-  const { leagueId } = useParams();
+  const { leagueId, feedType } = useParams();
   const realLeagueId = useMemo(() => {
     if (!leagueId) return -1;
     const id = parseInt(leagueId, 10);
@@ -14,11 +14,12 @@ const Home: React.FC = () => {
   return (
     <div className="home">
       <Leagues small leagueId={realLeagueId} />
-      <LeagueMatches leagueId={realLeagueId} />
-      <News small />
+      {!feedType && <LeagueMatches leagueId={realLeagueId} />}
+      <News small={!feedType} />
+      {!!feedType && <LeagueMatches leagueId={realLeagueId} small />}
     </div>
   );
 };
 
-// reload
+// relo ad
 export default Home;

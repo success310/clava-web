@@ -338,6 +338,10 @@ button {
 
   .league-matches-container {
     flex: 0 1 60%;
+
+    &.small {
+      flex: 0 1 20%;
+    }
     position: relative;
 
     .matchdays-container {
@@ -490,8 +494,8 @@ button {
     }
   }
 
-  .news-small {
-    flex: 0 1 20%;
+  .news {
+    flex: 0 1 60%;
 
     .news-header {
       border-bottom: solid thin $gray-900;
@@ -499,37 +503,79 @@ button {
       text-align: center;
       min-height: 57px;
       max-height: 57px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      a{
+        margin: 0 1rem;
+        h5 {
+          transition: color ease-in-out 0.25s;
+        }
+      }
     }
 
     .news-list {
-      padding: 0.5rem;
+      padding: 1rem;
 
       .news-list-elem {
-        display: block;
-        margin-bottom: 1rem;
-        border-radius: 1rem;
+        margin-bottom: 2rem;
         position: relative;
         overflow: hidden;
-
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         img {
-          width: 100%;
+          width: #{"max(80%, 500px)"};
           top: 0;
-          left: 0;
         }
 
         .backdrop {
+          padding: 2rem 0.5rem 0 0.5rem;
           position: absolute;
           bottom: 0;
+          width: #{"max(80%, 500px)"};
+          background-image: linear-gradient(to top, $black-8, transparent);
+        }
+        svg.video-play{
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%) scale(1.5);
+        }
+        .transfer{
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
           width: 100%;
-
-          h6 {
-            margin: 0.5rem;
+          img{
+            width: 60px;
+            margin: 0 1rem;
           }
         }
+      }
+    }
 
-        &:hover {
-          .backdrop {
-            background-image: linear-gradient(to top, $black-6, transparent);
+    &.small {
+      flex: 0 1 20%;
+      margin-bottom: 1rem;
+      .news-list {
+        padding: 0.5rem;
+
+        .news-list-elem {
+          border-radius: 1rem;
+
+          .backdrop{
+            padding: 0.5rem;
+          }
+
+          img, .backdrop{
+            width: 100%;
+          }
+          svg{
+            transform: translate(-50%, -50%);
           }
         }
       }

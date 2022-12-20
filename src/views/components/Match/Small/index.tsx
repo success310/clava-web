@@ -45,7 +45,7 @@ const MatchSmall: React.FC<ConnectedProps<typeof connector>> = ({
   }
   return (
     <NavLink
-      to={parseParams({ ...params, matchId: thisMatchId })}
+      to={parseParams({ matchId: thisMatchId }, params)}
       className="match-small">
       <Row>
         <Col xs={2} className="match-status">
@@ -86,4 +86,4 @@ const MatchSmall: React.FC<ConnectedProps<typeof connector>> = ({
 };
 
 export default connector(MatchSmall);
-// rel o ad
+// rel oad

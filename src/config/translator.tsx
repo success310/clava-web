@@ -122,10 +122,20 @@ const generalKeywords = {
     it: 'Statistiche',
     en: 'Statistics',
   },
+  transfers: {
+    de: 'Transfers',
+    it: 'Video',
+    en: 'Videos',
+  },
   videos: {
     de: 'Videos',
     it: 'Video',
     en: 'Videos',
+  },
+  bulletins: {
+    de: 'Rundschreiben',
+    it: 'Communicati',
+    en: 'Bulletins',
   },
   noMatches: {
     de: 'Keine Spiele',
@@ -1398,20 +1408,10 @@ const generalKeywords = {
     it: 'Ruota per più info',
     en: 'Rotate for more',
   },
-  NewsList: {
-    de: '  News  ',
-    it: '  News  ',
-    en: '  News  ',
-  },
   Transfers: {
-    de: '  Transfers  ',
-    it: '  Trasferimenti  ',
-    en: '  Transfers  ',
-  },
-  Videos: {
-    de: '  Videos  ',
-    it: '  Video  ',
-    en: '  Video  ',
+    de: 'Transfers',
+    it: 'Trasferimenti',
+    en: 'Transfers',
   },
   noNews: {
     de: 'Noch keine News',
@@ -1429,8 +1429,8 @@ const generalKeywords = {
     en: 'No vidoes yet - coming soon',
   },
   viewExtern: {
-    de: 'Erfahre mehr',
-    it: 'Scopri di più',
+    de: 'Weiterlesen',
+    it: 'Continua',
     en: 'Learn more',
   },
   matchNotStarted: {

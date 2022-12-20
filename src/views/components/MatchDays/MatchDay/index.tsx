@@ -63,12 +63,14 @@ const MatchDayElement: React.ComponentType<MatchDayProps> = ({ day, live }) => {
   }, [realDay, isToday, isTomorrow, isYesterday, l]);
   return (
     <NavLink
-      to={parseParams({
-        ...params,
-        date: day,
-        matchId: undefined,
-        view: undefined,
-      })}
+      to={parseParams(
+        {
+          date: day,
+          matchId: undefined,
+          view: undefined,
+        },
+        params,
+      )}
       className="matchday"
       data-date={day.toString(10)}>
       <span
@@ -88,4 +90,4 @@ MatchDayElement.defaultProps = {
 };
 
 export default MatchDayElement;
-// r eload
+// reload

@@ -57,6 +57,7 @@ const LeagueMatches: React.FC<ConnectedProps<typeof connector>> = ({
   favorites,
   fetchLeagueMatchesOfDay,
   fetchLeagueMatchesOfDayAndLeague,
+  small,
 }) => {
   const { l, aoi } = useContext(ClavaContext);
   const [selectedDate, setSelectedDate] = useState<Date>();
@@ -188,7 +189,7 @@ const LeagueMatches: React.FC<ConnectedProps<typeof connector>> = ({
     leagueId,
   ]);
   return (
-    <div className="league-matches-container">
+    <div className={`league-matches-container${small ? ' small' : ''}`}>
       <MatchDays
         type={leagueId === -1 ? 'aoi' : 'league'}
         id={leagueId === -1 ? aoi : leagueId}

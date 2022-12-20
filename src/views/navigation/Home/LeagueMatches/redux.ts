@@ -26,7 +26,10 @@ const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
   },
 });
 
-const props = (state: RootState, prevProps: { leagueId: IDType }) => {
+const props = (
+  state: RootState,
+  prevProps: { leagueId: IDType; small?: boolean },
+) => {
   let leagueMatches: LeagueMatch[] = [];
   if (prevProps.leagueId === -1) {
     if (state.match.leagueMatches)

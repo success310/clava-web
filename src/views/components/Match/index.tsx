@@ -79,7 +79,7 @@ const Match: React.FC<ConnectedProps<typeof connector>> = ({
   return (
     <div className="match-big">
       <div className="close-match">
-        <NavLink to={parseParams({ ...params, matchId: undefined })}>
+        <NavLink to={parseParams({ matchId: undefined }, params)}>
           <FontAwesomeIcon icon={faClose} />
         </NavLink>
       </div>
@@ -135,7 +135,7 @@ const Match: React.FC<ConnectedProps<typeof connector>> = ({
           <Row className="text-center mt-4 border-bottom mx-1">
             <Col xs={4}>
               <NavLink
-                to={parseParams({ ...params, view: 'highlights' })}
+                to={parseParams({ view: 'highlights' }, params)}
                 className={
                   !view || view === 'highlights' ? 'text-primary bold' : ''
                 }>
@@ -144,14 +144,14 @@ const Match: React.FC<ConnectedProps<typeof connector>> = ({
             </Col>
             <Col xs={4}>
               <NavLink
-                to={parseParams({ ...params, view: 'lineup' })}
+                to={parseParams({ view: 'lineup' }, params)}
                 className={view === 'lineup' ? 'text-primary bold' : ''}>
                 {translate('lineup', l)}
               </NavLink>
             </Col>
             <Col xs={4}>
               <NavLink
-                to={parseParams({ ...params, view: 'table' })}
+                to={parseParams({ view: 'table' }, params)}
                 className={view === 'table' ? 'text-primary bold' : ''}>
                 {translate('table', l)}
               </NavLink>
@@ -201,4 +201,4 @@ const Match: React.FC<ConnectedProps<typeof connector>> = ({
 };
 
 export default connector(Match);
-// r elo ad
+// r eload
