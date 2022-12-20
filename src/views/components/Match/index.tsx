@@ -21,6 +21,7 @@ import { ChangeEvent, EventTypeEnum } from '../../../client/api';
 import { parseParams } from '../../../config/routes';
 import MatchEvent from './MatchEvent';
 import Lineup from '../Lineup';
+import Table from '../Table';
 
 const Match: React.FC<ConnectedProps<typeof connector>> = ({
   match,
@@ -186,7 +187,11 @@ const Match: React.FC<ConnectedProps<typeof connector>> = ({
               />
             </Col>
             <Col xs={12} className={view === 'table' ? '' : 'hidden'}>
-              <h6>{translate('table', l)}</h6>
+              <Table
+                team2Id={fullMatch.team2.id}
+                team1Id={fullMatch.team1.id}
+                leagueId={fullMatch.leagueId}
+              />
             </Col>
           </Row>
         </>
