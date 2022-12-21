@@ -3,10 +3,10 @@ import { NavLink } from 'react-router-dom';
 import { faChevronRight, faPlay } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IDType } from '../../../../config/types';
-import ClavaImage from '../../../components/ClavaImage';
 import { File, TeamListElement } from '../../../../client/api';
 import { showTranslated } from '../../../../config/translator';
 import { ClavaContext } from '../../../../config/contexts';
+import ClavaImage from '../../ClavaImage';
 
 export declare type NewsListElementType = {
   type: 'news' | 'transfers' | 'videos' | 'bulletins';

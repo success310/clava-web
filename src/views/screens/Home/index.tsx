@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router';
-import LeagueMatches from './LeagueMatches';
+import LeagueMatches from '../../components/LeagueMatches';
 import Leagues from '../../components/League';
-import News from '../News';
+import News from '../../components/News';
 
 const Home: React.FC = () => {
   const { leagueId, feedType } = useParams();

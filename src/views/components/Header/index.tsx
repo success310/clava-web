@@ -43,19 +43,20 @@ const Header: React.FC<ConnectedProps<typeof connector>> = ({
           <FontAwesomeIcon icon={faHouse} />
           {translate('home', l)}
         </NavLink>
-        <NavLink to="/news">
+        <NavLink to="/feed/news">
           <FontAwesomeIcon icon={faNewspaper} />
           {translate('news', l)}
         </NavLink>
-        <NavLink to="/profile">
+        <NavLink to={!user || user.anonymous ? '/login' : '/profile'}>
           <FontAwesomeIcon
             icon={
               isAdmin(user) ? faUserNinja : isInsider(user) ? faUserTie : faUser
             }
           />
-
           <span>
-            {translate(!user || user.anonymous ? 'login' : 'profile', l)}
+            {!user || user.anonymous
+              ? translate('login', l)
+              : `Hi ${user.username}`}
           </span>
         </NavLink>
         <NavbarToggler onClick={onToggle}>

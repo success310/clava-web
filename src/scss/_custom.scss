@@ -342,6 +342,7 @@ button {
     &.small {
       flex: 0 1 20%;
     }
+
     position: relative;
 
     .matchdays-container {
@@ -507,8 +508,10 @@ button {
       flex-direction: row;
       align-items: center;
       justify-content: center;
-      a{
+
+      a {
         margin: 0 1rem;
+
         h5 {
           transition: color ease-in-out 0.25s;
         }
@@ -526,6 +529,7 @@ button {
         flex-direction: column;
         align-items: center;
         justify-content: center;
+
         img {
           width: #{"max(80%, 500px)"};
           top: 0;
@@ -538,19 +542,22 @@ button {
           width: #{"max(80%, 500px)"};
           background-image: linear-gradient(to top, $black-8, transparent);
         }
-        svg.video-play{
+
+        svg.video-play {
           position: absolute;
           left: 50%;
           top: 50%;
           transform: translate(-50%, -50%) scale(1.5);
         }
-        .transfer{
+
+        .transfer {
           display: flex;
           flex-direction: row;
           align-items: center;
           justify-content: space-between;
           width: 100%;
-          img{
+
+          img {
             width: 60px;
             margin: 0 1rem;
           }
@@ -561,20 +568,22 @@ button {
     &.small {
       flex: 0 1 20%;
       margin-bottom: 1rem;
+
       .news-list {
         padding: 0.5rem;
 
         .news-list-elem {
           border-radius: 1rem;
 
-          .backdrop{
+          .backdrop {
             padding: 0.5rem;
           }
 
-          img, .backdrop{
+          img, .backdrop {
             width: 100%;
           }
-          svg{
+
+          svg {
             transform: translate(-50%, -50%);
           }
         }
@@ -700,6 +709,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
+
   .field-container {
 
     position: relative;
@@ -750,7 +760,7 @@ button {
         transform: translateX(-50%) translateY(50%);
       }
 
-      .jersey{
+      .jersey {
         position: relative;
       }
 
@@ -760,6 +770,7 @@ button {
         align-items: center;
         justify-content: center;
         height: 1rem;
+
         span {
           position: absolute;
           width: max-content;
@@ -767,23 +778,26 @@ button {
         }
       }
 
-      .goal, .card-event, .change{
+      .goal, .card-event, .change {
         position: absolute;
       }
 
-      .goal{
+      .goal {
         right: 0;
         bottom: 1rem;
-        svg{
+
+        svg {
           background-color: #fff;
           border-radius: 100%;
         }
       }
-      .card-event{
+
+      .card-event {
         left: 0;
         bottom: 1rem;
       }
-      .change{
+
+      .change {
         right: 0;
         top: 0;
       }
@@ -825,62 +839,73 @@ button {
 }
 
 
-.clava-switch{
+.clava-switch {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  button.clava-switch-elem{
+
+  button.clava-switch-elem {
     background-color: $black;
     border: 1px solid $primary;
     border-left-width: 0;
     margin: 0;
     outline: none !important;
     transition: background-color ease-in-out 0.25s;
-    &:first-child{
+
+    &:first-child {
       border-bottom-left-radius: 0.5rem;
       border-top-left-radius: 0.5rem;
       border-left-width: 1px;
     }
-    &:last-child{
+
+    &:last-child {
       border-bottom-right-radius: 0.5rem;
       border-top-right-radius: 0.5rem;
     }
-    &.selected{
+
+    &.selected {
       background-color: $primary;
     }
-    span{
+
+    span {
       font-weight: 400;
     }
   }
 }
 
-.table-container{
+.table-container {
   width: 100%;
-  .clava-table{
+
+  .clava-table {
     width: 100%;
     border: 1px solid $gray-800;
     border-radius: 0.25rem;
     margin: 1rem 0;
-    table{
+
+    table {
       width: 100%;
       border-spacing: 0;
       border-collapse: collapse;
-      thead{
-        tr{
+
+      thead {
+        tr {
           border-bottom: 1px solid $gray-800;
-          th{
-            button{
+
+          th {
+            button {
               background: transparent;
               width: 100%;
               height: 100%;
               border: none;
               outline: none;
               position: relative;
-              span{
+
+              span {
                 font-weight: 400;
               }
-              &:after{
+
+              &:after {
                 content: "⇅";
                 position: absolute;
                 font-weight: 300;
@@ -889,20 +914,23 @@ button {
                 right: 0;
                 top: 0.25rem;
               }
-              &.sort-asc{
-                &:after{
+
+              &.sort-asc {
+                &:after {
                   content: "⤓";
                   color: $white;
                 }
               }
-              &.sort-desc{
-                &:after{
+
+              &.sort-desc {
+                &:after {
                   content: "⤒";
                   color: $white;
                 }
               }
             }
-            &:nth-child(2){
+
+            &:nth-child(2) {
               span {
                 text-align: left;
               }
@@ -910,22 +938,160 @@ button {
           }
         }
       }
-      tbody{
-        tr{
+
+      tbody {
+        tr {
           border-bottom: 1px solid $gray-800;
-          &:last-child{
+
+          &:last-child {
             border-bottom: none;
           }
+
           td {
             padding: 0.25rem 0;
+
             &:nth-child(2) {
-                text-align: left;
-              img{
+              text-align: left;
+
+              img {
                 margin-right: 0.25rem;
               }
             }
           }
         }
+      }
+    }
+  }
+}
+
+
+.container{
+  padding-top: 1rem;
+}
+
+.auth {
+  border: 1px solid $gray-900;
+  border-radius: 1rem;
+
+  .auth-header {
+    border-bottom: solid thin $gray-900;
+    padding: 1rem;
+    text-align: center;
+    min-height: 57px;
+    max-height: 57px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+    span {
+      margin-left: 1rem;
+    }
+  }
+
+  .form {
+    padding: 1rem;
+    .code-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      .code {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+        max-width: 300px;
+        width: 100%;
+        input {
+          aspect-ratio: 1;
+          max-width: 40px;
+          background-color: $primary;
+          color: $white;
+          border-radius: 0.5rem;
+          border: none;
+          text-align: center;
+        }
+      }
+    }
+  }
+}
+
+.profile{
+
+    border: 1px solid $gray-900;
+    border-radius: 1rem;
+
+    .profile-header {
+      border-bottom: solid thin $gray-900;
+      padding: 1rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      svg{
+        margin: 1rem 0;
+      }
+    }
+    .profile-content{
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+}
+
+.delete-account{
+  top: 7rem;
+  .sure-delete-account{
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.input-group {
+
+  .input-group-addon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 100;
+    color: $white;
+    border: 1px solid $primary;
+    aspect-ratio: 1;
+    background-color: $gray-900;
+
+    &.active {
+      background-color: $primary;
+    }
+  }
+  &.only-focus{
+    input{
+      border: none;
+      text-align: center;
+
+    }
+    .input-group-addon{
+      display: none;
+    }
+    &:focus-within{
+      input{
+        border: initial;
+        text-align: left;
+      }
+      .input-group-addon{
+        display: flex;
       }
     }
   }

@@ -19,7 +19,11 @@ import { fb } from '../../../config/firebase';
 import { AS_ENDPOINT, PROD_ENDPOINT } from '../../../config/constants';
 import { GroupEnum, User } from '../../../client/api';
 import Header from '../../components/Header';
-import Home from '../Home';
+import Home from '../../screens/Home';
+import Login from '../../screens/Profile/Login';
+import Profile from '../../screens/Profile';
+import Register from '../../screens/Profile/Register';
+import ConfirmMail from '../../screens/Profile/ConfirmMail';
 
 const Main: React.FC<ConnectedProps<typeof connector>> = ({
   user,
@@ -140,10 +144,21 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
           />
           <Route path="/feed/:feedType" element={<Home />} />
           <Route path="/feed/:feedType/:feedId" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/login/:redirectAfter" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/register/:redirectAfter" element={<Register />} />
+          <Route path="/confirm" element={<ConfirmMail />} />
+          <Route path="/confirm/:redirectAfter" element={<ConfirmMail />} />
+          <Route
+            path="/confirm/:redirectAfter/:pwForgot"
+            element={<ConfirmMail />}
+          />
         </Routes>
       </div>
     </ClavaContext.Provider>
   );
 };
-// re l oad
+// reload
 export default connector(Main);
