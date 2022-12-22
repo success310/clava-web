@@ -2,10 +2,10 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/pro-regular-svg-icons';
-import { AdPositionEnum, MatchListElement } from '../../../../../client/api';
-import { IDType } from '../../../../../config/types';
-import ClavaAd from '../../../../components/ClavaAd';
-import MatchSmall from '../../../../components/Match/Small';
+import { AdPositionEnum, MatchListElement } from '../../../../client/api';
+import { IDType } from '../../../../config/types';
+import ClavaAd from '../../ClavaAd';
+import MatchSmall from '../../Match/Small';
 
 export declare type SectionItem =
   | string

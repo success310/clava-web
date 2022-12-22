@@ -93,7 +93,7 @@ const Profile: React.FC<ConnectedProps<typeof connector>> = ({
               {!registered && (
                 <div>
                   <NavLink
-                    to="/register"
+                    to="/login"
                     className="text-decoration-underline text-muted">
                     <span>{`${translate('alreadyRegistered', l)} ${translate(
                       'login',

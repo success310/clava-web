@@ -1,15 +1,15 @@
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import { connect } from 'react-redux';
-import { performAction } from '../../../../store/actions/all';
-import { RootState } from '../../../../store';
-import { IDType } from '../../../../config/types';
+import { performAction } from '../../../store/actions/all';
+import { RootState } from '../../../store';
+import { IDType } from '../../../config/types';
+import { dayToNumber } from '../../../config/utils';
+import { LeagueMatch, MatchListElement } from '../../../client/api';
 import {
   fetchLeagueMatchesOfDay,
   fetchLeagueMatchesOfDayLeague,
-} from '../../../../store/actions/matchActions';
-import { dayToNumber } from '../../../../config/utils';
-import { LeagueMatch, MatchListElement } from '../../../../client/api';
+} from '../../../store/actions/matchActions';
 
 const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
   fetchLeagueMatchesOfDay: (aoiID: IDType, date: Date) => {
@@ -52,3 +52,4 @@ const props = (
 };
 
 export const connector = connect(props, mapper);
+// reload

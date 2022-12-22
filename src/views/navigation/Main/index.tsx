@@ -24,6 +24,7 @@ import Login from '../../screens/Profile/Login';
 import Profile from '../../screens/Profile';
 import Register from '../../screens/Profile/Register';
 import ConfirmMail from '../../screens/Profile/ConfirmMail';
+import Adminpanel from '../../screens/Adminpanel';
 
 const Main: React.FC<ConnectedProps<typeof connector>> = ({
   user,
@@ -155,10 +156,20 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
             path="/confirm/:redirectAfter/:pwForgot"
             element={<ConfirmMail />}
           />
+          <Route path="/backoffice" element={<Adminpanel />} />
+          <Route path="/backoffice/:adminSite" element={<Adminpanel />} />
+          <Route
+            path="/backoffice/:adminSite/:adminMethod"
+            element={<Adminpanel />}
+          />
+          <Route
+            path="/backoffice/:adminSite/:adminMethod/:adminElemId"
+            element={<Adminpanel />}
+          />
         </Routes>
       </div>
     </ClavaContext.Provider>
   );
 };
-// reload
+// reloa d
 export default connector(Main);

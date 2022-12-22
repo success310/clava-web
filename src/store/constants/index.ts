@@ -163,6 +163,26 @@ export interface AdState {
   readonly status: 'idle' | 'loading' | 'failed';
 }
 
+export interface AdminState {
+  readonly match: Match | null;
+  readonly matches: Match[];
+  readonly user: User | null;
+  readonly users: User[];
+  readonly league: League | null;
+  readonly leagues: League[];
+  readonly ad: Ad | null;
+  readonly ads: Ad[];
+  readonly news: Blog | null;
+  readonly newses: Blog[];
+  readonly team: Team | null;
+  readonly teams: Team[];
+  readonly video: ExternalVideo | null;
+  readonly videos: ExternalVideo[];
+  readonly error: TranslatorKeys | null;
+  readonly status: 'idle' | 'loading' | 'failed';
+  readonly statusSearch: 'idle' | 'loading' | 'failed';
+}
+
 export type ValueStore<T> = {
   id: IDType;
   date?: number;

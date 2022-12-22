@@ -1732,6 +1732,81 @@ const generalKeywords = {
     it: 'Vuoi inserire eventi (gol, formazioni, ecc.)?',
     en: 'Do you want to enter Events?',
   },
+  users: {
+    de: 'Benutzer',
+    it: 'Utenti',
+    en: 'Users',
+  },
+  ads: {
+    de: 'Werbung',
+    it: 'Pubblicitá',
+    en: 'Ads',
+  },
+  administration: {
+    de: 'Administrazion',
+    it: 'Administrazione',
+    en: 'Administration',
+  },
+  adminpanel: {
+    de: 'Backoffice',
+    it: 'Backoffice',
+    en: 'Backoffice',
+  },
+  yourNotAdmin: {
+    de: 'Nur für Admins Sichtbar. Bitte als Admin anmelden!',
+    it: 'Nur für Admins Sichtbar. Bitte als Admin anmelden!',
+    en: 'Nur für Admins Sichtbar. Bitte als Admin anmelden!',
+  },
+  createVideo: {
+    de: 'Video Erstellen',
+    it: 'Crea Video',
+    en: 'Create Video',
+  },
+  length: {
+    de: 'Länge',
+    it: 'Lunghezza',
+    en: 'Length',
+  },
+  url: {
+    de: 'Link',
+    it: 'Link',
+    en: 'Link',
+  },
+  date: {
+    de: 'Datum',
+    it: 'Datum',
+    en: 'Datum',
+  },
+  summary: {
+    de: 'Zusammenfassung',
+    it: 'Zusammenfassung',
+    en: 'Zusammenfassung',
+  },
+  thumbnailUrl: {
+    de: 'Link zum Vorschaubild',
+    it: 'Link per il preview',
+    en: 'Preview Link',
+  },
+  searchVideo: {
+    de: 'Nach Video suchen',
+    it: 'Nach Video suchen',
+    en: 'Nach Video suchen',
+  },
+  editVideo: {
+    de: 'Video Bearbeiten',
+    it: 'Video Bearbeiten',
+    en: 'Edit Video',
+  },
+  deleteVideo: {
+    de: 'Video löschen',
+    it: 'Video löschen',
+    en: 'Delete Video',
+  },
+  reset: {
+    de: 'Zurücksetzen',
+    it: 'Reset',
+    en: 'Reset',
+  },
   emptyString: {
     de: ' ',
     it: '',

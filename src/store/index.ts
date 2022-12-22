@@ -15,6 +15,7 @@ import { searchReducer } from './reducers/searchReducer';
 import { serverReducer } from './reducers/serverReducer';
 import { newsReducer } from './reducers/newsReducer';
 import { adReducer } from './reducers/adReducer';
+import { adminReducer } from './reducers/adminReducer';
 
 export const store = configureStore({
   reducer: {
@@ -30,6 +31,7 @@ export const store = configureStore({
     server: serverReducer,
     news: newsReducer,
     ads: adReducer,
+    admin: adminReducer,
   },
   middleware: [logger, thunk],
 });

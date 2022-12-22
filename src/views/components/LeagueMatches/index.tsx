@@ -9,10 +9,10 @@ import React, {
 import { ConnectedProps } from 'react-redux';
 import { DateTimeFormat } from 'intl';
 import { connector } from './redux';
-import { ClavaContext } from '../../../../config/contexts';
-import MatchDays from '../../../components/MatchDays';
-import { MatchListElement } from '../../../../client/api';
-import { showTranslated, translate } from '../../../../config/translator';
+import { ClavaContext } from '../../../config/contexts';
+import MatchDays from '../MatchDays';
+import { MatchListElement } from '../../../client/api';
+import { showTranslated, translate } from '../../../config/translator';
 import {
   dayToNumber,
   formatDate,
@@ -23,8 +23,8 @@ import {
   sameDay,
   shouldAdBePlaced,
   sortMatchesByTime,
-} from '../../../../config/utils';
-import Loading from '../../../components/Loading';
+} from '../../../config/utils';
+import Loading from '../Loading';
 import LeagueMatchSection, { Section, SectionItem } from './LeagueMatchSection';
 
 const reducer = (
@@ -215,5 +215,5 @@ const LeagueMatches: React.FC<ConnectedProps<typeof connector>> = ({
   );
 };
 
-// reload
+// rel oad
 export default connector(LeagueMatches);

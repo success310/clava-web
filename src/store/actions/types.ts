@@ -704,6 +704,94 @@ export type NewsActions =
       payload: TranslatorKeys;
     };
 
+export enum AdminActionTypes {
+  FETCH_USER = '@@admin/FETCH_USER',
+  FETCH_USER_SUCCESS = '@@admin/FETCH_USER_SUCCESS',
+  FETCH_MATCH = '@@admin/FETCH_MATCH',
+  FETCH_MATCH_SUCCESS = '@@admin/FETCH_MATCH_SUCCESS',
+  FETCH_LEAGUE = '@@admin/FETCH_LEAGUE',
+  FETCH_LEAGUE_SUCCESS = '@@admin/FETCH_LEAGUE_SUCCESS',
+  FETCH_AD = '@@admin/FETCH_AD',
+  FETCH_AD_SUCCESS = '@@admin/FETCH_AD_SUCCESS',
+  FETCH_VIDEO = '@@admin/FETCH_VIDEO',
+  FETCH_VIDEO_SUCCESS = '@@admin/FETCH_VIDEO_SUCCESS',
+  FETCH_NEWS = '@@admin/FETCH_NEWS',
+  FETCH_NEWS_SUCCESS = '@@admin/FETCH_NEWS_SUCCESS',
+  FETCH_TEAM = '@@admin/FETCH_TEAM',
+  FETCH_TEAM_SUCCESS = '@@admin/FETCH_TEAM_SUCCESS',
+  SEARCH = '@@admin/SEARCH',
+  SEARCH_SUCCESS = '@@admin/SEARCH_SUCCESS',
+  FETCH_ERROR = '@@admin/FETCH_ERROR',
+}
+
+export const SEARCH_USERS = 1;
+export const SEARCH_TEAMS = 2;
+export const SEARCH_LEAGUES = 3;
+export const SEARCH_NEWS = 4;
+export const SEARCH_VIDEOS = 5;
+export const SEARCH_ADS = 6;
+
+export declare type SEARCH_TYPES =
+  | typeof SEARCH_LEAGUES
+  | typeof SEARCH_ADS
+  | typeof SEARCH_NEWS
+  | typeof SEARCH_TEAMS
+  | typeof SEARCH_USERS
+  | typeof SEARCH_VIDEOS;
+export type AdminActions =
+  | {
+      type:
+        | AdminActionTypes.FETCH_NEWS
+        | AdminActionTypes.FETCH_AD
+        | AdminActionTypes.FETCH_MATCH
+        | AdminActionTypes.FETCH_VIDEO
+        | AdminActionTypes.FETCH_LEAGUE
+        | AdminActionTypes.FETCH_TEAM
+        | AdminActionTypes.FETCH_USER
+        | AdminActionTypes.SEARCH;
+    }
+  | {
+      type: AdminActionTypes.FETCH_NEWS_SUCCESS;
+      payload: Blog;
+    }
+  | {
+      type: AdminActionTypes.FETCH_TEAM_SUCCESS;
+      payload: Team;
+    }
+  | {
+      type: AdminActionTypes.FETCH_MATCH_SUCCESS;
+      payload: Match;
+    }
+  | {
+      type: AdminActionTypes.FETCH_USER_SUCCESS;
+      payload: User;
+    }
+  | {
+      type: AdminActionTypes.FETCH_VIDEO_SUCCESS;
+      payload: ExternalVideo;
+    }
+  | {
+      type: AdminActionTypes.FETCH_AD_SUCCESS;
+      payload: Ad;
+    }
+  | {
+      type: AdminActionTypes.FETCH_LEAGUE_SUCCESS;
+      payload: League;
+    }
+  | {
+      type: AdminActionTypes.SEARCH_SUCCESS;
+      payload:
+        | { id: typeof SEARCH_LEAGUES; response: League[] }
+        | { id: typeof SEARCH_VIDEOS; response: ExternalVideo[] }
+        | { id: typeof SEARCH_NEWS; response: Blog[] }
+        | { id: typeof SEARCH_USERS; response: User[] }
+        | { id: typeof SEARCH_ADS; response: Ad[] };
+    }
+  | {
+      type: AdminActionTypes.FETCH_ERROR;
+      payload: TranslatorKeys;
+    };
+
 export declare type AllActionTypes =
   | AoiActionTypes
   | UserActionTypes
@@ -715,6 +803,7 @@ export declare type AllActionTypes =
   | LanguageActionTypes
   | RouteActionTypes
   | AdActionTypes
+  | AdminActionTypes
   | SearchActionTypes;
 
 export declare type AllActions =
@@ -728,6 +817,7 @@ export declare type AllActions =
   | RouteActions
   | NewsActions
   | AdActions
+  | AdminActions
   | SearchActions;
 
 export declare type PayloadAction<T extends AllActions> = T extends {

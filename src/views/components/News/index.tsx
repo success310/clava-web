@@ -14,8 +14,8 @@ import { ClavaContext } from '../../../config/contexts';
 import NewsListElement, { NewsListElementType } from './NewsListElement';
 import { showTranslated, translate } from '../../../config/translator';
 import { parseParams } from '../../../config/routes';
-import Loading from '../../components/Loading';
-import ClavaImage from '../../components/ClavaImage';
+import ClavaImage from '../ClavaImage';
+import Loading from '../Loading';
 
 const NEWS_LIMIT = 20;
 
@@ -256,4 +256,4 @@ const News: React.FC<ConnectedProps<typeof connector>> = ({
   );
 };
 export default connector(News);
-// re load
+// re l oad
