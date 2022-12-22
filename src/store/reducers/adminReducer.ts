@@ -4,6 +4,8 @@ import {
   AdminActions,
   AdminActionTypes,
   SEARCH_ADS,
+  SEARCH_LEAGUES,
+  SEARCH_TEAMS,
   SEARCH_VIDEOS,
 } from '../actions/types';
 
@@ -53,6 +55,18 @@ const reducer: Reducer<AdminState> = (
           statusSearch: 'idle',
           videos: action.payload.response,
         };
+      if (action.payload.id === SEARCH_LEAGUES)
+        return {
+          ...state,
+          statusSearch: 'idle',
+          leagues: action.payload.response,
+        };
+      if (action.payload.id === SEARCH_TEAMS)
+        return {
+          ...state,
+          statusSearch: 'idle',
+          teams: action.payload.response,
+        };
       if (action.payload.id === SEARCH_ADS)
         return { ...state, statusSearch: 'idle', ads: action.payload.response };
       return state;
@@ -64,3 +78,4 @@ const reducer: Reducer<AdminState> = (
 };
 
 export { reducer as adminReducer };
+// reload

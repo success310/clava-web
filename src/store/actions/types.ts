@@ -730,11 +730,13 @@ export const SEARCH_LEAGUES = 3;
 export const SEARCH_NEWS = 4;
 export const SEARCH_VIDEOS = 5;
 export const SEARCH_ADS = 6;
+export const SEARCH_MATCH = 7;
 
 export declare type SEARCH_TYPES =
   | typeof SEARCH_LEAGUES
   | typeof SEARCH_ADS
   | typeof SEARCH_NEWS
+  | typeof SEARCH_MATCH
   | typeof SEARCH_TEAMS
   | typeof SEARCH_USERS
   | typeof SEARCH_VIDEOS;
@@ -784,8 +786,10 @@ export type AdminActions =
         | { id: typeof SEARCH_LEAGUES; response: League[] }
         | { id: typeof SEARCH_VIDEOS; response: ExternalVideo[] }
         | { id: typeof SEARCH_NEWS; response: Blog[] }
+        | { id: typeof SEARCH_TEAMS; response: TeamListElement[] }
         | { id: typeof SEARCH_USERS; response: User[] }
-        | { id: typeof SEARCH_ADS; response: Ad[] };
+        | { id: typeof SEARCH_ADS; response: Ad[] }
+        | { id: typeof SEARCH_MATCH; response: MatchListElement[] };
     }
   | {
       type: AdminActionTypes.FETCH_ERROR;

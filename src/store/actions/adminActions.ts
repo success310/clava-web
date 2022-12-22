@@ -1,9 +1,20 @@
 import { Dispatch } from 'redux';
 import client from '../../client';
-import { AdminActions, AdminActionTypes, SEARCH_TYPES } from './types';
+import {
+  AdminActions,
+  AdminActionTypes,
+  SEARCH_LEAGUES,
+  SEARCH_TEAMS,
+  SEARCH_TYPES,
+  SEARCH_VIDEOS,
+} from './types';
 import { defaultGet } from './all';
 import { IDType } from '../../config/types';
-import { ExternalVideoCreateRaw } from '../../client/api';
+import {
+  ExternalVideoCreateRaw,
+  MatchCreate,
+  MatchPatch,
+} from '../../client/api';
 
 export function getMatch(dispatch: Dispatch<AdminActions>, matchId: IDType) {
   defaultGet(
@@ -31,6 +42,39 @@ export function createVideo(
     false,
     false,
     video,
+  );
+}
+
+export function createMatch(
+  dispatch: Dispatch<AdminActions>,
+  match: MatchCreate,
+) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.FETCH_MATCH_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.FETCH_MATCH,
+    client().createMatch,
+    false,
+    false,
+    match,
+  );
+}
+export function patchMatch(
+  dispatch: Dispatch<AdminActions>,
+  id: IDType,
+  match: MatchPatch,
+) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.FETCH_MATCH_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.FETCH_MATCH,
+    client().patchMatch,
+    false,
+    false,
+    id,
+    match,
   );
 }
 export function getVideo(dispatch: Dispatch<AdminActions>, id: IDType) {
@@ -66,12 +110,18 @@ export function searchAdmin(
     AdminActionTypes.SEARCH_SUCCESS,
     AdminActionTypes.FETCH_ERROR,
     AdminActionTypes.SEARCH,
-    client().fetchVideos,
+    type === SEARCH_VIDEOS
+      ? client().searchVideos
+      : type === SEARCH_LEAGUES
+      ? client().searchLeagues
+      : type === SEARCH_TEAMS
+      ? client().searchTeams
+      : client().searchLeagues,
     false,
     { id: type },
-    1,
+    q,
     0,
-    10,
+    100,
   );
 }
 

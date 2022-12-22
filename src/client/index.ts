@@ -37,9 +37,11 @@ import {
   ManOfTheMatchService,
   ManOfTheMatchVote,
   MatchBetService,
+  MatchCreate,
   MatchDayService,
   MatchListElement,
   MatchLocationEnum,
+  MatchPatch,
   MatchService,
   OpenAPI,
   PlayerCreate,
@@ -1030,6 +1032,26 @@ class Client {
 
   getAds(pos: AdPositionEnum) {
     return AdService.getAdsByPositionAdPositionPositionGet(pos);
+  }
+
+  createMatch(match: MatchCreate) {
+    return MatchService.createMatchMatchCreatePost(match);
+  }
+
+  patchMatch(id: IDType, match: MatchPatch) {
+    return MatchService.patchMatchMatchMatchIdPatch(id, match);
+  }
+
+  searchLeagues(q: string, offset: number, limit: number) {
+    return SearchService.searchLeagueSearchLeagueQueryGet(q, limit, offset);
+  }
+
+  searchTeams(q: string, offset: number, limit: number) {
+    return SearchService.searchTeamSearchTeamQueryGet(q, limit, offset);
+  }
+
+  searchVideos(q: string, offset: number, limit: number) {
+    return this.fetchVideos(1, offset, limit);
   }
 
   private filterAoi(

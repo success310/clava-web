@@ -1802,10 +1802,40 @@ const generalKeywords = {
     it: 'Video löschen',
     en: 'Delete Video',
   },
+  deleteMatch: {
+    de: 'Match löschen',
+    it: 'Match löschen',
+    en: 'Delete Match',
+  },
+  createMatch: {
+    de: 'Match Erstellen',
+    it: 'Match Erstellen',
+    en: 'Create Match',
+  },
+  searchMatches: {
+    de: 'Nach Match Suchen',
+    it: 'Nach Match Suchen',
+    en: 'Nach Match Suchen',
+  },
   reset: {
     de: 'Zurücksetzen',
     it: 'Reset',
     en: 'Reset',
+  },
+  searchLeague: {
+    de: 'Liga',
+    it: 'Liga',
+    en: 'League',
+  },
+  searchTeam1: {
+    de: 'Heimmannschaft',
+    it: 'Heimmannschaft',
+    en: 'Home Team',
+  },
+  searchTeam2: {
+    de: 'Andere Mannschaft',
+    it: 'Andere Mannschaft',
+    en: 'Away Team',
   },
   emptyString: {
     de: ' ',

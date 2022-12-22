@@ -17,15 +17,23 @@ import {
   Ad,
   Blog,
   ExternalVideo,
-  League,
-  Team,
+  LeagueListElement,
+  MatchListElement,
+  TeamListElement,
   User,
 } from '../../../../client/api';
 import { IDType } from '../../../../config/types';
 
-type SearchInputProps<
-  T extends Team | Ad | League | Blog | ExternalVideo | User,
-> = {
+type Searchable =
+  | TeamListElement
+  | Ad
+  | LeagueListElement
+  | Blog
+  | ExternalVideo
+  | User
+  | MatchListElement;
+
+type SearchInputProps<T extends Searchable> = {
   value: string;
   searching: boolean;
   onChange: (text: string) => void;
@@ -33,11 +41,17 @@ type SearchInputProps<
   items: T[];
   onSelect: (item: T | undefined) => void;
 };
-function SearchInput<
-  T extends Team | Ad | League | Blog | ExternalVideo | User,
->({ label, searching, items, onSelect, value, onChange }: SearchInputProps<T>) {
+
+function SearchInput<T extends Searchable>({
+  label,
+  searching,
+  items,
+  onSelect,
+  value,
+  onChange,
+}: SearchInputProps<T>) {
   const { l } = useContext(ClavaContext);
-  const selected = useRef<Team | Ad | Blog | ExternalVideo | League | User>();
+  const selected = useRef<Searchable>();
   const onValueChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
     (e) => {
       onChange(e.target.value);
@@ -71,6 +85,11 @@ function SearchInput<
                     ? showTranslated(selected.current.title, l)
                     : 'fileMobile' in selected.current
                     ? selected.current.name
+                    : 'team1' in selected.current
+                    ? `${showTranslated(
+                        selected.current.team1.name,
+                        l,
+                      )} - ${showTranslated(selected.current.team2.name, l)}`
                     : showTranslated(selected.current.name, l)
                 }`
               : value
@@ -100,6 +119,11 @@ function SearchInput<
                   ? showTranslated(i.title, l)
                   : 'fileMobile' in i
                   ? i.name
+                  : 'team1' in i
+                  ? `${showTranslated(i.team1.name, l)} - ${showTranslated(
+                      i.team2.name,
+                      l,
+                    )}`
                   : showTranslated(i.name, l)}
               </span>
             </button>
@@ -118,4 +142,4 @@ function SearchInput<
 }
 
 export default SearchInput;
-// relo ad
+// reload

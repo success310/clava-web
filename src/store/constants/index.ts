@@ -11,6 +11,7 @@ import {
   Group,
   Language,
   League,
+  LeagueListElement,
   LeagueMatch,
   LineupType,
   Location,
@@ -165,17 +166,17 @@ export interface AdState {
 
 export interface AdminState {
   readonly match: Match | null;
-  readonly matches: Match[];
+  readonly matches: MatchListElement[];
   readonly user: User | null;
   readonly users: User[];
   readonly league: League | null;
-  readonly leagues: League[];
+  readonly leagues: LeagueListElement[];
   readonly ad: Ad | null;
   readonly ads: Ad[];
   readonly news: Blog | null;
   readonly newses: Blog[];
   readonly team: Team | null;
-  readonly teams: Team[];
+  readonly teams: TeamListElement[];
   readonly video: ExternalVideo | null;
   readonly videos: ExternalVideo[];
   readonly error: TranslatorKeys | null;

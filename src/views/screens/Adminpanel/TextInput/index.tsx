@@ -3,18 +3,30 @@ import { FormGroup, Input, Label } from 'reactstrap';
 import { translate, TranslatorKeys } from '../../../../config/translator';
 import { ClavaContext } from '../../../../config/contexts';
 
-const TextInput: React.FC<{
-  value: string;
-  onChange: (text: string) => void;
+type TextInputProps<T extends string | number> = {
+  value: T;
+  onChange: (text: T) => void;
   name: string;
   multiline?: boolean;
   label: TranslatorKeys;
-}> = ({ label, name, value, onChange, multiline }) => {
+};
+
+function TextInput<T extends string | number>({
+  label,
+  name,
+  value,
+  onChange,
+  multiline,
+}: TextInputProps<T>) {
   const { l } = useContext(ClavaContext);
 
   const onValueChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
     (e) => {
-      onChange(e.target.value);
+      onChange(
+        (typeof value === 'number'
+          ? parseInt(e.target.value, 10)
+          : e.target.value) as T,
+      );
     },
     [onChange],
   );
@@ -22,7 +34,9 @@ const TextInput: React.FC<{
     <FormGroup>
       <Label htmlFor={name}>{translate(label, l)}</Label>
       <Input
-        type={multiline ? 'textarea' : 'text'}
+        type={
+          typeof value === 'number' ? 'number' : multiline ? 'textarea' : 'text'
+        }
         value={value}
         name={name}
         id={name}
@@ -30,7 +44,7 @@ const TextInput: React.FC<{
       />
     </FormGroup>
   );
-};
+}
 
 TextInput.defaultProps = {
   multiline: false,

@@ -7,6 +7,7 @@ import { translate, TranslatorKeys } from '../../../config/translator';
 import { connector } from './redux';
 import { isAdmin } from '../../../config/utils';
 import AdminVideo from './AdminVideo';
+import AdminMatch from './AdminMatch';
 
 const Adminpanel: React.FC<ConnectedProps<typeof connector>> = ({
   patchMatch,
@@ -82,6 +83,8 @@ const Adminpanel: React.FC<ConnectedProps<typeof connector>> = ({
                 </>
               ) : adminSite === 'videos' ? (
                 <AdminVideo />
+              ) : adminSite === 'matches' ? (
+                <AdminMatch />
               ) : (
                 <>
                   <span>else</span>
@@ -103,4 +106,4 @@ const Adminpanel: React.FC<ConnectedProps<typeof connector>> = ({
 };
 
 export default connector(Adminpanel);
-// reload
+// re load

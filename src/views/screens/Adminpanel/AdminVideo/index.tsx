@@ -21,7 +21,7 @@ import { formatDate } from '../../../../config/utils';
 import ClavaSwitch from '../../../components/Form/ClavaSwitch';
 import { IDType } from '../../../../config/types';
 
-const Adminpanel: React.FC<ConnectedProps<typeof connector>> = ({
+const AdminpanelVideo: React.FC<ConnectedProps<typeof connector>> = ({
   video,
   videos,
   patchVideo,
@@ -298,5 +298,5 @@ const Adminpanel: React.FC<ConnectedProps<typeof connector>> = ({
   );
 };
 
-export default connector(Adminpanel);
+export default connector(AdminpanelVideo);
 // r el
