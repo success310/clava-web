@@ -8,6 +8,7 @@ type TextInputProps<T extends string | number> = {
   onChange: (text: T) => void;
   name: string;
   multiline?: boolean;
+  disabled?: boolean;
   label: TranslatorKeys;
 };
 
@@ -17,6 +18,7 @@ function TextInput<T extends string | number>({
   value,
   onChange,
   multiline,
+  disabled,
 }: TextInputProps<T>) {
   const { l } = useContext(ClavaContext);
 
@@ -37,6 +39,7 @@ function TextInput<T extends string | number>({
         type={
           typeof value === 'number' ? 'number' : multiline ? 'textarea' : 'text'
         }
+        disabled={disabled}
         value={value}
         name={name}
         id={name}
@@ -48,6 +51,7 @@ function TextInput<T extends string | number>({
 
 TextInput.defaultProps = {
   multiline: false,
+  disabled: false,
 };
 
 export default TextInput;

@@ -5,6 +5,8 @@ import {
   AdminActionTypes,
   SEARCH_ADS,
   SEARCH_LEAGUES,
+  SEARCH_LOCATION,
+  SEARCH_MATCH,
   SEARCH_TEAMS,
   SEARCH_VIDEOS,
 } from '../actions/types';
@@ -18,6 +20,8 @@ const initialState: AdminState = {
   matches: [],
   team: null,
   teams: [],
+  location: null,
+  locations: [],
   ad: null,
   ads: [],
   news: null,
@@ -69,8 +73,26 @@ const reducer: Reducer<AdminState> = (
         };
       if (action.payload.id === SEARCH_ADS)
         return { ...state, statusSearch: 'idle', ads: action.payload.response };
+      if (action.payload.id === SEARCH_MATCH)
+        return {
+          ...state,
+          statusSearch: 'idle',
+          matches: action.payload.response,
+        };
+      if (action.payload.id === SEARCH_LOCATION)
+        return {
+          ...state,
+          statusSearch: 'idle',
+          locations: action.payload.response,
+        };
       return state;
     }
+    case AdminActionTypes.FETCH_MATCH_SUCCESS:
+      return {
+        ...state,
+        status: 'idle',
+        match: action.payload,
+      };
     default: {
       return state;
     }

@@ -9,7 +9,8 @@ const FileInput: React.FC<{
   preview: string | IconDefinition;
   onChange: (text: ClavaFile) => void;
   name: string;
-}> = ({ name, preview, onChange }) => {
+  disabled?: boolean;
+}> = ({ name, disabled, preview, onChange }) => {
   const onValueChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
     (e) => {
       if (e.target.files && e.target.files.length === 1)
@@ -40,5 +41,7 @@ const FileInput: React.FC<{
     </FormGroup>
   );
 };
+
+FileInput.defaultProps = { disabled: false };
 
 export default FileInput;

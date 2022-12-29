@@ -8,6 +8,8 @@ import React, {
 } from 'react';
 import { ConnectedProps } from 'react-redux';
 import { DateTimeFormat } from 'intl';
+import { Button } from 'reactstrap';
+import { io } from 'socket.io-client';
 import { connector } from './redux';
 import { ClavaContext } from '../../../config/contexts';
 import MatchDays from '../MatchDays';
@@ -59,7 +61,7 @@ const LeagueMatches: React.FC<ConnectedProps<typeof connector>> = ({
   fetchLeagueMatchesOfDayAndLeague,
   small,
 }) => {
-  const { l, aoi } = useContext(ClavaContext);
+  const { l, aoi, user } = useContext(ClavaContext);
   const [selectedDate, setSelectedDate] = useState<Date>();
   const shouldScroll = useRef<boolean>(false);
   const adPositions = useRef<string[]>([]);
@@ -188,6 +190,20 @@ const LeagueMatches: React.FC<ConnectedProps<typeof connector>> = ({
     matchesLength,
     leagueId,
   ]);
+  const [socket, setSocket] = useState<string[]>([]);
+  const connectSocketio = useCallback(() => {
+    // TODO
+    const client = io({ host: 'https://socket.clava-sports.com/' });
+    client.on('message', (message) => {
+      setSocket((m) => m.concat(message));
+    });
+    client.on('connect', () => {
+      setSocket((m) => m.concat(`Connected as ${client.id}`));
+    });
+    client.on('connection', () => {
+      client.emit('message', JSON.stringify({ user_id: user.id }));
+    });
+  }, [user]);
   return (
     <div className={`league-matches-container${small ? ' small' : ''}`}>
       <MatchDays
@@ -198,6 +214,9 @@ const LeagueMatches: React.FC<ConnectedProps<typeof connector>> = ({
         shouldScroll={shouldScroll}
         disabled={false}
       />
+      <Button type="button" onClick={connectSocketio}>
+        Connect
+      </Button>
       <div className="league-matches">
         {filtered.length === 0 ? (
           <Loading small />

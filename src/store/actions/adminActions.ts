@@ -4,6 +4,8 @@ import {
   AdminActions,
   AdminActionTypes,
   SEARCH_LEAGUES,
+  SEARCH_LOCATION,
+  SEARCH_MATCH,
   SEARCH_TEAMS,
   SEARCH_TYPES,
   SEARCH_VIDEOS,
@@ -116,6 +118,10 @@ export function searchAdmin(
       ? client().searchLeagues
       : type === SEARCH_TEAMS
       ? client().searchTeams
+      : type === SEARCH_LOCATION
+      ? client().searchLocations
+      : type === SEARCH_MATCH
+      ? client().searchMatches
       : client().searchLeagues,
     false,
     { id: type },

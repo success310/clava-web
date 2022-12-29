@@ -319,5 +319,6 @@ export { StandingService } from './services/StandingService';
 export { StatisticsService } from './services/StatisticsService';
 export { TeamService } from './services/TeamService';
 export { TemporaryService } from './services/TemporaryService';
+export { TestService } from './services/TestService';
 export { TransferService } from './services/TransferService';
 export { UserService } from './services/UserService';

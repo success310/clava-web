@@ -731,6 +731,7 @@ export const SEARCH_NEWS = 4;
 export const SEARCH_VIDEOS = 5;
 export const SEARCH_ADS = 6;
 export const SEARCH_MATCH = 7;
+export const SEARCH_LOCATION = 8;
 
 export declare type SEARCH_TYPES =
   | typeof SEARCH_LEAGUES
@@ -739,6 +740,7 @@ export declare type SEARCH_TYPES =
   | typeof SEARCH_MATCH
   | typeof SEARCH_TEAMS
   | typeof SEARCH_USERS
+  | typeof SEARCH_LOCATION
   | typeof SEARCH_VIDEOS;
 export type AdminActions =
   | {
@@ -789,6 +791,7 @@ export type AdminActions =
         | { id: typeof SEARCH_TEAMS; response: TeamListElement[] }
         | { id: typeof SEARCH_USERS; response: User[] }
         | { id: typeof SEARCH_ADS; response: Ad[] }
+        | { id: typeof SEARCH_LOCATION; response: Location[] }
         | { id: typeof SEARCH_MATCH; response: MatchListElement[] };
     }
   | {

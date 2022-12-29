@@ -10,7 +10,6 @@ import {
   AdPositionEnum,
   AdService,
   ApiError,
-  AppService,
   AreaOfInterest,
   AreaOfInterestService,
   AuthenticationService,
@@ -533,16 +532,6 @@ class Client {
     return PlayerService.getPlayersByTeamPlayerTeamTeamIdGet(id);
   }
 
-  getVersion() {
-    return AppService.getAppVersionAppVersionGet();
-  }
-
-  checkVersion(version: string) {
-    return AppService.getUpdateRequiredNewAppUpdateRequiredNewVersionGet(
-      version,
-    );
-  }
-
   getPlayer(id: IDType) {
     return PlayerService.getPlayerPlayerPlayerIdGet(id);
   }
@@ -831,10 +820,6 @@ class Client {
     );
   }
 
-  getMatchIdsByTeam(teamId: IDType) {
-    // TODO
-  }
-
   postDeclineInsider(userId: IDType, teamId: IDType) {
     return UserService.declineGroupRequestUserGroupDeclineUserUserIdTeamTeamIdPost(
       userId,
@@ -1050,8 +1035,16 @@ class Client {
     return SearchService.searchTeamSearchTeamQueryGet(q, limit, offset);
   }
 
+  searchLocations(q: string, offset: number, limit: number) {
+    return SearchService.searchLocationSearchLocationQueryGet(q, limit, offset);
+  }
+
   searchVideos(q: string, offset: number, limit: number) {
-    return this.fetchVideos(1, offset, limit);
+    return client().fetchVideos(1, offset, limit);
+  }
+
+  searchMatches(q: string, offset: number, limit: number) {
+    return client().getMatchesOfTeam(68, limit, false);
   }
 
   private filterAoi(

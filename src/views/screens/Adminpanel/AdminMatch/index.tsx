@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { faChevronDown, faChevronUp } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from 'reactstrap';
@@ -14,46 +14,25 @@ import { ClavaContext } from '../../../../config/contexts';
 import { translate } from '../../../../config/translator';
 import { connector } from './redux';
 import SearchInput from '../SearchInput';
-import { formatDate, getMatchDate } from '../../../../config/utils';
-import {
-  LeagueListElement,
-  Match,
-  MatchListElement,
-  TeamListElement,
-} from '../../../../client/api';
-import TextInput from '../TextInput';
+import { MatchListElement } from '../../../../client/api';
+import AdminCreateMatch from './Create';
+import AdminEditMatch from './Edit';
 
 const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
   match,
   matches,
-  patchMatch,
   getMatch,
-  createMatch,
   status,
   searching,
-  deleteMatch,
   searchMatch,
-  leagues,
-  searchLeague,
-  teams,
-  searchTeams,
 }) => {
   const { l } = useContext(ClavaContext);
   const { adminMethod, adminElemId } = useParams();
+  const navigate = useNavigate();
   const [method, setMethod] = useState<string>(adminMethod ?? 'search');
   const [query, setQuery] = useState('');
-  const [queryLeague, setQueryLeague] = useState('');
-  const [queryTeam1, setQueryTeam1] = useState('');
-  const [queryTeam2, setQueryTeam2] = useState('');
 
-  const [selectedMatch, setSelectedMatch] = useState<
-    Match | MatchListElement
-  >();
-  const [selectedLeague, setSelectedLeague] = useState<LeagueListElement>();
-  const [selectedTeam1, setSelectedTeam1] = useState<TeamListElement>();
-  const [selectedTeam2, setSelectedTeam2] = useState<TeamListElement>();
-  const [date, setDate] = useState<Date>(new Date());
-  const [matchDay, setMatchDay] = useState<number>(-1);
+  const [selectedMatch, setSelectedMatch] = useState<MatchListElement>();
   const timeout = useRef<number>(-1);
 
   useEffect(() => {
@@ -64,26 +43,17 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
     ) {
       if (!match) getMatch(parseInt(adminElemId, 10));
       if (match) {
-        if (adminMethod === 'edit') {
-          setMatchDay(match.matchDay);
-          setSelectedTeam1(match.team1);
-          setSelectedTeam2(match.team2);
-          setSelectedLeague(match.league);
-          setDate(getMatchDate(match));
-        }
         setSelectedMatch(match);
       }
     } else if (adminMethod === 'edit' && status !== 'loading') {
       setMethod('search');
+    } else if (match) {
+      setSelectedMatch(match);
     }
-  }, [adminElemId, getMatch, method, status, match]);
+  }, [adminElemId, getMatch, method, status, match, adminMethod]);
   const reset = useCallback(() => {
     setSelectedMatch(undefined);
-    setSelectedLeague(undefined);
-    setSelectedTeam1(undefined);
-    setSelectedTeam2(undefined);
-    setDate(new Date());
-    setMatchDay(-1);
+    setQuery('');
   }, []);
   const toggleCreate = useCallback(() => {
     reset();
@@ -94,11 +64,6 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
   }, []);
   const toggleEdit = useCallback(() => {
     if (selectedMatch) {
-      setMatchDay(selectedMatch.matchDay);
-      setSelectedTeam1(selectedMatch.team1);
-      setSelectedTeam2(selectedMatch.team2);
-      setSelectedLeague(selectedMatch.league);
-      setDate(getMatchDate(selectedMatch));
       setMethod((m) => (m === 'edit' ? 'search' : 'edit'));
     } else {
       reset();
@@ -120,71 +85,14 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
     },
     [searchMatch],
   );
-  const onSearchLeague = useCallback(
-    (q: string) => {
-      if (timeout.current !== -1) {
-        window.clearTimeout(timeout.current);
+  const setSelectedMatchCont = useCallback(
+    (m: MatchListElement | undefined) => {
+      if (m) {
+        getMatch(m.id);
       }
-      setQueryLeague(q);
-      window.setTimeout(() => {
-        searchLeague(q);
-      }, 100);
+      setSelectedMatch(m);
     },
-    [searchLeague],
-  );
-  const onSearchTeam1 = useCallback(
-    (q: string) => {
-      if (timeout.current !== -1) {
-        window.clearTimeout(timeout.current);
-      }
-      setQueryTeam1(q);
-      window.setTimeout(() => {
-        searchTeams(q);
-      }, 100);
-    },
-    [searchTeams],
-  );
-  const onSearchTeam2 = useCallback(
-    (q: string) => {
-      if (timeout.current !== -1) {
-        window.clearTimeout(timeout.current);
-      }
-      setQueryTeam2(q);
-      window.setTimeout(() => {
-        searchTeams(q);
-      }, 100);
-    },
-    [searchTeams],
-  );
-  const onEdit = useCallback(() => {
-    if (selectedMatch) {
-      patchMatch(selectedMatch.id, { cancelled: false });
-    }
-  }, [patchMatch, selectedMatch]);
-  const onCreate = useCallback(() => {
-    if (selectedLeague && selectedTeam1 && selectedTeam2)
-      createMatch({
-        matchDay,
-        leagueId: selectedLeague.id,
-        team1Id: selectedTeam1.id,
-        team2Id: selectedTeam2.id,
-        originalStartTime: formatDate(date, l, true),
-      });
-  }, [
-    createMatch,
-    date,
-    l,
-    matchDay,
-    selectedLeague,
-    selectedTeam1,
-    selectedTeam2,
-  ]);
-  const setSelectedLeagueCont = useCallback(
-    (league: LeagueListElement | undefined) => {
-      setSelectedLeague(league);
-      if (league) setMatchDay(league.matchDays);
-    },
-    [],
+    [getMatch],
   );
   return (
     <div>
@@ -199,7 +107,7 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
           value={query}
           onChange={onSearch}
           label="searchMatches"
-          onSelect={setSelectedMatch}
+          onSelect={setSelectedMatchCont}
           items={matches}
           searching={searching}
         />
@@ -221,46 +129,20 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
             icon={method === 'create' ? faChevronUp : faChevronDown}
           />
         </button>
-        <SearchInput
-          value={queryLeague}
-          searching={searching}
-          onChange={onSearchLeague}
-          label="searchLeague"
-          items={leagues}
-          onSelect={setSelectedLeagueCont}
-        />
-        {selectedLeague && (
-          <SearchInput
-            value={queryTeam1}
-            searching={searching}
-            onChange={onSearchTeam1}
-            label="searchTeam1"
-            items={teams}
-            onSelect={setSelectedTeam1}
+        {method === 'create' && <AdminCreateMatch />}
+      </fieldset>
+      <fieldset className={`form ${method === 'edit' ? 'open' : 'close'}`}>
+        <button className="form-toggler" onClick={toggleEdit} type="button">
+          <h6>{translate('editMatch', l)}</h6>
+          <FontAwesomeIcon
+            icon={method === 'edit' ? faChevronUp : faChevronDown}
           />
-        )}
-        {selectedLeague && selectedTeam1 && (
-          <SearchInput
-            value={queryTeam2}
-            searching={searching}
-            onChange={onSearchTeam2}
-            label="searchTeam2"
-            items={teams}
-            onSelect={setSelectedTeam2}
-          />
-        )}
-        {selectedTeam2 && (
-          <TextInput
-            label="matchDay"
-            onChange={setMatchDay}
-            name="matchday"
-            value={matchDay}
-          />
-        )}
-        {selectedTeam2 && selectedTeam1 && selectedLeague && (
-          <Button color="primary" onClick={onCreate}>
-            {translate('submit', l)}
-          </Button>
+        </button>
+        {method === 'edit' && match && <AdminEditMatch selectedMatch={match} />}
+        {method === 'edit' && !selectedMatch && (
+          <span className="text-danger bold">
+            {translate('matchNotFound', l)}
+          </span>
         )}
       </fieldset>
     </div>
@@ -268,4 +150,4 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
 };
 
 export default connector(AdminpanelMatch);
-// r el
+// reload

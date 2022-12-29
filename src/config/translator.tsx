@@ -1817,6 +1817,11 @@ const generalKeywords = {
     it: 'Nach Match Suchen',
     en: 'Nach Match Suchen',
   },
+  searchLocation: {
+    de: 'Nach Spielstätte Suchen (optional)',
+    it: 'Nach Location Suchen',
+    en: 'Nach Location Suchen',
+  },
   reset: {
     de: 'Zurücksetzen',
     it: 'Reset',
@@ -1836,6 +1841,11 @@ const generalKeywords = {
     de: 'Andere Mannschaft',
     it: 'Andere Mannschaft',
     en: 'Away Team',
+  },
+  matchNotFound: {
+    de: 'Spiel nicht gefunden',
+    it: 'Spiel nicht gefunden',
+    en: 'Spiel nicht gefunden',
   },
   emptyString: {
     de: ' ',

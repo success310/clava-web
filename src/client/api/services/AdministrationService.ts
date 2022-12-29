@@ -246,27 +246,6 @@ key?: string,
     }
 
     /**
-     * Check Kafka Health
-     * @param key 
-     * @returns any Successful Response
-     * @throws ApiError
-     */
-    public static checkKafkaHealthAdminCheckKafkaHealthPost(
-key?: string,
-): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/admin/check_kafka_health',
-            query: {
-                'key': key,
-            },
-            errors: {
-                422: `Validation Error`,
-            },
-        });
-    }
-
-    /**
      * Delete Team
      * @param teamId 
      * @param key 

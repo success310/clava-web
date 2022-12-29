@@ -587,32 +587,6 @@ export function logout(dispatch: Dispatch<UserActions>) {
       dispatch({ type: UserActionTypes.LOGOUT });
     });
 }
-
-export function getVersion(dispatch: Dispatch<UserActions>) {
-  defaultGet(
-    dispatch,
-    UserActionTypes.GET_VERSION_SUCCESS,
-    UserActionTypes.FETCH_ERROR,
-    UserActionTypes.GET_VERSION,
-    client().getVersion,
-    false,
-    false,
-  );
-}
-
-export function checkVersion(dispatch: Dispatch<UserActions>, version: string) {
-  defaultGet(
-    dispatch,
-    UserActionTypes.CHECK_VERSION_SUCCESS,
-    UserActionTypes.FETCH_ERROR,
-    UserActionTypes.GET_VERSION,
-    client().checkVersion,
-    false,
-    false,
-    version,
-  );
-}
-
 export function deleteAccount(dispatch: Dispatch<UserActions>) {
   defaultGet(
     dispatch,

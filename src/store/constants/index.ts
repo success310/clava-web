@@ -173,6 +173,8 @@ export interface AdminState {
   readonly leagues: LeagueListElement[];
   readonly ad: Ad | null;
   readonly ads: Ad[];
+  readonly location: Location | null;
+  readonly locations: Location[];
   readonly news: Blog | null;
   readonly newses: Blog[];
   readonly team: Team | null;

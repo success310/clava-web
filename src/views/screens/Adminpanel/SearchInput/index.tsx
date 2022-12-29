@@ -1,5 +1,6 @@
 import React, {
   ChangeEventHandler,
+  KeyboardEventHandler,
   useCallback,
   useContext,
   useRef,
@@ -18,16 +19,19 @@ import {
   Blog,
   ExternalVideo,
   LeagueListElement,
+  Location,
   MatchListElement,
   TeamListElement,
   User,
 } from '../../../../client/api';
 import { IDType } from '../../../../config/types';
+import { getMainLeague } from '../../../../config/utils';
 
 type Searchable =
   | TeamListElement
   | Ad
   | LeagueListElement
+  | Location
   | Blog
   | ExternalVideo
   | User
@@ -36,6 +40,7 @@ type Searchable =
 type SearchInputProps<T extends Searchable> = {
   value: string;
   searching: boolean;
+  disabled?: boolean;
   onChange: (text: string) => void;
   label: TranslatorKeys;
   items: T[];
@@ -48,6 +53,7 @@ function SearchInput<T extends Searchable>({
   items,
   onSelect,
   value,
+  disabled,
   onChange,
 }: SearchInputProps<T>) {
   const { l } = useContext(ClavaContext);
@@ -70,11 +76,21 @@ function SearchInput<T extends Searchable>({
     selected.current = undefined;
     onSelect(undefined);
   }, [onChange, onSelect]);
+  const onKeyDownHandler = useCallback<KeyboardEventHandler<HTMLInputElement>>(
+    (e) => {
+      if (e.key === 'Backspace' && selected.current) {
+        selected.current = undefined;
+        onSelect(undefined);
+      }
+    },
+    [onSelect],
+  );
   return (
     <FormGroup>
       <Label htmlFor={`search${label}`}>{translate(label, l)}</Label>
       <InputGroup className={searching ? 'searching' : ''}>
         <Input
+          disabled={disabled}
           type="text"
           value={
             selected.current
@@ -90,13 +106,28 @@ function SearchInput<T extends Searchable>({
                         selected.current.team1.name,
                         l,
                       )} - ${showTranslated(selected.current.team2.name, l)}`
-                    : showTranslated(selected.current.name, l)
+                    : `${showTranslated(selected.current.name, l)} ${
+                        'leagues' in selected.current &&
+                        selected.current.leagues &&
+                        getMainLeague(selected.current.leagues)
+                          ? `( ${selected.current.leagues
+                              .map(
+                                (leag) =>
+                                  `[${leag.id}] ${showTranslated(
+                                    leag.name,
+                                    l,
+                                  )}`,
+                              )
+                              .join(', ')} )`
+                          : ''
+                      }`
                 }`
               : value
           }
           name={`search${label}`}
           id={`search${label}`}
           onChange={onValueChange}
+          onKeyDown={onKeyDownHandler}
         />
         <div className="input-group-addon refreshing">
           <FontAwesomeIcon icon={faRefresh} />
@@ -124,7 +155,16 @@ function SearchInput<T extends Searchable>({
                       i.team2.name,
                       l,
                     )}`
-                  : showTranslated(i.name, l)}
+                  : `${showTranslated(i.name, l)} ${
+                      'leagues' in i && i.leagues && getMainLeague(i.leagues)
+                        ? `( ${i.leagues
+                            .map(
+                              (leag) =>
+                                `[${leag.id}] ${showTranslated(leag.name, l)}`,
+                            )
+                            .join(', ')} )`
+                        : ''
+                    }`}
               </span>
             </button>
           ))}
@@ -140,6 +180,7 @@ function SearchInput<T extends Searchable>({
     </FormGroup>
   );
 }
+SearchInput.defaultProps = { disabled: false };
 
 export default SearchInput;
 // reload
