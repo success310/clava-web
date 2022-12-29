@@ -768,7 +768,7 @@ const generalKeywords = {
     en: 'Add',
   },
   insertMatch: {
-    de: 'Match eintragen',
+    de: 'Spiel eintragen',
     it: 'Inserisci partita',
     en: 'Insert match',
   },
@@ -1183,7 +1183,7 @@ const generalKeywords = {
     en: 'Info',
   },
   TeamMatches: {
-    de: 'Matches',
+    de: 'Spiele',
     it: 'Partite',
     en: 'Matches',
   },
@@ -1803,24 +1803,24 @@ const generalKeywords = {
     en: 'Delete Video',
   },
   deleteMatch: {
-    de: 'Match löschen',
-    it: 'Match löschen',
+    de: 'Spiel löschen',
+    it: 'Spiel löschen',
     en: 'Delete Match',
   },
   createMatch: {
-    de: 'Match Erstellen',
-    it: 'Match Erstellen',
+    de: 'Spiel Erstellen',
+    it: 'Spiel Erstellen',
     en: 'Create Match',
   },
   searchMatches: {
-    de: 'Nach Match Suchen',
-    it: 'Nach Match Suchen',
-    en: 'Nach Match Suchen',
+    de: 'Nach Spiel Suchen',
+    it: 'Nach Spiel Suchen',
+    en: 'Nach Spiel Suchen',
   },
   searchLocation: {
-    de: 'Nach Spielstätte Suchen (optional)',
-    it: 'Nach Location Suchen',
-    en: 'Nach Location Suchen',
+    de: 'Spielstätte (optional)',
+    it: 'Location (optional)',
+    en: 'Location (optional)',
   },
   reset: {
     de: 'Zurücksetzen',
@@ -1846,6 +1846,56 @@ const generalKeywords = {
     de: 'Spiel nicht gefunden',
     it: 'Spiel nicht gefunden',
     en: 'Spiel nicht gefunden',
+  },
+  createBulk: {
+    de: 'Mehrere Erstellen',
+    it: 'Mehrere Erstellen',
+    en: 'Mehrere Erstellen',
+  },
+  uploadSheet: {
+    de: 'Liste hochladen',
+    it: 'Liste hochladen',
+    en: 'Liste hochladen',
+  },
+  validateSheet: {
+    de: 'Auswerten',
+    it: 'Auswerten',
+    en: 'Auswerten',
+  },
+  allowedSheets: {
+    de: 'Folgene formate werden unterstützt: .xml, .xlsx, .csv',
+    it: 'Folgene formate werden unterstützt: .xml, .xlsx, .csv',
+    en: 'Folgene formate werden unterstützt: .xml, .xlsx, .csv',
+  },
+  couldNotParseFile: {
+    de: 'Datei [file] konnte nicht glesen werden',
+    it: 'Datei [file] konnte nicht glesen werden',
+    en: 'Datei [file] konnte nicht glesen werden',
+  },
+  wrongLine: {
+    de: '[file]: Zeile [line] konnte nicht glesen werden',
+    it: '[file]: Zeile [line] konnte nicht glesen werden',
+    en: '[file]: Zeile [line] konnte nicht glesen werden',
+  },
+  noMatchday: {
+    de: '[file]: Zeile [line] konnte nicht glesen werden (Spieltag)',
+    it: '[file]: Zeile [line] konnte nicht glesen werden (Spieltag)',
+    en: '[file]: Zeile [line] konnte nicht glesen werden (Spieltag)',
+  },
+  probablyHeader: {
+    de: '[file]: Header? auf Zeile [line] übersprungen',
+    it: '[file]: Header? auf Zeile [line] übersprungen',
+    en: '[file]: Header? auf Zeile [line] übersprungen',
+  },
+  newMatch: {
+    de: 'Neues Spiel',
+    it: 'Neues Spiel',
+    en: 'Neues Spiel',
+  },
+  submitAll: {
+    de: 'Alle Senden',
+    it: 'Alle Senden',
+    en: 'Alle Senden',
   },
   emptyString: {
     de: ' ',

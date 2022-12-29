@@ -17,6 +17,7 @@ import SearchInput from '../SearchInput';
 import { MatchListElement } from '../../../../client/api';
 import AdminCreateMatch from './Create';
 import AdminEditMatch from './Edit';
+import AdminCreateBulkMatch from './CreateBulk';
 
 const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
   match,
@@ -73,6 +74,9 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
   const toggleDelete = useCallback(() => {
     setMethod((m) => (m === 'delete' ? 'search' : 'delete'));
   }, []);
+  const toggleCreateBulk = useCallback(() => {
+    setMethod((m) => (m === 'create-bulk' ? 'search' : 'create-bulk'));
+  }, []);
   const onSearch = useCallback(
     (q: string) => {
       if (timeout.current !== -1) {
@@ -106,7 +110,10 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
         <SearchInput
           value={query}
           onChange={onSearch}
+          selectedItem={selectedMatch}
           label="searchMatches"
+          isFocused={method === 'search'}
+          name="searchMatches"
           onSelect={setSelectedMatchCont}
           items={matches}
           searching={searching}
@@ -145,9 +152,22 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
           </span>
         )}
       </fieldset>
+      <fieldset
+        className={`form ${method === 'create-bulk' ? 'open' : 'close'}`}>
+        <button
+          className="form-toggler"
+          onClick={toggleCreateBulk}
+          type="button">
+          <h6>{translate('createBulk', l)}</h6>
+          <FontAwesomeIcon
+            icon={method === 'create-bulk' ? faChevronUp : faChevronDown}
+          />
+        </button>
+        {method === 'create-bulk' && <AdminCreateBulkMatch />}
+      </fieldset>
     </div>
   );
 };
 
 export default connector(AdminpanelMatch);
-// reload
+// rel oad

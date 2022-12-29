@@ -81,9 +81,11 @@ const AdminEditMatch: React.FC<ConnectedProps<typeof connector>> = ({
       <SearchInput
         value={queryLocation}
         disabled={cancelled}
+        isFocused
         searching={searching}
         onChange={onSearchLocation}
         label="searchLocation"
+        name="searchLocation"
         items={locations}
         onSelect={setSelectedLocation}
       />

@@ -133,7 +133,7 @@ const Profile: React.FC<ConnectedProps<typeof connector>> = ({
           modalTransition={DeleteFadeTrans}
           backdrop
           unmountOnClose={false}>
-          <div className="sure-delete-account">
+          <div className="default-modal-content">
             <h3>{translate('deleteAccount', l)}</h3>
             <p>{translate('deleteAccountCont', l)}</p>
             <Row>

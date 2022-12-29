@@ -32,6 +32,7 @@ const FileInput: React.FC<{
         )}
       </Label>
       <Input
+        tabIndex={0}
         type="file"
         accept="image/*"
         name={name}

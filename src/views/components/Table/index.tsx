@@ -276,7 +276,7 @@ const Table: React.FC<ConnectedProps<typeof connector>> = ({
             </thead>
             <tbody>
               {selectedStanding.map((st) => (
-                <Line standing={st} />
+                <Line standing={st} key={`stand${st.team.id}`} />
               ))}
             </tbody>
           </table>

@@ -1,4 +1,9 @@
-import React, { useCallback, useContext, useMemo } from 'react';
+import React, {
+  MouseEventHandler,
+  useCallback,
+  useContext,
+  useMemo,
+} from 'react';
 import { ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/pro-regular-svg-icons';
@@ -32,9 +37,13 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = ({
     () => isFavorite(favorites, id, type, team1Id, team2Id),
     [favorites, id, team1Id, team2Id, type],
   );
-  const onFav = useCallback(() => {
-    onPressStar(id, checked, type);
-  }, [checked, id, onPressStar, type]);
+  const onFav = useCallback<MouseEventHandler<HTMLButtonElement>>(
+    (event) => {
+      event.preventDefault();
+      onPressStar(id, checked, type);
+    },
+    [checked, id, onPressStar, type],
+  );
 
   return (
     <button
@@ -68,7 +77,7 @@ export default connector(FavoriteIcon);
             onPress={() => {
               onPressBell(id, checkedBell, type);
             }}>
-            <FA5Icon
+            <FA5Icon 
               name="bell"
               size={big ? 30 : 20}
               color={checkedBell ? theme.COLORS.PRIMARY : theme.COLORS.WHITE}

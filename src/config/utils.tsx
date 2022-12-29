@@ -464,7 +464,7 @@ export function numberedHash(str: string): number {
     // eslint-disable-next-line no-bitwise
     hash = (hash << 5) - hash + chr;
     // eslint-disable-next-line no-bitwise
-    hash |= 0; // Convert to 32bit integer
+    hash |= 0; // Convert to 32bit in teger
   }
   return hash;
 }

@@ -3,6 +3,7 @@ import React, {
   KeyboardEventHandler,
   useCallback,
   useContext,
+  useEffect,
   useRef,
 } from 'react';
 import { Button, FormGroup, Input, InputGroup, Label } from 'reactstrap';
@@ -43,7 +44,12 @@ type SearchInputProps<T extends Searchable> = {
   disabled?: boolean;
   onChange: (text: string) => void;
   label: TranslatorKeys;
+  selectedItem?: T | undefined;
+  name: string;
   items: T[];
+  onFocus?: (index: number | undefined) => void;
+  isFocused?: boolean;
+  index?: number;
   onSelect: (item: T | undefined) => void;
 };
 
@@ -51,81 +57,96 @@ function SearchInput<T extends Searchable>({
   label,
   searching,
   items,
+  onFocus,
+  isFocused,
   onSelect,
   value,
+  index,
+  selectedItem,
+  name,
   disabled,
   onChange,
 }: SearchInputProps<T>) {
   const { l } = useContext(ClavaContext);
-  const selected = useRef<Searchable>();
+  const inputElem = useRef<HTMLInputElement>(null);
+  const preventSearch = useRef(false);
+  useEffect(() => {
+    if (isFocused && inputElem.current) inputElem.current.focus();
+  }, [isFocused]);
   const onValueChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
     (e) => {
-      onChange(e.target.value);
+      if (preventSearch.current) preventSearch.current = false;
+      else onChange(e.target.value);
     },
     [onChange],
   );
   const onClickItem = useCallback(
     (id: IDType) => {
-      selected.current = items.find((i) => i.id === id);
       onSelect(items.find((i) => i.id === id));
     },
     [items, onSelect],
   );
   const onReset = useCallback(() => {
     onChange('');
-    selected.current = undefined;
     onSelect(undefined);
   }, [onChange, onSelect]);
   const onKeyDownHandler = useCallback<KeyboardEventHandler<HTMLInputElement>>(
     (e) => {
-      if (e.key === 'Backspace' && selected.current) {
-        selected.current = undefined;
+      if (e.key === 'Backspace' && selectedItem) {
+        preventSearch.current = true;
         onSelect(undefined);
+        onChange(value.slice(0, -1));
       }
     },
-    [onSelect],
+    [onSelect, selectedItem],
   );
+  const onFocusCont = useCallback(() => {
+    if (onFocus) {
+      onFocus(index);
+    }
+  }, [index, onFocus]);
   return (
     <FormGroup>
-      <Label htmlFor={`search${label}`}>{translate(label, l)}</Label>
-      <InputGroup className={searching ? 'searching' : ''}>
+      <Label htmlFor={`search${name}`}>{translate(label, l)}</Label>
+      <InputGroup className={searching && isFocused ? 'searching' : ''}>
         <Input
+          onFocus={onFocusCont}
+          autoFocus={isFocused}
+          tabIndex={0}
+          className={selectedItem ? 'text-white' : 'text-white-50'}
           disabled={disabled}
+          innerRef={inputElem}
+          title={
+            selectedItem &&
+            'leagues' in selectedItem &&
+            selectedItem.leagues &&
+            getMainLeague(selectedItem.leagues)
+              ? selectedItem.leagues
+                  .map((leag) => `[${leag.id}] ${showTranslated(leag.name, l)}`)
+                  .join(', ')
+              : ''
+          }
           type="text"
           value={
-            selected.current
-              ? `[${selected.current.id}] ${
-                  'username' in selected.current
-                    ? selected.current.username
-                    : 'title' in selected.current
-                    ? showTranslated(selected.current.title, l)
-                    : 'fileMobile' in selected.current
-                    ? selected.current.name
-                    : 'team1' in selected.current
+            selectedItem
+              ? `[${selectedItem.id}] ${
+                  'username' in selectedItem
+                    ? selectedItem.username
+                    : 'title' in selectedItem
+                    ? showTranslated(selectedItem.title, l)
+                    : 'fileMobile' in selectedItem
+                    ? selectedItem.name
+                    : 'team1' in selectedItem
                     ? `${showTranslated(
-                        selected.current.team1.name,
+                        selectedItem.team1.name,
                         l,
-                      )} - ${showTranslated(selected.current.team2.name, l)}`
-                    : `${showTranslated(selected.current.name, l)} ${
-                        'leagues' in selected.current &&
-                        selected.current.leagues &&
-                        getMainLeague(selected.current.leagues)
-                          ? `( ${selected.current.leagues
-                              .map(
-                                (leag) =>
-                                  `[${leag.id}] ${showTranslated(
-                                    leag.name,
-                                    l,
-                                  )}`,
-                              )
-                              .join(', ')} )`
-                          : ''
-                      }`
+                      )} - ${showTranslated(selectedItem.team2.name, l)}`
+                    : showTranslated(selectedItem.name, l)
                 }`
               : value
           }
-          name={`search${label}`}
-          id={`search${label}`}
+          name={`search${name}`}
+          id={`search${name}`}
           onChange={onValueChange}
           onKeyDown={onKeyDownHandler}
         />
@@ -133,15 +154,25 @@ function SearchInput<T extends Searchable>({
           <FontAwesomeIcon icon={faRefresh} />
         </div>
       </InputGroup>
-      {!!items.length && !selected.current && (
+      {!!items.length && !selectedItem && isFocused && (
         <div className="search-addon">
           {items.map((i) => (
             <button
-              key={`search-result-${i.id}`}
+              key={`search-result${name}-${i.id}`}
               type="button"
               onClick={() => {
                 onClickItem(i.id);
-              }}>
+              }}
+              title={
+                'leagues' in i && i.leagues && getMainLeague(i.leagues)
+                  ? i.leagues
+                      .map(
+                        (leag) =>
+                          `[${leag.id}] ${showTranslated(leag.name, l)}`,
+                      )
+                      .join(', ')
+                  : ''
+              }>
               <span className="id">[{i.id}]</span>
               <span>
                 {'username' in i
@@ -155,16 +186,7 @@ function SearchInput<T extends Searchable>({
                       i.team2.name,
                       l,
                     )}`
-                  : `${showTranslated(i.name, l)} ${
-                      'leagues' in i && i.leagues && getMainLeague(i.leagues)
-                        ? `( ${i.leagues
-                            .map(
-                              (leag) =>
-                                `[${leag.id}] ${showTranslated(leag.name, l)}`,
-                            )
-                            .join(', ')} )`
-                        : ''
-                    }`}
+                  : showTranslated(i.name, l)}
               </span>
             </button>
           ))}
@@ -180,7 +202,14 @@ function SearchInput<T extends Searchable>({
     </FormGroup>
   );
 }
-SearchInput.defaultProps = { disabled: false };
+
+SearchInput.defaultProps = {
+  disabled: false,
+  isFocused: false,
+  index: undefined,
+  onFocus: undefined,
+  selectedItem: undefined,
+};
 
 export default SearchInput;
-// reload
+// relo ad

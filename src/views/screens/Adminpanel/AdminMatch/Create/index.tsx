@@ -123,17 +123,23 @@ const AdminCreateMatch: React.FC<ConnectedProps<typeof connector>> = ({
 
       <SearchInput
         value={queryLocation}
+        isFocused
+        selectedItem={selectedLocation}
         searching={searching}
         onChange={onSearchLocation}
         label="searchLocation"
+        name="searchLocation"
         items={locations}
         onSelect={setSelectedLocation}
       />
       <SearchInput
         value={queryLeague}
         searching={searching}
+        selectedItem={selectedLeague}
+        isFocused
         onChange={onSearchLeague}
         label="searchLeague"
+        name="searchLeague"
         items={leagues}
         onSelect={setSelectedLeagueCont}
       />
@@ -142,7 +148,10 @@ const AdminCreateMatch: React.FC<ConnectedProps<typeof connector>> = ({
           value={queryTeam1}
           searching={searching}
           onChange={onSearchTeam1}
+          isFocused
+          selectedItem={selectedTeam1}
           label="searchTeam1"
+          name="searchTeam1"
           items={teams}
           onSelect={setSelectedTeam1}
         />
@@ -151,8 +160,11 @@ const AdminCreateMatch: React.FC<ConnectedProps<typeof connector>> = ({
         <SearchInput
           value={queryTeam2}
           searching={searching}
+          isFocused
+          selectedItem={selectedTeam2}
           onChange={onSearchTeam2}
           label="searchTeam2"
+          name="searchTeam2"
           items={teams}
           onSelect={setSelectedTeam2}
         />

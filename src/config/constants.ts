@@ -29,3 +29,8 @@ export const AS_AOI = 'areaOfInterest';
 export const AS_SEASON = 'season';
 export const AS_FAVORITES = 'favorites';
 export const AS_CUSTOM_USERNAME = 'customUsername';
+
+export const DefaultFadeTrans = {
+  timeout: 250,
+  baseClass: 'default-modal',
+};

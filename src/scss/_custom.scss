@@ -1045,14 +1045,32 @@ button {
 
 }
 
-.delete-account{
+.default-modal{
   top: 7rem;
-  .sure-delete-account{
+  .default-modal-content{
     padding: 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    position: relative;
+    box-shadow: 0 0 4px $primary;
+
+    .close{
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      right: 0;
+      top: 0;
+      padding: 0.5rem 0.6rem;
+      aspect-ratio: 1;
+      background-color: transparent;
+      border: none;
+      box-shadow: -1px 1px 3px $primary;
+      outline: none;
+      color: $white;
+    }
   }
 }
 
@@ -1210,7 +1228,7 @@ button {
           max-height: calc(29px + 0.5rem);
         }
         &.open{
-          max-height: 1000px;
+          max-height: 100%;
         }
         &.disabled{
           opacity: 0.6;
@@ -1233,6 +1251,11 @@ button {
           flex-direction: row;
           justify-content: space-evenly;
         }
+      }
+      .bulk-game{
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid $gray-900;
       }
     }
   }

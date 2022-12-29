@@ -2,6 +2,7 @@ import React, {
   ChangeEventHandler,
   useCallback,
   useContext,
+  useEffect,
   useRef,
 } from 'react';
 import { FormGroup, Input, InputGroup, Label } from 'reactstrap';
@@ -30,12 +31,29 @@ const DateInput: React.FC<{
   onChange: (date: Date) => void;
   disabled?: boolean;
   name: string;
+  onFocus?: (index: number | undefined) => void;
+  isFocused?: boolean;
+  index?: number;
   label: TranslatorKeys;
   type: 'date' | 'datetime' | 'time';
-}> = ({ label, name, type, disabled, value, onChange }) => {
+}> = ({
+  label,
+  name,
+  index,
+  type,
+  onFocus,
+  isFocused,
+  disabled,
+  value,
+  onChange,
+}) => {
   const { l } = useContext(ClavaContext);
   const date = useRef(formatDateForHtmlInput(value));
   const time = useRef(formatTimeForHtmlInput(value));
+  const inputElem = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (isFocused && inputElem.current) inputElem.current.focus();
+  }, [isFocused]);
   const onValueChange = useCallback(() => {
     const datestring =
       type === 'date'
@@ -59,16 +77,26 @@ const DateInput: React.FC<{
     },
     [onValueChange],
   );
+
+  const onFocusCont = useCallback(() => {
+    if (onFocus) {
+      onFocus(index);
+    }
+  }, [index, onFocus]);
   return (
     <FormGroup>
       <Label htmlFor={name}>{translate(label, l)}</Label>
       <InputGroup>
         <Input
+          tabIndex={0}
           disabled={disabled}
           type={type === 'datetime' ? 'date' : type}
           value={type === 'time' ? time.current : date.current}
           name={name}
           id={name}
+          innerRef={inputElem}
+          onFocus={onFocusCont}
+          autoFocus={isFocused}
           onChange={type === 'time' ? onTimeChange : onDateChange}
         />
         {type === 'datetime' && (
@@ -87,6 +115,8 @@ const DateInput: React.FC<{
         </div>
         {type === 'datetime' && (
           <Input
+            tabIndex={0}
+            onFocus={onFocusCont}
             className="ms-1"
             type="time"
             disabled={disabled}
@@ -101,7 +131,12 @@ const DateInput: React.FC<{
   );
 };
 
-DateInput.defaultProps = { disabled: false };
+DateInput.defaultProps = {
+  disabled: false,
+  isFocused: false,
+  index: undefined,
+  onFocus: undefined,
+};
 
 export default DateInput;
-// rel ad
+// relo ad

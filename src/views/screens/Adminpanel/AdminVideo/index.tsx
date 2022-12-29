@@ -159,6 +159,9 @@ const AdminpanelVideo: React.FC<ConnectedProps<typeof connector>> = ({
           value={query}
           onChange={onSearch}
           label="searchVideo"
+          isFocused={method === 'search'}
+          selectedItem={selectedVideo}
+          name="searchVideo"
           onSelect={setSelectedVideo}
           items={videos}
           searching={searching}
