@@ -2017,6 +2017,11 @@ const generalKeywords = {
     it: 'Admin Key speichern',
     en: 'Admin Key speichern',
   },
+  transfer: {
+    de: 'Transfer',
+    it: 'Transfer',
+    en: 'Transfer',
+  },
   emptyString: {
     de: ' ',
     it: '',

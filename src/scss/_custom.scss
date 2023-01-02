@@ -541,9 +541,18 @@ button {
         align-items: center;
         justify-content: center;
 
+
+        &.transfers{
+          background-color: $gray-900;
+          padding: 0.5rem;
+        }
         img {
           width: #{"max(80%, 500px)"};
           top: 0;
+        }
+
+        .content-news {
+          padding: 0.5rem;
         }
 
         .backdrop {
@@ -567,7 +576,13 @@ button {
           align-items: center;
           justify-content: space-between;
           width: 100%;
-
+          div{
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+          }
           img {
             width: 60px;
             margin: 0 1rem;

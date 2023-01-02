@@ -64,16 +64,13 @@ const News: React.FC<ConnectedProps<typeof connector>> = ({
       });
       transfers.forEach((t) => {
         its.push({
-          id: -1,
+          id: t.player.id + 100 * t.teamTo.id,
           date: new Date(t.date),
           image: undefined,
-          title: `${t.player.givenName} ${t.player.familyName.slice(
-            0,
-            1,
-          )} -> ${showTranslated(t.teamTo.name, l)}`,
+          title: `${t.player.givenName} ${t.player.familyName.slice(0, 1)}`,
           type: 'transfers',
-          teamTo: undefined,
-          teamFrom: undefined,
+          teamTo: t.teamTo,
+          teamFrom: t.teamFrom,
           url: undefined,
         });
       });
@@ -256,4 +253,4 @@ const News: React.FC<ConnectedProps<typeof connector>> = ({
   );
 };
 export default connector(News);
-// re l oad
+// rel oad

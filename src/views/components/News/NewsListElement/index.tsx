@@ -29,15 +29,18 @@ const NewsListElement: React.FC<NewsListElementType> = ({
   date,
 }) => {
   const { l } = useContext(ClavaContext);
+  console.log(type);
+  console.log(title);
+  console.log(teamFrom);
+  console.log(teamTo);
   const inner = useMemo(
     () => (
       <>
         {image && <ClavaImage image={image} width="100%" />}
         <div
           className={
-            (type === 'transfers' && !!teamFrom && teamTo) ||
-            type === 'bulletins'
-              ? ''
+            type === 'transfers' || type === 'bulletins'
+              ? 'content-news'
               : 'backdrop'
           }>
           <h6>{title}</h6>
@@ -45,11 +48,11 @@ const NewsListElement: React.FC<NewsListElementType> = ({
         {type === 'videos' && (
           <FontAwesomeIcon icon={faPlay} className="video-play" />
         )}
-        {type === 'transfers' && !!teamFrom && teamTo && (
+        {type === 'transfers' && !!teamFrom && !!teamTo && (
           <div className="transfer">
             <div>
-              <ClavaImage image={teamFrom.thumb} width="40px" />
               <span>{showTranslated(teamFrom.name, l)}</span>
+              <ClavaImage image={teamFrom.thumb} width="40px" />
             </div>
             <div>
               <FontAwesomeIcon icon={faChevronRight} />
@@ -66,18 +69,22 @@ const NewsListElement: React.FC<NewsListElementType> = ({
   );
   if (url && url.indexOf('http') === -1)
     return (
-      <NavLink to={url} className="news-list-elem">
+      <NavLink to={url} className={`news-list-elem ${type}`}>
         {inner}
       </NavLink>
     );
   if (url) {
     return (
-      <a href={url} target="_blank" className="news-list-elem" rel="noreferrer">
+      <a
+        href={url}
+        target="_blank"
+        className={`news-list-elem ${type}`}
+        rel="noreferrer">
         {inner}
       </a>
     );
   }
-  return <div className="news-list-elem">{inner}</div>;
+  return <div className={`news-list-elem ${type}`}>{inner}</div>;
 };
 export default NewsListElement;
-//  rel
+//  r el
