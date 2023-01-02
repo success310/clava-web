@@ -17,6 +17,7 @@ import { AS_ADMIN_KEY } from '../../../../config/constants';
 const AdminpanelAdministration: React.FC<ConnectedProps<typeof connector>> = ({
   createTask,
   status,
+  error,
 }) => {
   const { l } = useContext(ClavaContext);
   const [key, setKey] = useState(localStorage.getItem(AS_ADMIN_KEY) ?? '');
@@ -58,6 +59,8 @@ const AdminpanelAdministration: React.FC<ConnectedProps<typeof connector>> = ({
             {status === 'failed' && (
               <span className="text-danger">
                 {translate('taskCreateFailed', l)}
+                <br />
+                {error}
               </span>
             )}
           </>

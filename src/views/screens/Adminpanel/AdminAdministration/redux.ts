@@ -14,6 +14,7 @@ const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
 
 const props = (state: RootState) => ({
   status: state.admin.status,
+  error: state.admin.error,
 });
 
 export const connector = connect(props, mapper);
