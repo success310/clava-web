@@ -722,6 +722,8 @@ export enum AdminActionTypes {
   SEARCH = '@@admin/SEARCH',
   SEARCH_SUCCESS = '@@admin/SEARCH_SUCCESS',
   FETCH_ERROR = '@@admin/FETCH_ERROR',
+  CREATE_TASK = '@@admin/CREATE_TASK',
+  CREATE_TASK_SUCCESS = '@@admin/CREATE_TASK_SUCCESS',
 }
 
 export const SEARCH_USERS = 1;
@@ -732,6 +734,9 @@ export const SEARCH_VIDEOS = 5;
 export const SEARCH_ADS = 6;
 export const SEARCH_MATCH = 7;
 export const SEARCH_LOCATION = 8;
+export const CACHE_TASK = 0;
+export const STATISTICS_TASK = 1;
+export const SQUAD_TASK = 2;
 
 export declare type SEARCH_TYPES =
   | typeof SEARCH_LEAGUES
@@ -742,6 +747,11 @@ export declare type SEARCH_TYPES =
   | typeof SEARCH_USERS
   | typeof SEARCH_LOCATION
   | typeof SEARCH_VIDEOS;
+
+export declare type TASK_TYPES =
+  | typeof CACHE_TASK
+  | typeof SQUAD_TASK
+  | typeof STATISTICS_TASK;
 export type AdminActions =
   | {
       type:
@@ -752,11 +762,16 @@ export type AdminActions =
         | AdminActionTypes.FETCH_LEAGUE
         | AdminActionTypes.FETCH_TEAM
         | AdminActionTypes.FETCH_USER
+        | AdminActionTypes.CREATE_TASK
         | AdminActionTypes.SEARCH;
     }
   | {
       type: AdminActionTypes.FETCH_NEWS_SUCCESS;
       payload: Blog;
+    }
+  | {
+      type: AdminActionTypes.CREATE_TASK_SUCCESS;
+      payload: any;
     }
   | {
       type: AdminActionTypes.FETCH_TEAM_SUCCESS;

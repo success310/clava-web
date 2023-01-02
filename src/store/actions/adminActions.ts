@@ -3,6 +3,7 @@ import client from '../../client';
 import {
   AdminActions,
   AdminActionTypes,
+  CACHE_TASK,
   SEARCH_ADS,
   SEARCH_LEAGUES,
   SEARCH_LOCATION,
@@ -10,6 +11,8 @@ import {
   SEARCH_TEAMS,
   SEARCH_TYPES,
   SEARCH_VIDEOS,
+  STATISTICS_TASK,
+  TASK_TYPES,
 } from './types';
 import { defaultGet } from './all';
 import { IDType } from '../../config/types';
@@ -124,6 +127,18 @@ export function createAd(dispatch: Dispatch<AdminActions>, ad: AdCreate) {
     ad,
   );
 }
+export function deleteAd(dispatch: Dispatch<AdminActions>, id: IDType) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.FETCH_AD_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.FETCH_AD,
+    client().deleteAd,
+    false,
+    false,
+    id,
+  );
+}
 export function getVideo(dispatch: Dispatch<AdminActions>, id: IDType) {
   dispatch({ type: AdminActionTypes.FETCH_VIDEO });
   client()
@@ -178,4 +193,25 @@ export function searchAdmin(
   );
 }
 
-// as f
+export function createTask(
+  dispatch: Dispatch<AdminActions>,
+  key: string,
+  type: TASK_TYPES,
+) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.CREATE_TASK_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.CREATE_TASK,
+    type === CACHE_TASK
+      ? client().clearCache
+      : type === STATISTICS_TASK
+      ? client().forceRecalculateStatistics
+      : client().forceRecalculateSquad,
+    false,
+    false,
+    key,
+  );
+}
+
+// asf

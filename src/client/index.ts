@@ -9,6 +9,7 @@ import {
 } from '../config/types';
 import {
   AdCreate,
+  AdministrationService,
   AdPatch,
   AdPositionEnum,
   AdService,
@@ -51,6 +52,7 @@ import {
   PlayerCreate,
   PlayerPatch,
   PlayerService,
+  ScopeEnum,
   SearchResult,
   SearchService,
   SponsorCreate,
@@ -1060,6 +1062,10 @@ class Client {
     );
   }
 
+  deleteAd(id: IDType) {
+    return AdService.patchAdAdAdIdPatch(id, { paused: true });
+  }
+
   searchLocations(q: string, offset: number, limit: number) {
     return SearchService.searchLocationSearchLocationQueryGet(q, limit, offset);
   }
@@ -1129,6 +1135,44 @@ class Client {
     });
   }
 
+  clearCache(key: string) {
+    return AdministrationService.clearCacheAdminClearCachePost(key);
+  }
+
+  forceRecalculateSquad(key: string) {
+    return AdministrationService.forceRecalculateSquadsAdminForceRecalculateSquadsPost(
+      key,
+    );
+  }
+
+  forceRecalculateStatistics(key: string) {
+    return AdministrationService.recalculateAllStatisticsAdminRecalculateAllStatisticsPost(
+      key,
+    );
+  }
+
+  forceRecalculateStanding(leagueId: IDType, key: string) {
+    return AdministrationService.forceUpdateStandingsLeagueAdminForceUpdateStandingsLeagueLeagueIdPost(
+      leagueId,
+      key,
+    );
+  }
+
+  confirmUserEmail(email: string, key: string) {
+    return AdministrationService.confirmUserEmailAdminConfirmUserEmailUserEmailPost(
+      email,
+      key,
+    );
+  }
+
+  giveUserScope(email: string, key: string, scope: ScopeEnum) {
+    return AdministrationService.makeUserAdminAdminGiveUserScopeUserIdPost(
+      email,
+      scope,
+      key,
+    );
+  }
+
   private filterAoi(
     aois: AreaOfInterest[],
     id: IDType,
@@ -1158,4 +1202,4 @@ class Client {
 
 const client = Client.getInstance;
 export default client;
-// reload
+// relo ad

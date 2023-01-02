@@ -1628,9 +1628,9 @@ const generalKeywords = {
     en: 'Delete event',
   },
   sureWantDelete: {
-    de: '', // Konn man laar lossn
-    it: '',
-    en: '',
+    de: 'Bist du sicher dass du [title] löschen möchten?', // Konn man laar lossn
+    it: 'Bist du sicher dass du [title] löschen möchten?',
+    en: 'Bist du sicher dass du [title] löschen möchten?',
   },
   sureWantDeleteCARD: {
     de: 'Bist du sicher, dass du diese Karte löschen möchtest?',
@@ -1981,6 +1981,41 @@ const generalKeywords = {
     de: 'Gleiches Bild für Desktop und Mobile',
     it: 'Gleiches Bild für Desktop und Mobile',
     en: 'Gleiches Bild für Desktop und Mobile',
+  },
+  key: {
+    de: 'Admin Key',
+    it: 'Admin Key',
+    en: 'Admin Key',
+  },
+  clearCache: {
+    de: 'Cache leeren ( Behebt manchmal Fehler )',
+    it: 'Cache leeren ( Behebt manchmal Fehler )',
+    en: 'Cache leeren ( Behebt manchmal Fehler )',
+  },
+  recalculateSqua: {
+    de: 'Spieler-Werte neu berechnen ( Gesp. Minuten, Tore, etc. )',
+    it: 'Spieler-Werte neu berechnen ( Gesp. Minuten, Tore, etc. )',
+    en: 'Spieler-Werte neu berechnen ( Gesp. Minuten, Tore, etc. )',
+  },
+  recalculateStat: {
+    de: 'Alle Statistiken neu berechnen',
+    it: 'Alle Statistiken neu berechnen',
+    en: 'Alle Statistiken neu berechnen',
+  },
+  taskCreateSuccess: {
+    de: 'Task erfolgreich erstellt',
+    it: 'Task erfolgreich erstellt',
+    en: 'Task erfolgreich erstellt',
+  },
+  taskCreateFailed: {
+    de: 'Task konnte nicht erstellt werden',
+    it: 'Task konnte nicht erstellt werden',
+    en: 'Task konnte nicht erstellt werden',
+  },
+  saveKey: {
+    de: 'Admin Key speichern',
+    it: 'Admin Key speichern',
+    en: 'Admin Key speichern',
   },
   emptyString: {
     de: ' ',

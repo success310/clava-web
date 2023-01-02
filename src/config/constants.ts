@@ -22,6 +22,7 @@ export const AS_FIRST_OPEN = 'clava-f-o';
 export const AS_LANG = 'clava-lang';
 export const AS_THEME = 'clava-theme';
 export const AS_ENDPOINT = 'clava-endpoint';
+export const AS_ADMIN_KEY = 'clava-admin-key';
 export const AS_THEME_VAL_DARK = 'dark';
 export const AS_THEME_VAL_LIGHT = 'light';
 

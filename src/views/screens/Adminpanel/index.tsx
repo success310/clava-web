@@ -9,6 +9,7 @@ import { isAdmin } from '../../../config/utils';
 import AdminVideo from './AdminVideo';
 import AdminMatch from './AdminMatch';
 import AdminAds from './AdminAds';
+import AdminAdministration from './AdminAdministration';
 
 const Adminpanel: React.FC<ConnectedProps<typeof connector>> = ({
   patchMatch,
@@ -88,6 +89,8 @@ const Adminpanel: React.FC<ConnectedProps<typeof connector>> = ({
                 <AdminMatch />
               ) : adminSite === 'ads' ? (
                 <AdminAds />
+              ) : adminSite === 'administration' ? (
+                <AdminAdministration />
               ) : (
                 <>
                   <span>else</span>
@@ -109,4 +112,4 @@ const Adminpanel: React.FC<ConnectedProps<typeof connector>> = ({
 };
 
 export default connector(Adminpanel);
-// re load
+// re lo ad

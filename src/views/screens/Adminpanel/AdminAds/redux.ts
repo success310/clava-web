@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { RootState } from '../../../../store';
 import {
   createAd,
+  deleteAd,
   getAd,
   patchAd,
   searchAdmin,
@@ -23,8 +24,8 @@ const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
   createAd: (ad: AdCreate) => {
     performAction({ f: createAd, p: [dispatch, ad] });
   },
-  deleteAd: () => {
-    // TODO
+  deleteAd: (id: IDType) => {
+    performAction({ f: deleteAd, p: [dispatch, id] });
   },
   searchAd: (q: string) => {
     performAction({ f: searchAdmin, p: [dispatch, q, SEARCH_ADS] });
@@ -32,7 +33,7 @@ const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
 });
 
 const props = (state: RootState) => ({
-  ad: state.admin.ad,
+  ad: state.admin.ad ?? undefined,
   ads: state.admin.ads,
   searching: state.admin.statusSearch === 'loading',
   status: state.admin.status,

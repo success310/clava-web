@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { AdPositionEnum } from './AdPositionEnum';
+import type { AdPositionEnum } from "./AdPositionEnum";
 
 export type AdPatch = {
     name?: string;
@@ -12,7 +12,7 @@ export type AdPatch = {
     paused?: boolean;
     url?: string;
     color?: string;
-    fileMobileId?: string;
-    fileDesktopId?: string;
+    fileMobileId?: number;
+    fileDesktopId?: number;
     priority?: number;
 };
