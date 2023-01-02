@@ -6,6 +6,7 @@ import {
   changeAoi,
   changeLanguage,
   login,
+  refreshToken,
 } from '../../../store/actions/userActions';
 import { RootState } from '../../../store';
 import { AreaOfInterest, Language } from '../../../client/api';
@@ -17,6 +18,9 @@ import {
   StandingActionTypes,
   TeamActionTypes,
 } from '../../../store/actions/types';
+import client from '../../../client';
+import socket from '../../../client/Websockets/events';
+import { AS_ENDPOINT } from '../../../config/constants';
 
 const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
   login: (email: string, password: string) => {
@@ -37,6 +41,12 @@ const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
   },
   getAois: () => {
     performAction({ f: fetchAois, p: [dispatch] });
+  },
+  setEndpoint: (endpoint: string) => {
+    client().setEndpoint(endpoint);
+    socket().setEndpoint(endpoint);
+    localStorage.setItem(AS_ENDPOINT, endpoint);
+    refreshToken(dispatch);
   },
 });
 

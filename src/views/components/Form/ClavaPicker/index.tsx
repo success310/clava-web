@@ -19,6 +19,7 @@ export declare type Item = {
 type PickerBaseProps = {
   value?: string;
   disabled?: boolean;
+  disabledMsg?: string;
   items: Item[];
   onValueChange: (value: string) => void;
   small?: boolean;
@@ -52,18 +53,21 @@ const ClavaPickerBase: React.FC<PickerBaseProps> = ({
   value,
   big,
   items,
+  disabledMsg,
   small,
 }) => {
   const [open, setOpen] = useState<boolean>(false);
   const toggleOpen = useCallback(() => {
-    setOpen((o) => !o);
-  }, []);
+    if (!disabled) setOpen((o) => !o);
+  }, [disabled]);
   return (
     <Button
       color="transparent"
       className={`picker  picker${
         small ? '-small' : big ? '-big' : disabled ? '-disabled' : '-default'
       } ${open ? 'open' : ' '}`}
+      disabled={disabled}
+      title={disabledMsg}
       onClick={toggleOpen}>
       {items.find((i) => i.value === value)?.label}
       <FontAwesomeIcon icon={open ? faChevronUp : faChevronDown} />
@@ -83,6 +87,7 @@ const ClavaPickerBase: React.FC<PickerBaseProps> = ({
 ClavaPickerBase.defaultProps = {
   small: undefined,
   disabled: undefined,
+  disabledMsg: undefined,
   value: undefined,
   big: undefined,
 };
@@ -95,6 +100,7 @@ type MyPickerProps<T extends Translatable> = {
   submit: (value: T | undefined) => void;
   value?: IDType;
   disabled?: boolean;
+  disabledMsg?: string;
   small?: boolean;
   big?: boolean;
 };
@@ -106,6 +112,7 @@ function ClavaPickerTranslatable<T extends Translatable>({
   disabled,
   customChooseMessage,
   itemsTranslatable,
+  disabledMsg,
   small,
   big,
 }: MyPickerProps<T>): JSX.Element {
@@ -148,6 +155,7 @@ function ClavaPickerTranslatable<T extends Translatable>({
       value={value ? value.toString(10) : '-1'}
       small={small}
       big={big}
+      disabledMsg={disabledMsg}
     />
   );
 }
@@ -156,6 +164,7 @@ ClavaPickerTranslatable.defaultProps = {
   value: undefined,
   withChoose: false,
   customChooseMessage: undefined,
+  disabledMsg: undefined,
   disabled: undefined,
   small: undefined,
   big: undefined,
@@ -174,6 +183,7 @@ function ClavaPickerNormal({
   value,
   withChoose,
   small,
+  disabledMsg,
   big,
   customChooseMessage,
 }: PickerNormalProps) {
@@ -205,6 +215,7 @@ function ClavaPickerNormal({
       disabled={disabled}
       value={value}
       small={small}
+      disabledMsg={disabledMsg}
     />
   );
 }
@@ -215,6 +226,7 @@ ClavaPickerNormal.defaultProps = {
   disabled: undefined,
   value: undefined,
   small: undefined,
+  disabledMsg: undefined,
   big: undefined,
 };
 

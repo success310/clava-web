@@ -76,6 +76,10 @@ button {
   img {
     max-width: 200px;
   }
+
+  &.beta{
+    background-color: $primary;
+  }
 }
 
 .spacer {
@@ -83,11 +87,12 @@ button {
 }
 
 .picker {
-  background: $black;
+  background: $input-bg;
+  color: $input-color;
   padding: 0.5rem 1rem;
   border-radius: 2rem;
   width: 100%;
-  border: 1px solid $primary;
+  border: 1px solid $input-border-color;
   position: relative;
 
   svg {
@@ -101,7 +106,7 @@ button {
     top: 100%;
     left: 0;
     right: 0;
-    border: 1px solid $primary;
+    border: 1px solid $input-border-color;
     border-top-width: 0;
     opacity: 0;
     border-image-outset: 1;
@@ -117,15 +122,21 @@ button {
     width: 100%;
     overflow: hidden;
     padding: 0.5rem 1rem;
-    color: $white;
+    color: $input-color;
     background-color: transparent;
     border-color: transparent;
-    border-top: 1px dotted $primary;
+    border-top: 1px dotted $input-border-color;
     border-radius: 0;
     transition: height, opacity 1s linear;
 
     &:hover {
       color: $primary;
+    }
+    &.disabled{
+      color: $input-disabled-color;
+      background-color: $input-disabled-bg;
+      border-color: $input-disabled-border-color;
+      cursor: default;
     }
   }
 
@@ -1144,6 +1155,25 @@ button {
         animation: rotateRefresh linear 2s infinite;
       }
     }
+  }
+
+}
+.file-preview{
+  position: relative;
+  width: 100%;
+  img.img-preview, svg {
+    width: 100%;
+    font-size: 300%;
+  }
+  .file-progress{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background-color: $primary-4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 

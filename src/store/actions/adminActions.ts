@@ -3,6 +3,7 @@ import client from '../../client';
 import {
   AdminActions,
   AdminActionTypes,
+  SEARCH_ADS,
   SEARCH_LEAGUES,
   SEARCH_LOCATION,
   SEARCH_MATCH,
@@ -13,6 +14,8 @@ import {
 import { defaultGet } from './all';
 import { IDType } from '../../config/types';
 import {
+  AdCreate,
+  AdPatch,
   ExternalVideoCreateRaw,
   MatchCreate,
   MatchPatch,
@@ -28,6 +31,19 @@ export function getMatch(dispatch: Dispatch<AdminActions>, matchId: IDType) {
     false,
     false,
     matchId,
+  );
+}
+
+export function getAd(dispatch: Dispatch<AdminActions>, adId: IDType) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.FETCH_AD_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.FETCH_AD,
+    client().getAd,
+    false,
+    false,
+    adId,
   );
 }
 
@@ -79,6 +95,35 @@ export function patchMatch(
     match,
   );
 }
+export function patchAd(
+  dispatch: Dispatch<AdminActions>,
+  id: IDType,
+  ad: AdPatch,
+) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.FETCH_AD_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.FETCH_AD,
+    client().patchAd,
+    false,
+    false,
+    id,
+    ad,
+  );
+}
+export function createAd(dispatch: Dispatch<AdminActions>, ad: AdCreate) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.FETCH_AD_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.FETCH_AD,
+    client().createAd,
+    false,
+    false,
+    ad,
+  );
+}
 export function getVideo(dispatch: Dispatch<AdminActions>, id: IDType) {
   dispatch({ type: AdminActionTypes.FETCH_VIDEO });
   client()
@@ -122,6 +167,8 @@ export function searchAdmin(
       ? client().searchLocations
       : type === SEARCH_MATCH
       ? client().searchMatches
+      : type === SEARCH_ADS
+      ? client().searchAds
       : client().searchLeagues,
     false,
     { id: type },

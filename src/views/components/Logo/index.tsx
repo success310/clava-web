@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
 import { Button } from 'reactstrap';
 import { ClavaRootContext } from '../../../config/contexts';
+import client from '../../../client';
+import { BETA_ENDPOINT } from '../../../config/constants';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const logoPng = require('../../../assets/images/logo-app.png');
@@ -17,9 +19,14 @@ type LogoProps = {
 };
 const Logo: React.FC<LogoProps> = ({ vertical, onPress }) => {
   const { theme } = useContext(ClavaRootContext);
+  const endpoint = client().getEndpoint();
   if (!onPress)
     return (
-      <div className={vertical ? 'logo-vertical' : 'logo'}>
+      <div
+        className={
+          (vertical ? 'logo-vertical' : 'logo') +
+          (endpoint === BETA_ENDPOINT ? ' beta' : '')
+        }>
         <img
           src={
             vertical
@@ -62,5 +69,5 @@ Logo.defaultProps = {
   onPress: undefined,
   vertical: false,
 };
-// rel oad
+// reload
 export default Logo;

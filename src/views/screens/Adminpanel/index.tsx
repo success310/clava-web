@@ -8,6 +8,7 @@ import { connector } from './redux';
 import { isAdmin } from '../../../config/utils';
 import AdminVideo from './AdminVideo';
 import AdminMatch from './AdminMatch';
+import AdminAds from './AdminAds';
 
 const Adminpanel: React.FC<ConnectedProps<typeof connector>> = ({
   patchMatch,
@@ -85,6 +86,8 @@ const Adminpanel: React.FC<ConnectedProps<typeof connector>> = ({
                 <AdminVideo />
               ) : adminSite === 'matches' ? (
                 <AdminMatch />
+              ) : adminSite === 'ads' ? (
+                <AdminAds />
               ) : (
                 <>
                   <span>else</span>

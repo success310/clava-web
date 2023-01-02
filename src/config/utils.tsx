@@ -23,6 +23,8 @@ import {
   ChangeEvent,
   EventType,
   EventTypeEnum,
+  File,
+  FormatTypeEnum,
   GoalEvent,
   Group,
   GroupEnum,
@@ -658,3 +660,26 @@ export function filterTranslatable(name: Translation, q: string) {
 export function setHead(title: string) {
   document.title = `Clava-Sports - ${title}`;
 }
+
+export function getBiggest(file: File | undefined): string {
+  if (!file) return '';
+  const { formats } = file;
+  let biggest = FormatTypeEnum.SMALL;
+  let biggestIdx = -1;
+  for (let i = 0; i < formats.length; i++) {
+    if (formats[i].type === FormatTypeEnum.XL) return formats[i].url;
+    if (biggest === FormatTypeEnum.SMALL) {
+      biggest = formats[i].type;
+      biggestIdx = i;
+    }
+    if (
+      biggest === FormatTypeEnum.MEDIUM &&
+      formats[i].type === FormatTypeEnum.LARGE
+    ) {
+      biggest = formats[i].type;
+      biggestIdx = i;
+    }
+  }
+  return formats[biggestIdx].url ?? '';
+}
+// reload

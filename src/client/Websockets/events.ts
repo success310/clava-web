@@ -323,14 +323,14 @@ class EventsSocket implements EventSocketType {
 
   open() {
     this.close();
-    this.websocket = new WebSocket(this.endpoint);
+    /*  this.websocket = new WebSocket(this.endpoint);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     this.websocket.binaryType = 'blob';
     this.websocket.onopen = EventsSocket.onOpen;
     this.websocket.onmessage = EventsSocket.onMessage;
     this.websocket.onerror = EventsSocket.onError;
-    this.websocket.onclose = EventsSocket.onClose;
+    this.websocket.onclose = EventsSocket.onClose;*/
   }
 
   close() {

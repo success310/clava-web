@@ -43,8 +43,8 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
   useEffect(() => {
     const endpoint = window.localStorage.getItem(AS_ENDPOINT);
     socket(endpoint ?? PROD_ENDPOINT).open();
-    initBaseDataUser();
     client(endpoint ?? PROD_ENDPOINT).setLang(browserLang());
+    initBaseDataUser();
     return () => {
       socket().close();
     };

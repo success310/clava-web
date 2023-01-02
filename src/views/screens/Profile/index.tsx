@@ -21,7 +21,12 @@ import { NavLink } from 'react-router-dom';
 import { ClavaContext } from '../../../config/contexts';
 import { translate } from '../../../config/translator';
 import { connector } from './redux';
-import { isInsider, isRegistered, isTeamInsider } from '../../../config/utils';
+import {
+  isAdmin,
+  isInsider,
+  isRegistered,
+  isTeamInsider,
+} from '../../../config/utils';
 
 const DeleteFadeTrans = {
   timeout: 250,
@@ -49,6 +54,12 @@ const Profile: React.FC<ConnectedProps<typeof connector>> = ({
   const onSubmitUsername = useCallback(() => {
     changeUsername(username);
   }, [username, changeUsername]);
+  const onDeleteAccount = useCallback(() => {
+    setDeleteAccount(true);
+  }, []);
+  const onCancelDeleteAccount = useCallback(() => {
+    setDeleteAccount(false);
+  }, []);
   return (
     <div className="container">
       <div className="profile">
@@ -85,6 +96,13 @@ const Profile: React.FC<ConnectedProps<typeof connector>> = ({
           </FormGroup>
         </div>
         <div className="profile-content">
+          {isAdmin(user) && (
+            <div className="mt-2 text-center">
+              <NavLink to="/backoffice">
+                <h5>Backoffice</h5>
+              </NavLink>
+            </div>
+          )}
           {!user.emailConfirmed && (
             <div className="mt-2">
               <NavLink to="/confirm" className="btn btn-primary">
@@ -107,22 +125,14 @@ const Profile: React.FC<ConnectedProps<typeof connector>> = ({
           <span>Clava Sports &copy; 2022</span>
           {registered && (
             <div className="mt-2">
-              <Button
-                onClick={() => {
-                  logout();
-                }}
-                color="secondary">
+              <Button onClick={logout} color="secondary">
                 <span>{translate('logout', l)}</span>
               </Button>
             </div>
           )}
           {registered && (
             <div className="mt-2">
-              <Button
-                color="secondary"
-                onClick={() => {
-                  setDeleteAccount(true);
-                }}>
+              <Button color="secondary" onClick={onDeleteAccount}>
                 <span>{translate('deleteAccount', l)}</span>
               </Button>
             </div>
@@ -138,20 +148,12 @@ const Profile: React.FC<ConnectedProps<typeof connector>> = ({
             <p>{translate('deleteAccountCont', l)}</p>
             <Row>
               <Col xs={12} md={6}>
-                <Button
-                  color="secondary"
-                  onClick={() => {
-                    deleteAccount();
-                  }}>
+                <Button color="secondary" onClick={deleteAccount}>
                   <span>{translate('yes', l)}</span>
                 </Button>
               </Col>
               <Col xs={12} md={6}>
-                <Button
-                  color="primary"
-                  onClick={() => {
-                    setDeleteAccount(false);
-                  }}>
+                <Button color="primary" onClick={onCancelDeleteAccount}>
                   <span>{translate('no', l)}</span>
                 </Button>
               </Col>
@@ -164,4 +166,4 @@ const Profile: React.FC<ConnectedProps<typeof connector>> = ({
 };
 
 export default connector(Profile);
-// a  sd
+// reloa  d

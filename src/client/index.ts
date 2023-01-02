@@ -1,5 +1,6 @@
 import { EnhancedStore } from '@reduxjs/toolkit';
 import * as Sentry from '@sentry/react';
+import axios, { AxiosRequestConfig } from 'axios';
 import {
   IDType,
   LanguageISO,
@@ -7,6 +8,8 @@ import {
   LineupPositionPlayersExtended,
 } from '../config/types';
 import {
+  AdCreate,
+  AdPatch,
   AdPositionEnum,
   AdService,
   ApiError,
@@ -22,7 +25,9 @@ import {
   ExternalVideo,
   ExternalVideoCreateRaw,
   ExternalVideoService,
+  File,
   GoalDistributionService,
+  ImageTypeEnum,
   Language,
   LanguageLocaleEnum,
   LanguageService,
@@ -67,6 +72,8 @@ import {
 } from './api';
 import { formatDate } from '../config/utils';
 import { AMOUNT_MATCHDAYS, PROD_ENDPOINT } from '../config/constants';
+import { ClavaFile } from '../views/screens/Adminpanel/FileInput';
+import { addLog } from '../store/middleware/logger';
 
 class Client {
   public static token: string | undefined = undefined;
@@ -1027,12 +1034,30 @@ class Client {
     return MatchService.patchMatchMatchMatchIdPatch(id, match);
   }
 
+  patchAd(id: IDType, ad: AdPatch) {
+    return AdService.patchAdAdAdIdPatch(id, ad);
+  }
+
+  createAd(ad: AdCreate) {
+    return AdService.createAdAdPost(ad);
+  }
+
+  getAd(id: IDType) {
+    return AdService.getAdAdAdIdGet(id);
+  }
+
   searchLeagues(q: string, offset: number, limit: number) {
     return SearchService.searchLeagueSearchLeagueQueryGet(q, limit, offset);
   }
 
   searchTeams(q: string, offset: number, limit: number) {
     return SearchService.searchTeamSearchTeamQueryGet(q, limit, offset);
+  }
+
+  searchAds(q: string, offset: number, limit: number) {
+    return AdService.getAdsByPositionAdPositionPositionGet(
+      AdPositionEnum.HOME_MATCH,
+    );
   }
 
   searchLocations(q: string, offset: number, limit: number) {
@@ -1045,6 +1070,63 @@ class Client {
 
   searchMatches(q: string, offset: number, limit: number) {
     return client().getMatchesOfTeam(68, limit, false);
+  }
+
+  uploadFile(
+    f: ClavaFile,
+    imageType: ImageTypeEnum,
+    caption: string,
+    progress: (event: ProgressEvent) => void,
+  ): CancelablePromise<File> {
+    const data = new FormData();
+    data.append('file', f.file);
+
+    return new CancelablePromise<File>(async (resolve, reject, onCancel) => {
+      const source = axios.CancelToken.source();
+      onCancel(() => source.cancel('The user aborted a request.'));
+
+      const { token } = Client;
+
+      const headers = {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      };
+      const url = `https://${client().getEndpoint()}/upload/image?caption=${caption}&filename=${
+        f.filename
+      }&image_type_enum=${imageType}`;
+      const config: AxiosRequestConfig = {
+        onUploadProgress: progress,
+        method: 'POST',
+        url,
+        data,
+        headers,
+      };
+
+      addLog('req', `POST: ${url}`, '#5d5dff');
+      console.log('\x1b[34m%s\x1b[0m', `POST: ${url}`);
+      try {
+        axios.request(config).then(
+          (response) => {
+            if (response.status >= 200 && response.status < 300) {
+              const body = response.status !== 204 ? response.data : undefined;
+              if (body) {
+                console.log('\x1b[34m%s%O\x1b[0m', 'Body:', body);
+                addLog('reqData', `Body: ${JSON.stringify(body)}`, '#5d5dff');
+              }
+              resolve(body);
+            } else {
+              reject(`Failed to uplaod: ${response.statusText}`);
+            }
+          },
+          (error) => {
+            reject(`Failed to uplaod: ${error}`);
+          },
+        );
+      } catch (e) {
+        reject(`Failed to uplaod: ${e}`);
+      }
+    });
   }
 
   private filterAoi(
@@ -1076,3 +1158,4 @@ class Client {
 
 const client = Client.getInstance;
 export default client;
+// reload

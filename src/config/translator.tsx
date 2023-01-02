@@ -1897,6 +1897,91 @@ const generalKeywords = {
     it: 'Alle Senden',
     en: 'Alle Senden',
   },
+  searchAds: {
+    de: 'Nach Ad suchen',
+    it: 'Nach Ad suchen',
+    en: 'Nach Ad suchen',
+  },
+  editAd: {
+    de: 'Ad Bearbeiten',
+    it: 'Ad Bearbeiten',
+    en: 'Ad Bearbeiten',
+  },
+  deleteAd: {
+    de: 'Ad Löschen',
+    it: 'Ad Löschen',
+    en: 'Ad Löschen',
+  },
+  createAd: {
+    de: 'Ad Erstellen',
+    it: 'Ad Erstellen',
+    en: 'Ad Erstellen',
+  },
+  homeMatchAd: {
+    de: 'Startseite',
+    it: 'Startseite',
+    en: 'Startseite',
+  },
+  matchHistoryBottomAd: {
+    de: 'Spielverlauf',
+    it: 'Spielverlauf',
+    en: 'Spielverlauf',
+  },
+  leagueMatchAd: {
+    de: 'Liga-Spiele',
+    it: 'Liga-Spiele',
+    en: 'Liga-Spiele',
+  },
+  adPosition: {
+    de: 'Posizion',
+    it: 'Position',
+    en: 'Position',
+  },
+  startDate: {
+    de: 'Start-Datum',
+    it: 'Start-Datum',
+    en: 'Start-Datum',
+  },
+  stopDate: {
+    de: 'End-Datum',
+    it: 'End-Datum',
+    en: 'End-Datum',
+  },
+  priority: {
+    de: 'Priorität',
+    it: 'Priorität',
+    en: 'Priorität',
+  },
+  paused: {
+    de: 'Pausiert',
+    it: 'Pausiert',
+    en: 'Pausiert',
+  },
+  color: {
+    de: 'Farbe',
+    it: 'Farbe',
+    en: 'Farbe',
+  },
+  uploadError: {
+    de: 'Fehler beim hochladen',
+    it: 'Fehler beim hochladen',
+    en: 'Fehler beim hochladen',
+  },
+  chooseEndpoint: {
+    de: 'Server wählen',
+    it: 'Server wählen',
+    en: 'Server wählen',
+  },
+  deleteImageToChoose: {
+    de: 'Die Bilder müssen neu hochgeladen werden wenn die Posizion verändert wird, bitte löschen',
+    it: 'Die Bilder müssen neu hochgeladen werden wenn die Posizion verändert wird, bitte löschen',
+    en: 'Die Bilder müssen neu hochgeladen werden wenn die Posizion verändert wird, bitte löschen',
+  },
+  useSameFile: {
+    de: 'Gleiches Bild für Desktop und Mobile',
+    it: 'Gleiches Bild für Desktop und Mobile',
+    en: 'Gleiches Bild für Desktop und Mobile',
+  },
   emptyString: {
     de: ' ',
     it: '',

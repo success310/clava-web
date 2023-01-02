@@ -13,12 +13,26 @@ import {
   faLanguage,
   faMailbox,
   faMap,
+  faServer,
 } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ConnectedProps } from 'react-redux';
 import { ClavaContext } from '../../../config/contexts';
 import { showTranslated, translate } from '../../../config/translator';
 import { connector } from './redux';
+import { isAdmin } from '../../../config/utils';
+import client from '../../../client';
+import {
+  BETA_ENDPOINT,
+  DEV_ENDPOINT,
+  PROD_ENDPOINT,
+} from '../../../config/constants';
+
+const endpoints = {
+  Production: PROD_ENDPOINT,
+  Beta: BETA_ENDPOINT,
+  Dev: DEV_ENDPOINT,
+};
 
 const Sidebar: React.FC<ConnectedProps<typeof connector>> = ({
   user,
@@ -28,10 +42,19 @@ const Sidebar: React.FC<ConnectedProps<typeof connector>> = ({
   getLanguages,
   getAois,
   changeAoi,
+  setEndpoint,
 }) => {
   const { l, aoi } = useContext(ClavaContext);
   const [langOpen, setLangOpen] = useState(false);
   const [aoiOpen, setAoiOpen] = useState(false);
+  const [endpointsOpen, setEndpointOpen] = useState(false);
+  const [selectedEndpoint, setSelectedEndpoint] = useState(
+    client().getEndpoint() === PROD_ENDPOINT
+      ? 'Production'
+      : client().getEndpoint() === BETA_ENDPOINT
+      ? 'Beta'
+      : 'Dev',
+  );
   useEffect(() => {
     getLanguages();
     getAois();
@@ -49,6 +72,19 @@ const Sidebar: React.FC<ConnectedProps<typeof connector>> = ({
   const selectedAoi = useMemo(
     () => aois.find((item) => item.id === aoi)?.name,
     [aois, aoi],
+  );
+  const toggleEndpoints = useCallback(() => {
+    setEndpointOpen((o) => !o);
+  }, []);
+  const setSelectedEndpointCont = useCallback(
+    (item: keyof typeof endpoints) => {
+      setSelectedEndpoint(item);
+      if (item in endpoints) {
+        const endpoint = endpoints[item];
+        setEndpoint(endpoint);
+      }
+    },
+    [setEndpoint],
   );
   return (
     <Navbar className="navbar-vertical">
@@ -115,6 +151,33 @@ const Sidebar: React.FC<ConnectedProps<typeof connector>> = ({
         <span>{translate('aboutUs', l)}</span>
         <small className="text-end" />
       </Link>
+      {isAdmin(user) && (
+        <>
+          <NavLink onClick={toggleEndpoints} to="#">
+            <FontAwesomeIcon icon={faServer} />
+            <span>{translate('chooseEndpoint', l)}</span>
+            <small className="text-end">{selectedEndpoint}</small>
+          </NavLink>
+          {endpointsOpen && (
+            <>
+              {Object.keys(endpoints).map((item: string) => {
+                if (item === selectedEndpoint) return null;
+                return (
+                  <NavLink
+                    key={`lang-${item}`}
+                    to="#"
+                    onClick={() => {
+                      setSelectedEndpointCont(item as keyof typeof endpoints);
+                    }}>
+                    <span className="text-end">{item}</span>
+                  </NavLink>
+                );
+              })}
+            </>
+          )}
+        </>
+      )}
+
       <Link className="mt-5 nav-link" to="/tos">
         <small className="text-center">
           {`${translate('tos', l)} | ${translate('privacy', l)}`}
