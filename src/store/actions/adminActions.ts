@@ -36,6 +36,18 @@ export function getMatch(dispatch: Dispatch<AdminActions>, matchId: IDType) {
     matchId,
   );
 }
+export function getLeague(dispatch: Dispatch<AdminActions>, leagueId: IDType) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.FETCH_LEAGUE_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.FETCH_LEAGUE,
+    client().getLeague,
+    false,
+    false,
+    leagueId,
+  );
+}
 
 export function getAd(dispatch: Dispatch<AdminActions>, adId: IDType) {
   defaultGet(

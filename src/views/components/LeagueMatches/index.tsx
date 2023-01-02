@@ -191,9 +191,11 @@ const LeagueMatches: React.FC<ConnectedProps<typeof connector>> = ({
     leagueId,
   ]);
   const [socket, setSocket] = useState<string[]>([]);
-  const connectSocketio = useCallback(() => {
+  const connectSocketIo = useCallback(() => {
     // TODO
-    const client = io({ host: 'https://socket.clava-sports.com/' });
+    const client = io('wss://socket.clava-sports.com/socket', {
+      reconnectionDelayMax: 10000,
+    });
     client.on('message', (message) => {
       setSocket((m) => m.concat(message));
     });
@@ -214,7 +216,7 @@ const LeagueMatches: React.FC<ConnectedProps<typeof connector>> = ({
         shouldScroll={shouldScroll}
         disabled={false}
       />
-      <Button type="button" onClick={connectSocketio}>
+      <Button type="button" onClick={connectSocketIo}>
         Connect
       </Button>
       <div className="league-matches">

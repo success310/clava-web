@@ -10,6 +10,9 @@ import AdminVideo from './AdminVideo';
 import AdminMatch from './AdminMatch';
 import AdminAds from './AdminAds';
 import AdminAdministration from './AdminAdministration';
+import AdminLeague from './AdminLeague';
+import AdminUser from './AdminUser';
+import AdminNews from './AdminNews';
 
 const Adminpanel: React.FC<ConnectedProps<typeof connector>> = ({
   patchMatch,
@@ -79,10 +82,7 @@ const Adminpanel: React.FC<ConnectedProps<typeof connector>> = ({
           {admin ? (
             <div className="adminpanel-content">
               {adminSite === 'users' ? (
-                <>
-                  <span>Create user</span>
-                  <span>Create user</span>
-                </>
+                <AdminUser />
               ) : adminSite === 'videos' ? (
                 <AdminVideo />
               ) : adminSite === 'matches' ? (
@@ -91,6 +91,10 @@ const Adminpanel: React.FC<ConnectedProps<typeof connector>> = ({
                 <AdminAds />
               ) : adminSite === 'administration' ? (
                 <AdminAdministration />
+              ) : adminSite === 'leagues' ? (
+                <AdminLeague />
+              ) : adminSite === 'news' ? (
+                <AdminNews />
               ) : (
                 <>
                   <span>else</span>
@@ -112,4 +116,4 @@ const Adminpanel: React.FC<ConnectedProps<typeof connector>> = ({
 };
 
 export default connector(Adminpanel);
-// re lo ad
+// reload
