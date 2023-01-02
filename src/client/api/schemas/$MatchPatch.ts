@@ -16,5 +16,8 @@ export const $MatchPatch = {
         cancelled: {
     type: 'boolean',
 },
+        matchDay: {
+    type: 'number',
+},
     },
 } as const;

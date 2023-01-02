@@ -1029,7 +1029,11 @@ class Client {
   }
 
   createMatch(match: MatchCreate) {
-    return MatchService.createMatchMatchCreatePost(match);
+    return MatchService.createMatchMatchPost(match);
+  }
+
+  createMatchMultiple(matches: MatchCreate[]) {
+    return MatchService.createMultipleMatchesMatchMultiplePost(matches);
   }
 
   patchMatch(id: IDType, match: MatchPatch) {

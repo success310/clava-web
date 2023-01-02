@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { AdPositionEnum } from "./AdPositionEnum";
+import type { AdPositionEnum } from './AdPositionEnum';
 
 export type AdPatch = {
     name?: string;

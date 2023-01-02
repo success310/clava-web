@@ -3,7 +3,7 @@ import { AnyAction } from 'redux';
 import { connect } from 'react-redux';
 import { RootState } from '../../../../../store';
 import {
-  createMatch,
+  createMatchMultiple,
   searchAdmin,
 } from '../../../../../store/actions/adminActions';
 import {
@@ -15,8 +15,8 @@ import { performAction } from '../../../../../store/actions/all';
 import { MatchCreate } from '../../../../../client/api';
 
 const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
-  createSingleMatch: (match: MatchCreate) => {
-    performAction({ f: createMatch, p: [dispatch, match] });
+  createMultiple: (matches: MatchCreate[]) => {
+    performAction({ f: createMatchMultiple, p: [dispatch, matches] });
   },
   searchLeague: (q: string) => {
     performAction({ f: searchAdmin, p: [dispatch, q, SEARCH_LEAGUES] });

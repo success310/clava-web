@@ -102,6 +102,132 @@ requestBody: UserRegister,
     }
 
     /**
+     * Favorite Match
+     * @param matchId 
+     * @returns User Successful Response
+     * @throws ApiError
+     */
+    public static favoriteMatchUserFavoriteMatchMatchIdPut(
+matchId: number,
+): CancelablePromise<User> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/user/favorite/match/{match_id}',
+            path: {
+                'match_id': matchId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Favorite Team
+     * @param teamId 
+     * @returns User Successful Response
+     * @throws ApiError
+     */
+    public static favoriteTeamUserFavoriteTeamTeamIdPut(
+teamId: number,
+): CancelablePromise<User> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/user/favorite/team/{team_id}',
+            path: {
+                'team_id': teamId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Favorite League
+     * @param leagueId 
+     * @returns User Successful Response
+     * @throws ApiError
+     */
+    public static favoriteLeagueUserFavoriteLeagueLeagueIdPut(
+leagueId: number,
+): CancelablePromise<User> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/user/favorite/league/{league_id}',
+            path: {
+                'league_id': leagueId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Favorite Match
+     * @param matchId 
+     * @returns User Successful Response
+     * @throws ApiError
+     */
+    public static favoriteMatchUserUnfavoriteMatchMatchIdPut(
+matchId: number,
+): CancelablePromise<User> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/user/unfavorite/match/{match_id}',
+            path: {
+                'match_id': matchId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Unfavorite Team
+     * @param teamId 
+     * @returns User Successful Response
+     * @throws ApiError
+     */
+    public static unfavoriteTeamUserUnfavoriteTeamTeamIdPut(
+teamId: number,
+): CancelablePromise<User> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/user/unfavorite/team/{team_id}',
+            path: {
+                'team_id': teamId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Unfavorite League
+     * @param leagueId 
+     * @returns User Successful Response
+     * @throws ApiError
+     */
+    public static unfavoriteLeagueUserUnfavoriteLeagueLeagueIdPut(
+leagueId: number,
+): CancelablePromise<User> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/user/unfavorite/league/{league_id}',
+            path: {
+                'league_id': leagueId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
      * Change Password
      * @param requestBody 
      * @returns AuthResponse Successful Response

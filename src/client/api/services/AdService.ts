@@ -35,6 +35,27 @@ adId: number,
     }
 
     /**
+     * Delete Ad
+     * @param adId 
+     * @returns number Successful Response
+     * @throws ApiError
+     */
+    public static deleteAdAdAdIdDelete(
+adId: number,
+): CancelablePromise<number> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/ad/{ad_id}',
+            path: {
+                'ad_id': adId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
      * Patch Ad
      * @param adId 
      * @param requestBody 
@@ -92,6 +113,26 @@ requestBody: AdCreate,
         return __request(OpenAPI, {
             method: 'POST',
             url: '/ad/',
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Create Multiple Ads
+     * @param requestBody 
+     * @returns Ad Successful Response
+     * @throws ApiError
+     */
+    public static createMultipleAdsAdMultiplePost(
+requestBody: Array<AdCreate>,
+): CancelablePromise<Array<Ad>> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/ad/multiple',
             body: requestBody,
             mediaType: 'application/json',
             errors: {

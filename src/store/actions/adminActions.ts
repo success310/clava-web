@@ -93,6 +93,21 @@ export function createMatch(
     match,
   );
 }
+export function createMatchMultiple(
+  dispatch: Dispatch<AdminActions>,
+  match: MatchCreate[],
+) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.FETCH_MATCH_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.FETCH_MATCH,
+    client().createMatchMultiple,
+    false,
+    false,
+    match,
+  );
+}
 export function patchMatch(
   dispatch: Dispatch<AdminActions>,
   id: IDType,

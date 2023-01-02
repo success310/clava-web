@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Team } from '../models/Team';
+import type { TeamCreate } from '../models/TeamCreate';
 import type { TeamListElement } from '../models/TeamListElement';
 import type { TeamListElementList } from '../models/TeamListElementList';
 import type { TeamPatch } from '../models/TeamPatch';
@@ -23,6 +24,27 @@ teamId: number,
 ): CancelablePromise<Team> {
         return __request(OpenAPI, {
             method: 'GET',
+            url: '/team/{team_id}',
+            path: {
+                'team_id': teamId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Delete Team
+     * @param teamId 
+     * @returns number Successful Response
+     * @throws ApiError
+     */
+    public static deleteTeamTeamTeamIdDelete(
+teamId: number,
+): CancelablePromise<number> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
             url: '/team/{team_id}',
             path: {
                 'team_id': teamId,
@@ -80,6 +102,26 @@ leagueId: number,
     }
 
     /**
+     * Create Team
+     * @param requestBody 
+     * @returns Team Successful Response
+     * @throws ApiError
+     */
+    public static createTeamTeamPost(
+requestBody: TeamCreate,
+): CancelablePromise<Team> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/team/',
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
      * Get Team By Player And League
      * @param playerId 
      * @param leagueId 
@@ -97,6 +139,26 @@ leagueId: number,
                 'player_id': playerId,
                 'league_id': leagueId,
             },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Create Multiple Teams
+     * @param requestBody 
+     * @returns Team Successful Response
+     * @throws ApiError
+     */
+    public static createMultipleTeamsTeamMultiplePost(
+requestBody: Array<TeamCreate>,
+): CancelablePromise<Array<Team>> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/team/multiple',
+            body: requestBody,
+            mediaType: 'application/json',
             errors: {
                 422: `Validation Error`,
             },

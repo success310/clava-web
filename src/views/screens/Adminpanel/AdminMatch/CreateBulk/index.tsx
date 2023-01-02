@@ -15,16 +15,18 @@ import {
   faPlus,
 } from '@fortawesome/pro-regular-svg-icons';
 import Papa from 'papaparse';
+import * as Sentry from '@sentry/react';
 import SearchInput from '../../SearchInput';
 import TextInput from '../../TextInput';
 import {
   LeagueListElement,
   Location,
+  MatchCreate,
   TeamListElement,
 } from '../../../../../client/api';
 import { connector } from './redux';
 import DateInput from '../../DateInput';
-import { generatePW } from '../../../../../config/utils';
+import { formatDate, generatePW } from '../../../../../config/utils';
 import { translate, TranslatorKeys } from '../../../../../config/translator';
 import { ClavaContext } from '../../../../../config/contexts';
 import Loading from '../../../../components/Loading';
@@ -288,7 +290,7 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
   teams,
   searchLocation,
   locations,
-  createSingleMatch,
+  createMultiple,
 }) => {
   const { l } = useContext(ClavaContext);
   const [queryLeague, setQueryLeague] = useState<string[]>(['']);
@@ -311,6 +313,10 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
   const [matchDays, setMatchDay] = useState<number[]>([-1]);
   const currentIndex = useRef(0);
   const timeout = useRef<number>(-1);
+  const [createError, setCreateError] = useState<{
+    index: number;
+    type: TranslatorKeys;
+  }>();
   const onSearchLeague = useCallback(
     (q: string) => {
       if (timeout.current !== -1) {
@@ -530,8 +536,43 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
     setInfo((i) => !i);
   }, []);
   const onSubmit = useCallback(() => {
-    console.log(currentIndex.current);
-  }, []);
+    try {
+      const matchCreates: MatchCreate[] = dates.map((date, index) => {
+        const team1 = selectedTeam1s[index];
+        if (!team1) {
+          setCreateError({ index, type: 'errorTeam1' });
+          throw new Error(`Team1 not set on Match ${index}`);
+        }
+        const team2 = selectedTeam1s[index];
+        if (!team2) {
+          setCreateError({ index, type: 'errorTeam2' });
+          throw new Error(`Team2 not set on Match ${index}`);
+        }
+        const league = selectedTeam1s[index];
+        if (!league) {
+          setCreateError({ index, type: 'errorLeague' });
+          throw new Error(`League not set on Match ${index}`);
+        }
+        if (!date) {
+          setCreateError({ index, type: 'errorDate' });
+          throw new Error(`Date not set on Match ${index}`);
+        }
+        return {
+          matchDay: matchDays[index],
+          locationId: locations[index]?.id,
+          originalStartTime: formatDate(date, l, true),
+          team1Id: team1.id,
+          team2Id: team2.id,
+          leagueId: league.id,
+          refereeId: undefined,
+        };
+      });
+      setCreateError(undefined);
+      createMultiple(matchCreates);
+    } catch (e) {
+      Sentry.captureException(e);
+    }
+  }, [createMultiple, dates, l, locations, matchDays, selectedTeam1s]);
   return (
     <>
       <Row>
@@ -594,12 +635,30 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
           <span>{translate('allowedSheets', l)}</span>
         </div>
       </Modal>
+      {!!createError && (
+        <Row>
+          <Col xs={12}>
+            <h6 className="text-danger">
+              {`${translate(createError.type, l)} ${createError.index + 1}`}
+            </h6>
+          </Col>
+        </Row>
+      )}
       {Array(dates.length)
         .fill(0)
         .map((_, index) => (
           <div className="bulk-game" key={`bulk-create${generatePW(index)}`}>
             <Row>
-              <Col xs={12} md={6}>
+              <Col
+                xs={12}
+                md={6}
+                className={
+                  createError &&
+                  createError.index === index &&
+                  createError.type === 'errorDate'
+                    ? 'alert-danger'
+                    : ''
+                }>
                 <DateInput
                   value={dates[index] ?? new Date()}
                   onChange={setDateCont}
@@ -624,7 +683,16 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
               </Col>
             </Row>
             <Row>
-              <Col xs={12} md={6}>
+              <Col
+                xs={12}
+                md={6}
+                className={
+                  createError &&
+                  createError.index === index &&
+                  createError.type === 'errorLeague'
+                    ? 'alert-danger'
+                    : ''
+                }>
                 <SearchInput
                   value={queryLeague[index]}
                   searching={searching}
@@ -656,7 +724,16 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
               </Col>
             </Row>
             <Row>
-              <Col xs={12} md={6}>
+              <Col
+                xs={12}
+                md={6}
+                className={
+                  createError &&
+                  createError.index === index &&
+                  createError.type === 'errorTeam1'
+                    ? 'alert-danger'
+                    : ''
+                }>
                 <SearchInput
                   value={queryTeam1[index]}
                   searching={searching}
@@ -671,7 +748,16 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
                   onSelect={setSelectedTeam1Cont}
                 />
               </Col>
-              <Col xs={12} md={6}>
+              <Col
+                xs={12}
+                md={6}
+                className={
+                  createError &&
+                  createError.index === index &&
+                  createError.type === 'errorTeam2'
+                    ? 'alert-danger'
+                    : ''
+                }>
                 <SearchInput
                   value={queryTeam2[index]}
                   searching={searching}

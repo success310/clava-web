@@ -55,4 +55,24 @@ requestBody: BlogCreate,
         });
     }
 
+    /**
+     * Create Multiple Blogs
+     * @param requestBody 
+     * @returns Blog Successful Response
+     * @throws ApiError
+     */
+    public static createMultipleBlogsBlogMultiplePost(
+requestBody: Array<BlogCreate>,
+): CancelablePromise<Array<Blog>> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/blog/multiple',
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
 }

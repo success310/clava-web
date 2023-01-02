@@ -2,8 +2,10 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { League } from '../models/League';
+import type { LeagueCreate } from '../models/LeagueCreate';
 import type { LeagueList } from '../models/LeagueList';
 import type { LeagueMatchList } from '../models/LeagueMatchList';
+import type { LeaguePatch } from '../models/LeaguePatch';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -33,6 +35,52 @@ leagueId: number,
     }
 
     /**
+     * Delete League
+     * @param leagueId 
+     * @returns number Successful Response
+     * @throws ApiError
+     */
+    public static deleteLeagueLeagueLeagueIdDelete(
+leagueId: number,
+): CancelablePromise<number> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/league/{league_id}',
+            path: {
+                'league_id': leagueId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Patch League
+     * @param leagueId 
+     * @param requestBody 
+     * @returns League Successful Response
+     * @throws ApiError
+     */
+    public static patchLeagueLeagueLeagueIdPatch(
+leagueId: number,
+requestBody: LeaguePatch,
+): CancelablePromise<League> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/league/{league_id}',
+            path: {
+                'league_id': leagueId,
+            },
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
      * Get Leagues
      * @param areaOfInterestId 
      * @returns LeagueList Successful Response
@@ -47,6 +95,46 @@ areaOfInterestId: number,
             query: {
                 'area_of_interest_id': areaOfInterestId,
             },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Create League
+     * @param requestBody 
+     * @returns League Successful Response
+     * @throws ApiError
+     */
+    public static createLeagueLeaguePost(
+requestBody: LeagueCreate,
+): CancelablePromise<League> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/league/',
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Create Multiple Leagues
+     * @param requestBody 
+     * @returns League Successful Response
+     * @throws ApiError
+     */
+    public static createMultipleLeaguesLeagueMultiplePost(
+requestBody: Array<LeagueCreate>,
+): CancelablePromise<Array<League>> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/league/multiple',
+            body: requestBody,
+            mediaType: 'application/json',
             errors: {
                 422: `Validation Error`,
             },

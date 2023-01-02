@@ -27,10 +27,10 @@ export const $AdPatch = {
     type: 'string',
 },
         fileMobileId: {
-    type: 'string',
+    type: 'number',
 },
         fileDesktopId: {
-    type: 'string',
+    type: 'number',
 },
         priority: {
     type: 'number',

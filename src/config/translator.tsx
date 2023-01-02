@@ -2022,6 +2022,26 @@ const generalKeywords = {
     it: 'Transfer',
     en: 'Transfer',
   },
+  errorTeam1: {
+    de: 'Heimmannschaft nicht gesetzt',
+    it: 'Heimmannschaft nicht gesetzt',
+    en: 'Heimmannschaft nicht gesetzt',
+  },
+  errorTeam2: {
+    de: 'Andere Mannschaft nicht gesetzt',
+    it: 'Andere Mannschaft nicht gesetzt',
+    en: 'Andere Mannschaft nicht gesetzt',
+  },
+  errorLeague: {
+    de: 'Liga nicht gesetzt',
+    it: 'Liga nicht gesetzt',
+    en: 'Liga nicht gesetzt',
+  },
+  errorDate: {
+    de: 'Datum nicht gesetzt',
+    it: 'Datum nicht gesetzt',
+    en: 'Datum nicht gesetzt',
+  },
   emptyString: {
     de: ' ',
     it: '',

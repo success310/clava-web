@@ -35,6 +35,27 @@ matchId: number,
     }
 
     /**
+     * Delete Match
+     * @param matchId 
+     * @returns Match Successful Response
+     * @throws ApiError
+     */
+    public static deleteMatchMatchMatchIdDelete(
+matchId: number,
+): CancelablePromise<Match> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/match/{match_id}',
+            path: {
+                'match_id': matchId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
      * Patch Match
      * @param matchId 
      * @param requestBody 
@@ -187,6 +208,46 @@ limit: number,
     }
 
     /**
+     * Create Match
+     * @param requestBody 
+     * @returns Match Successful Response
+     * @throws ApiError
+     */
+    public static createMatchMatchPost(
+requestBody: MatchCreate,
+): CancelablePromise<Match> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/match/',
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Create Multiple Matches
+     * @param requestBody 
+     * @returns Match Successful Response
+     * @throws ApiError
+     */
+    public static createMultipleMatchesMatchMultiplePost(
+requestBody: Array<MatchCreate>,
+): CancelablePromise<Array<Match>> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/match/multiple',
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
      * Start Match
      * @param matchId 
      * @param minutes 
@@ -253,26 +314,6 @@ newStartTime: string,
             query: {
                 'new_start_time': newStartTime,
             },
-            errors: {
-                422: `Validation Error`,
-            },
-        });
-    }
-
-    /**
-     * Create Match
-     * @param requestBody 
-     * @returns Match Successful Response
-     * @throws ApiError
-     */
-    public static createMatchMatchCreatePost(
-requestBody: MatchCreate,
-): CancelablePromise<Match> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/match/create',
-            body: requestBody,
-            mediaType: 'application/json',
             errors: {
                 422: `Validation Error`,
             },

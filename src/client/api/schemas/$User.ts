@@ -60,5 +60,26 @@ export const $User = {
     type: 'AreaOfInterest',
     isRequired: true,
 },
+        favoriteMatches: {
+    type: 'array',
+    contains: {
+        type: 'MatchListElement',
+    },
+    isRequired: true,
+},
+        favoriteTeams: {
+    type: 'array',
+    contains: {
+        type: 'TeamListElement',
+    },
+    isRequired: true,
+},
+        favoriteLeagues: {
+    type: 'array',
+    contains: {
+        type: 'LeagueListElement',
+    },
+    isRequired: true,
+},
     },
 } as const;

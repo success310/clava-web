@@ -92,6 +92,12 @@ const reducer: Reducer<AdminState> = (
       return state;
     }
     case AdminActionTypes.FETCH_MATCH_SUCCESS:
+      if (Array.isArray(action.payload))
+        return {
+          ...state,
+          status: 'idle',
+          matches: action.payload,
+        };
       return {
         ...state,
         status: 'idle',

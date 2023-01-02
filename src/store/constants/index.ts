@@ -166,7 +166,7 @@ export interface AdState {
 
 export interface AdminState {
   readonly match: Match | null;
-  readonly matches: MatchListElement[];
+  readonly matches: MatchListElement[] | Match[];
   readonly user: User | null;
   readonly users: User[];
   readonly league: League | null;

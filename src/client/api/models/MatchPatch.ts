@@ -7,4 +7,5 @@ export type MatchPatch = {
     startTime?: string;
     refereeId?: number;
     cancelled?: boolean;
+    matchDay?: number;
 };

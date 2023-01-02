@@ -779,7 +779,7 @@ export type AdminActions =
     }
   | {
       type: AdminActionTypes.FETCH_MATCH_SUCCESS;
-      payload: Match;
+      payload: Match | Match[];
     }
   | {
       type: AdminActionTypes.FETCH_USER_SUCCESS;
