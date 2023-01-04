@@ -29,10 +29,6 @@ const NewsListElement: React.FC<NewsListElementType> = ({
   date,
 }) => {
   const { l } = useContext(ClavaContext);
-  console.log(type);
-  console.log(title);
-  console.log(teamFrom);
-  console.log(teamTo);
   const inner = useMemo(
     () => (
       <>

@@ -252,6 +252,11 @@ const generalKeywords = {
     it: 'Nessuna formazione inserita!',
     en: 'Lineup not entered!',
   },
+  noEventsEntered: {
+    de: 'Keine Ereignisse eingetragen!',
+    it: 'Nessuna evento inserita!',
+    en: 'No events entered!',
+  },
   enterLineup: {
     de: 'Aufstellung eintragen!',
     it: 'Inserisci formazione!',

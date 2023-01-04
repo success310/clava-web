@@ -30,20 +30,22 @@ const News: React.FC<ConnectedProps<typeof connector>> = ({
 }) => {
   const { user, l } = useContext(ClavaContext);
   const { feedType, feedId } = useParams();
-  const first = useRef(true);
   const pageNews = useRef(0);
   const onLoad = useCallback(
     (page: number) => {
-      pageNews.current = page;
-      getNews(
-        user.areaOfInterest.id,
-        small
-          ? 'mixed'
-          : (feedType as 'news' | 'transfers' | 'videos' | 'bulletins') ??
-              'news',
-        page * NEWS_LIMIT,
-        NEWS_LIMIT,
-      );
+      if (pageNews.current !== page) {
+        pageNews.current = page;
+        console.log(`fetch ${feedType} ${page} ${NEWS_LIMIT}`);
+        getNews(
+          user.areaOfInterest.id,
+          small
+            ? 'mixed'
+            : (feedType as 'news' | 'transfers' | 'videos' | 'bulletins') ??
+                'news',
+          page * NEWS_LIMIT,
+          NEWS_LIMIT,
+        );
+      }
     },
     [user, pageNews, getNews, small, feedType],
   );
@@ -136,24 +138,20 @@ const News: React.FC<ConnectedProps<typeof connector>> = ({
   }, [small, news, videos, transfers, feedType, bulletins, l]);
   useEffect(() => {
     if (items.length === 0 && !loading) {
-      if (pageNews.current !== 0) {
-        first.current = true;
-        pageNews.current = 0;
-      }
-      if (first.current) {
-        first.current = false;
-        getNews(
-          user.areaOfInterest.id,
-          small
-            ? 'mixed'
-            : (feedType as 'news' | 'transfers' | 'videos' | 'bulletins') ??
-                'news',
-          0,
-          NEWS_LIMIT,
-        );
-      }
+      pageNews.current = 0;
+
+      getNews(
+        user.areaOfInterest.id,
+        small
+          ? 'mixed'
+          : (feedType as 'news' | 'transfers' | 'videos' | 'bulletins') ??
+              'news',
+        0,
+        NEWS_LIMIT,
+      );
     }
-  }, [user, items, pageNews, getNews, loading, small, feedType]);
+  }, [user, items.length, pageNews, getNews, loading, small, feedType]);
+
   const openNews = useMemo(() => {
     if (feedType === 'news' && feedId && !Number.isNaN(parseInt(feedId, 10))) {
       return news.find((n) => n.id === parseInt(feedId, 10));
@@ -235,11 +233,11 @@ const News: React.FC<ConnectedProps<typeof connector>> = ({
         </div>
       ) : items.length === 0 ? null : (
         <InfiniteScroll
-          pageStart={Math.floor(items.length / NEWS_LIMIT)}
+          pageStart={0}
           initialLoad={false}
           loadMore={onLoad}
           className="news-list"
-          hasMore
+          hasMore={!loading && items.length >= pageNews.current * NEWS_LIMIT}
           loader={<Loading small />}>
           {items.map((item) => (
             <NewsListElement
@@ -253,4 +251,4 @@ const News: React.FC<ConnectedProps<typeof connector>> = ({
   );
 };
 export default connector(News);
-// rel oad
+// relo ad

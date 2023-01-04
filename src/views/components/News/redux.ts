@@ -60,4 +60,4 @@ const props = (state: RootState, prevProps: { small: boolean }) => ({
 });
 
 export const connector = connect(props, mapper);
-// re lo ad
+// re load

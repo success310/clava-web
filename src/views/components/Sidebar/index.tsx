@@ -9,18 +9,23 @@ import { Navbar } from 'reactstrap';
 import { Link, NavLink } from 'react-router-dom';
 import {
   faAd,
+  faHouse,
   faInfoCircle,
   faLanguage,
   faMailbox,
   faMap,
+  faNewspaper,
   faServer,
+  faUser,
+  faUserNinja,
+  faUserTie,
 } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ConnectedProps } from 'react-redux';
 import { ClavaContext } from '../../../config/contexts';
 import { showTranslated, translate } from '../../../config/translator';
 import { connector } from './redux';
-import { isAdmin } from '../../../config/utils';
+import { isAdmin, isInsider } from '../../../config/utils';
 import client from '../../../client';
 import {
   BETA_ENDPOINT,
@@ -87,105 +92,137 @@ const Sidebar: React.FC<ConnectedProps<typeof connector>> = ({
     [setEndpoint],
   );
   return (
-    <Navbar className="navbar-vertical">
-      <NavLink to="#" onClick={onToggleLang}>
-        <FontAwesomeIcon icon={faLanguage} />
-        <span>{translate('language', l)}</span>
-        <small className="text-end">
-          {selectedLang && showTranslated(selectedLang, l)}
-        </small>
-      </NavLink>
-      {langOpen && (
-        <>
-          {languages.map((lang) => {
-            if (lang.locale === l) return null;
-            return (
-              <NavLink
-                key={`lang-${lang.id}`}
-                to="#"
-                onClick={() => {
-                  changeLang(lang);
-                }}>
-                <span className="text-end">{showTranslated(lang.name, l)}</span>
-              </NavLink>
-            );
-          })}
-        </>
-      )}
-      <NavLink onClick={onToggleAoi} to="#">
-        <FontAwesomeIcon icon={faMap} />
-        <span>{translate('chooseAoi', l)}</span>
-        <small className="text-end">
-          {selectedAoi && showTranslated(selectedAoi, l)}
-        </small>
-      </NavLink>
-      {aoiOpen && (
-        <>
-          {aois.map((item) => {
-            if (item.id === aoi) return null;
-            return (
-              <NavLink
-                key={`lang-${item.id}`}
-                to="#"
-                onClick={() => {
-                  changeAoi(item);
-                }}>
-                <span className="text-end">{showTranslated(item.name, l)}</span>
-              </NavLink>
-            );
-          })}
-        </>
-      )}
-      <a href="mailto:info@clava-sports.com">
-        <FontAwesomeIcon icon={faMailbox} />
-        <span>{translate('contactUs', l)}</span>
-        <small className="text-end" />
-      </a>
-      <a href="mailto:ad@clava-sports.com">
-        <FontAwesomeIcon icon={faAd} />
-        <span>{translate('adsOnClava', l)}</span>
-        <small className="text-end" />
-      </a>
-      <Link to="/imprint" className="nav-link">
-        <FontAwesomeIcon icon={faInfoCircle} />
-        <span>{translate('aboutUs', l)}</span>
-        <small className="text-end" />
-      </Link>
-      {isAdmin(user) && (
-        <>
-          <NavLink onClick={toggleEndpoints} to="#">
-            <FontAwesomeIcon icon={faServer} />
-            <span>{translate('chooseEndpoint', l)}</span>
-            <small className="text-end">{selectedEndpoint}</small>
-          </NavLink>
-          {endpointsOpen && (
-            <>
-              {Object.keys(endpoints).map((item: string) => {
-                if (item === selectedEndpoint) return null;
-                return (
-                  <NavLink
-                    key={`lang-${item}`}
-                    to="#"
-                    onClick={() => {
-                      setSelectedEndpointCont(item as keyof typeof endpoints);
-                    }}>
-                    <span className="text-end">{item}</span>
-                  </NavLink>
-                );
-              })}
-            </>
-          )}
-        </>
-      )}
+    <>
+      <Navbar className="navbar-vertical hidden-xl">
+        <NavLink to="/home">
+          <FontAwesomeIcon icon={faHouse} />
+          <span>{translate('home', l)}</span>
+          <small className="text-end" />
+        </NavLink>
+        <NavLink to="/feed/news">
+          <FontAwesomeIcon icon={faNewspaper} />
+          <span>{translate('news', l)}</span>
+          <small className="text-end" />
+        </NavLink>
+        <NavLink to={!user || user.anonymous ? '/login' : '/profile'}>
+          <FontAwesomeIcon
+            icon={
+              isAdmin(user) ? faUserNinja : isInsider(user) ? faUserTie : faUser
+            }
+          />
+          <span>
+            {!user || user.anonymous
+              ? translate('login', l)
+              : `Hi ${user.username}`}
+          </span>
 
-      <Link className="mt-5 nav-link" to="/tos">
-        <small className="text-center">
-          {`${translate('tos', l)} | ${translate('privacy', l)}`}
-          <br />
-          &copy; Copyright 2022, Clava Sports
-        </small>
-      </Link>
-    </Navbar>
+          <small className="text-end" />
+        </NavLink>
+      </Navbar>
+      <Navbar className="navbar-vertical">
+        <NavLink to="#" onClick={onToggleLang}>
+          <FontAwesomeIcon icon={faLanguage} />
+          <span>{translate('language', l)}</span>
+          <small className="text-end">
+            {selectedLang && showTranslated(selectedLang, l)}
+          </small>
+        </NavLink>
+        {langOpen && (
+          <>
+            {languages.map((lang) => {
+              if (lang.locale === l) return null;
+              return (
+                <NavLink
+                  key={`lang-${lang.id}`}
+                  to="#"
+                  onClick={() => {
+                    changeLang(lang);
+                  }}>
+                  <span className="text-end">
+                    {showTranslated(lang.name, l)}
+                  </span>
+                </NavLink>
+              );
+            })}
+          </>
+        )}
+        <NavLink onClick={onToggleAoi} to="#">
+          <FontAwesomeIcon icon={faMap} />
+          <span>{translate('chooseAoi', l)}</span>
+          <small className="text-end">
+            {selectedAoi && showTranslated(selectedAoi, l)}
+          </small>
+        </NavLink>
+        {aoiOpen && (
+          <>
+            {aois.map((item) => {
+              if (item.id === aoi) return null;
+              return (
+                <NavLink
+                  key={`lang-${item.id}`}
+                  to="#"
+                  onClick={() => {
+                    changeAoi(item);
+                  }}>
+                  <span className="text-end">
+                    {showTranslated(item.name, l)}
+                  </span>
+                </NavLink>
+              );
+            })}
+          </>
+        )}
+        <a href="mailto:info@clava-sports.com">
+          <FontAwesomeIcon icon={faMailbox} />
+          <span>{translate('contactUs', l)}</span>
+          <small className="text-end" />
+        </a>
+        <a href="mailto:ad@clava-sports.com">
+          <FontAwesomeIcon icon={faAd} />
+          <span>{translate('adsOnClava', l)}</span>
+          <small className="text-end" />
+        </a>
+        <Link to="/imprint" className="nav-link">
+          <FontAwesomeIcon icon={faInfoCircle} />
+          <span>{translate('aboutUs', l)}</span>
+          <small className="text-end" />
+        </Link>
+        {isAdmin(user) && (
+          <>
+            <NavLink onClick={toggleEndpoints} to="#">
+              <FontAwesomeIcon icon={faServer} />
+              <span>{translate('chooseEndpoint', l)}</span>
+              <small className="text-end">{selectedEndpoint}</small>
+            </NavLink>
+            {endpointsOpen && (
+              <>
+                {Object.keys(endpoints).map((item: string) => {
+                  if (item === selectedEndpoint) return null;
+                  return (
+                    <NavLink
+                      key={`lang-${item}`}
+                      to="#"
+                      onClick={() => {
+                        setSelectedEndpointCont(item as keyof typeof endpoints);
+                      }}>
+                      <span className="text-end">{item}</span>
+                    </NavLink>
+                  );
+                })}
+              </>
+            )}
+          </>
+        )}
+
+        <Link className="mt-5 nav-link" to="/tos">
+          <small className="text-center">
+            {`${translate('tos', l)} | ${translate('privacy', l)}`}
+            <br />
+            &copy; Copyright 2022, Clava Sports
+          </small>
+        </Link>
+      </Navbar>
+    </>
   );
 };
 // relo ad

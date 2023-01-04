@@ -8,8 +8,13 @@ import React, {
 } from 'react';
 import { ConnectedProps } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { faSearch } from '@fortawesome/pro-regular-svg-icons';
+import {
+  faChevronDown,
+  faChevronUp,
+  faSearch,
+} from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { InputGroup } from 'reactstrap';
 import { connector } from './redux';
 import { ClavaContext } from '../../../config/contexts';
 import { showTranslated, translate } from '../../../config/translator';
@@ -26,6 +31,7 @@ const Leagues: React.FC<ConnectedProps<typeof connector>> = ({
 }) => {
   const { l } = useContext(ClavaContext);
   const currentLength = useRef(-1);
+  const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   useEffect(() => {
     if (leagueId !== -1) {
@@ -33,6 +39,9 @@ const Leagues: React.FC<ConnectedProps<typeof connector>> = ({
       if (league) setHead(showTranslated(league.name, l));
     }
   }, [leagueId, leagues, l]);
+  useEffect(() => {
+    if (leagueId) setOpen(false);
+  }, [leagueId]);
   const newId = useMemo(() => {
     if (currentLength.current === -1) {
       currentLength.current = favorites.length;
@@ -97,16 +106,34 @@ const Leagues: React.FC<ConnectedProps<typeof connector>> = ({
     },
     [],
   );
+  const toggleOpen = useCallback(() => {
+    setOpen((o) => !o);
+  }, []);
+  const openOpen = useCallback(() => {
+    setOpen(true);
+  }, []);
   return (
-    <div className={`leagues${small ? ' leagues-small' : ''}`}>
+    <div
+      className={`leagues${small ? ' leagues-small' : ''} ${
+        open ? 'open' : ''
+      }`}>
       <div className="search-leagues">
         <FontAwesomeIcon icon={faSearch} />
-        <input
-          type="text"
-          placeholder={translate('search', l)}
-          value={search}
-          onChange={onSearch}
-        />
+        <InputGroup>
+          <input
+            type="text"
+            placeholder={translate('leagues', l)}
+            value={search}
+            onFocus={openOpen}
+            onChange={onSearch}
+          />
+          <button
+            type="button"
+            className="input-group-addon"
+            onClick={toggleOpen}>
+            <FontAwesomeIcon icon={open ? faChevronUp : faChevronDown} />
+          </button>
+        </InputGroup>
       </div>
       <nav>
         {favLeagues.length !== 0 && (
@@ -159,4 +186,4 @@ const Leagues: React.FC<ConnectedProps<typeof connector>> = ({
 };
 
 export default connector(Leagues);
-// re l
+// relo ad

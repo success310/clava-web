@@ -29,13 +29,17 @@ const FavButton: React.FC<{
   team: TeamListElement;
   onSelect: (id: IDType) => void;
   l: LanguageLocaleEnum;
-}> = ({ onSelect, team, l }) => {
+  selected: boolean;
+}> = ({ onSelect, team, selected, l }) => {
   const onPress = useCallback(() => {
     onSelect(team.id);
   }, [team.id, onSelect]);
   return (
-    <Button color="secondary" onClick={onPress}>
-      <ClavaImage image={team.thumb} width={100} />
+    <Button
+      color="secondary"
+      className={`fav-button${selected ? ' selected' : ''}`}
+      onClick={onPress}>
+      <ClavaImage image={team.thumb} width={40} />
       <span>{showTranslated(team.name, l)}</span>
     </Button>
   );
@@ -154,29 +158,16 @@ const Favorites: React.FC<FirstOpenFavsProps> = ({
         <Col
           xs={12}
           md={6}
-          className="align-items-center justify-content-center mt-3 mt-sm-0">
-          {teamToChoose
-            .reduce<TeamListElement[][]>((prev, current, index) => {
-              const newArray = prev;
-              if (index % numPerRow !== 0)
-                newArray[prev.length - 1] =
-                  newArray[prev.length - 1].concat(current);
-              else newArray.push([current]);
-              return newArray;
-            }, [])
-            .map((groupedTeams) => (
-              <Row key={`group-${groupedTeams.map((t) => t.id).join('-')}`}>
-                {groupedTeams.map((team) => (
-                  <Col key={team.id}>
-                    <FavButton
-                      onSelect={onSelectFav}
-                      team={team}
-                      l={language}
-                    />
-                  </Col>
-                ))}
-              </Row>
-            ))}
+          className="align-items-center justify-content-center mt-3 mt-sm-1 fav-buttons">
+          {teamToChoose.map((team) => (
+            <FavButton
+              onSelect={onSelectFav}
+              team={team}
+              l={language}
+              key={team.id}
+              selected={selected.indexOf(team.id) !== -1}
+            />
+          ))}
           {teamLeagueToChoose.length === 0 && teamsStatus === 'loading' && (
             <Loading small />
           )}
@@ -196,4 +187,4 @@ const Favorites: React.FC<FirstOpenFavsProps> = ({
 
 export default connector(Favorites);
 
-// saf
+// rel oad

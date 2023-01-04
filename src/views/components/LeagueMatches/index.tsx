@@ -8,8 +8,6 @@ import React, {
 } from 'react';
 import { ConnectedProps } from 'react-redux';
 import { DateTimeFormat } from 'intl';
-import { Button } from 'reactstrap';
-import { io } from 'socket.io-client';
 import { connector } from './redux';
 import { ClavaContext } from '../../../config/contexts';
 import MatchDays from '../MatchDays';
@@ -59,6 +57,7 @@ const LeagueMatches: React.FC<ConnectedProps<typeof connector>> = ({
   favorites,
   fetchLeagueMatchesOfDay,
   fetchLeagueMatchesOfDayAndLeague,
+  league,
   small,
 }) => {
   const { l, aoi, user } = useContext(ClavaContext);
@@ -190,24 +189,8 @@ const LeagueMatches: React.FC<ConnectedProps<typeof connector>> = ({
     matchesLength,
     leagueId,
   ]);
-  const [socket, setSocket] = useState<string[]>([]);
-  const connectSocketIo = useCallback(() => {
-    // TODO
-    const client = io('wss://socket.clava-sports.com/socket', {
-      reconnectionDelayMax: 10000,
-    });
-    client.on('message', (message) => {
-      setSocket((m) => m.concat(message));
-    });
-    client.on('connect', () => {
-      setSocket((m) => m.concat(`Connected as ${client.id}`));
-    });
-    client.on('connection', () => {
-      client.emit('message', JSON.stringify({ user_id: user.id }));
-    });
-  }, [user]);
   return (
-    <div className={`league-matches-container${small ? ' small' : ''}`}>
+    <div className={`league-matches-container${small ? ' small' : ' '}`}>
       <MatchDays
         type={leagueId === -1 ? 'aoi' : 'league'}
         id={leagueId === -1 ? aoi : leagueId}
@@ -216,10 +199,10 @@ const LeagueMatches: React.FC<ConnectedProps<typeof connector>> = ({
         shouldScroll={shouldScroll}
         disabled={false}
       />
-      <Button type="button" onClick={connectSocketIo}>
-        Connect
-      </Button>
       <div className="league-matches">
+        {league && (
+          <h3 className="text-center">{showTranslated(league.name, l)}</h3>
+        )}
         {filtered.length === 0 ? (
           <Loading small />
         ) : (
@@ -236,5 +219,5 @@ const LeagueMatches: React.FC<ConnectedProps<typeof connector>> = ({
   );
 };
 
-// rel oad
+// relo ad
 export default connector(LeagueMatches);

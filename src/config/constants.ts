@@ -18,6 +18,10 @@ export const PROD_ENDPOINT = 'api.clava-sports.com';
 export const DEV_ENDPOINT = 'api.clava.kivi.bz.it';
 export const BETA_ENDPOINT = 'api.beta.clava-sports.com';
 
+export const PROD_SOCKET_ENDPOINT = 'socket.clava-sports.com';
+export const DEV_SOCKET_ENDPOINT = 'socket.clava.kivi.bz.it';
+export const BETA_SOCKET_ENDPOINT = 'socket.beta.clava-sports.com';
+
 export const AS_FIRST_OPEN = 'clava-f-o';
 export const AS_LANG = 'clava-lang';
 export const AS_THEME = 'clava-theme';

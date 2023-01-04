@@ -1,5 +1,7 @@
 /* eslint-disable camelcase */
 import * as Sentry from '@sentry/react';
+import { io, Socket } from 'socket.io-client';
+import { DisconnectDescription } from 'socket.io-client/build/esm/socket';
 import { IDType } from '../../config/types';
 import { dayToNumber, sameDay } from '../../config/utils';
 import client from '../index';
@@ -17,7 +19,13 @@ import {
 } from '../../store/actions/matchActions';
 import { MatchActionTypes, NewsActionTypes } from '../../store/actions/types';
 import { fetchByLeague } from '../../store/actions/standingActions';
-import { PROD_ENDPOINT } from '../../config/constants';
+import {
+  BETA_ENDPOINT,
+  BETA_SOCKET_ENDPOINT,
+  DEV_ENDPOINT,
+  DEV_SOCKET_ENDPOINT,
+  PROD_SOCKET_ENDPOINT,
+} from '../../config/constants';
 
 export interface EventSocketType {
   setUser: (id: IDType, aoi: IDType) => void;
@@ -69,42 +77,81 @@ class EventsSocket implements EventSocketType {
 
   private static readonly ALIVE_TIMEOUT = 120000;
 
-  private websocket: WebSocket | undefined;
+  private websocket: Socket | undefined;
 
   private userID: IDType = -1;
 
   private aoiID: IDType = -1;
 
-  private endpoint = `wss://${PROD_ENDPOINT}/ws/updates`;
+  private endpoint = `wss://${PROD_SOCKET_ENDPOINT}/`;
 
   private ignoreUserRefreshs = 0;
 
   private constructor(endpoint: string) {
-    this.endpoint = `wss://${endpoint}/ws/updates`;
+    this.endpoint = `wss://${endpoint}/`;
     // TODO remove comment this.open();
   }
 
   static getInstance(endpoint?: string): EventsSocket {
     if (!EventsSocket.__instance) {
-      if (!endpoint) endpoint = PROD_ENDPOINT;
-
-      EventsSocket.__instance = new EventsSocket(endpoint);
+      if (!endpoint) endpoint = PROD_SOCKET_ENDPOINT;
+      if (endpoint === BETA_ENDPOINT)
+        EventsSocket.__instance = new EventsSocket(BETA_SOCKET_ENDPOINT);
+      else if (endpoint === DEV_ENDPOINT)
+        EventsSocket.__instance = new EventsSocket(DEV_SOCKET_ENDPOINT);
+      else EventsSocket.__instance = new EventsSocket(PROD_SOCKET_ENDPOINT);
     }
     return EventsSocket.__instance;
   }
 
-  public static isOpen(
-    websocket: WebSocket | undefined,
-  ): websocket is WebSocket {
-    return !!websocket && websocket.readyState === WebSocket.OPEN;
+  public static isOpen(websocket: Socket | undefined): websocket is Socket {
+    return !!websocket && websocket.active;
   }
 
-  private static onClose(event: CloseEvent) {
-    console.log('WS closed: ', event);
-    addLog('socket', `WS closed due to: ${JSON.stringify(event)}`, '#faa');
-    setTimeout(() => {
+  /**
+   *
+   * @private
+   * @param reason
+   * @param description
+   */
+  private static onClose(
+    reason: Socket.DisconnectReason,
+    description?: DisconnectDescription,
+  ) {
+    console.log('WS closed: ', reason);
+    addLog('socket', `WS closed due to: ${reason}`, '#faa');
+  }
+
+  /**
+   *
+   * @private
+   * @deprecated with Socket.IO
+   */
+  private static checkAlive() {
+    const ws = socket().websocket;
+    if (EventsSocket.isOpen(ws)) {
+      // TODO ignore?
+    } else {
       socket().open();
-    }, 5000);
+    }
+    EventsSocket.alive = undefined;
+  }
+
+  private static onOpen() {
+    console.log(`WS open to ${socket().endpoint}`);
+    addLog('socket', `WS open to ${socket().endpoint}`, '#faa');
+    setTimeout(() => {
+      const sock = socket().websocket;
+      if (sock) sock.emit('user_id', socket().userID);
+      setTimeout(() => {
+        if (sock) sock.emit('room', `aoi_${socket().aoiID}`);
+      }, 1000);
+    }, 1000);
+  }
+
+  private static onError(error: Error) {
+    console.log('Error:', error);
+    addLog('socket', `WS Error: ${error}`, '#faa');
   }
 
   private static handleUserMessage(userId: IDType) {
@@ -244,22 +291,12 @@ class EventsSocket implements EventSocketType {
     // league stats ? eher lei periodisch
   }
 
-  private static checkAlive() {
-    const ws = socket().websocket;
-    if (EventsSocket.isOpen(ws)) {
-      // TODO ignore?
-    } else {
-      socket().open();
-    }
-    EventsSocket.alive = undefined;
-  }
-
-  private static onMessage(payload: MessageEvent) {
-    console.log(`Message from Socket: `, payload.data);
-    addLog('socket', `WS Message: ${JSON.stringify(payload.data)}`, '#faa');
+  private static onMessage(payload: any) {
+    console.log(`Message from Socket: `, payload);
+    addLog('socket', `WS Message: ${JSON.stringify(payload)}`, '#faa');
     const ws = socket().websocket;
     try {
-      const message: SocketMessage = JSON.parse(payload.data as string);
+      const message: SocketMessage = JSON.parse(payload as string);
       if (message.type === 'user') {
         if (socket().ignoreUserRefreshs) {
           socket().ignoreUserRefreshs--;
@@ -306,14 +343,13 @@ class EventsSocket implements EventSocketType {
     }
   }
 
-  private static onOpen() {
-    console.log(`WS open to ${socket().endpoint}`);
-    addLog('socket', `WS open to ${socket().endpoint}`, '#faa');
-  }
-
-  private static onError(error: Event) {
-    console.log('Error:', error);
-    addLog('socket', `WS Error: ${error}`, '#faa');
+  open() {
+    this.close();
+    this.websocket = io(socket().endpoint);
+    this.websocket.on('message', EventsSocket.onMessage);
+    this.websocket.on('connect', EventsSocket.onOpen);
+    this.websocket.on('connect_error', EventsSocket.onError);
+    this.websocket.on('disconnect', EventsSocket.onClose);
   }
 
   setUser(id: IDType, aoi: IDType) {
@@ -321,26 +357,21 @@ class EventsSocket implements EventSocketType {
     this.aoiID = aoi;
   }
 
-  open() {
-    this.close();
-    /*  this.websocket = new WebSocket(this.endpoint);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    this.websocket.binaryType = 'blob';
-    this.websocket.onopen = EventsSocket.onOpen;
-    this.websocket.onmessage = EventsSocket.onMessage;
-    this.websocket.onerror = EventsSocket.onError;
-    this.websocket.onclose = EventsSocket.onClose;*/
-  }
-
   close() {
     if (EventsSocket.isOpen(this.websocket)) this.websocket.close();
   }
 
   setEndpoint(endpoint: string) {
-    if (`wss://${endpoint}/ws/updates` !== this.endpoint) {
-      this.endpoint = `wss://${endpoint}/ws/updates`;
+    const newEndpoint =
+      endpoint === DEV_ENDPOINT
+        ? DEV_SOCKET_ENDPOINT
+        : endpoint === BETA_ENDPOINT
+        ? BETA_SOCKET_ENDPOINT
+        : PROD_SOCKET_ENDPOINT;
+    if (`wss://${newEndpoint}/` !== this.endpoint) {
+      this.endpoint = `wss://${newEndpoint}/`;
       this.close();
+      this.open();
     }
   }
 

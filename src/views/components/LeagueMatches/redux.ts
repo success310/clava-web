@@ -47,9 +47,10 @@ const props = (
     matches,
     matchesLength: matches.length,
     favorites: state.user.favorites,
+    league: state.leagues.value.find((l) => l.id === prevProps.leagueId),
     ...prevProps,
   };
 };
 
 export const connector = connect(props, mapper);
-// reload
+// relo ad

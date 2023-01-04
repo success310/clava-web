@@ -2,6 +2,12 @@
   //transition: background-color 1s ease;
 }
 
+html, body {
+  max-width: 100vw;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
 span, p, a, button {
   font-family: "Lexend", sans-serif;
   font-weight: lighter;
@@ -54,6 +60,7 @@ a {
   background: $primary;
 }
 
+
 .text-right {
   text-align: right;
 }
@@ -74,16 +81,39 @@ button {
   margin: 2rem;
 
   img {
-    max-width: 200px;
+    width: 200px;
+    max-width: 50vw;
   }
 
-  &.beta{
+  &.beta {
     background-color: $primary;
   }
 }
 
 .spacer {
   margin: 1rem 0;
+}
+
+.first-open{
+  .fav-buttons {
+    display: grid;
+    grid-template-columns: 20% 20% 20% 20% 20%;
+    max-width: 768px;
+    .fav-button {
+      margin: 0.125rem;
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      img{
+        width: 50%;
+      }
+      &.selected{
+        background-color: $form-file-button-hover-bg;
+      }
+    }
+  }
 }
 
 .picker {
@@ -116,6 +146,7 @@ button {
     max-height: 0;
     background-color: black;
     display: none;
+    z-index: 100;
   }
 
   .option {
@@ -132,7 +163,8 @@ button {
     &:hover {
       color: $primary;
     }
-    &.disabled{
+
+    &.disabled {
       color: $input-disabled-color;
       background-color: $input-disabled-bg;
       border-color: $input-disabled-border-color;
@@ -173,10 +205,15 @@ button {
   top: 0;
   height: 7rem;
   width: 100%;
+  max-width: 100vw;
   padding: 0 2rem;
   border-bottom: 1px solid $gray-900;
   background-color: $black;
   z-index: 100000;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 
   .logo {
     display: inline-block;
@@ -201,6 +238,14 @@ button {
     }
   }
 
+  .navbar {
+    flex: 1;
+
+    .container-fluid {
+      justify-content: space-around;
+    }
+  }
+
   .navbar-toggler {
     svg {
       width: 25px;
@@ -211,11 +256,34 @@ button {
 .sidebar {
   background-color: $gray-900;
   flex-direction: column;
-  width: 400px;
+  width: 300px;
+  position: fixed;
   top: 7rem;
-  left: calc(100vw - 400px);
-  transform: translateX(400px);
+  left: calc(100vw - 300px);
+  transform: translateX(300px);
   transition: transform 0.25s linear;
+  max-height: calc(100vh - 7rem);
+  overflow-y: scroll;
+
+  /* width */
+  &::-webkit-scrollbar {
+    width: 2px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: $gray-900;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: $primary;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: $primary;
+  }
 
   &.show {
     transform: translateX(0);
@@ -306,15 +374,28 @@ button {
       display: flex;
       border-bottom: solid thin $gray-900;
       align-items: center;
+      min-height: 60px;
+      max-height: 60px;
 
-      input {
-        padding: 0.5rem;
-        background-color: transparent;
-        border: none;
-        color: $white;
+      .input-group {
+        input {
+          padding: 0.5rem;
+          background-color: transparent;
+          border: none;
+          color: $white;
 
-        &:active, &:focus {
-          outline: none;
+          &:active, &:focus {
+            outline: none;
+          }
+        }
+
+        .input-group-addon {
+          display: none;
+          visibility: hidden;
+          z-index: 100;
+          color: $input-color;
+          border: none;
+          background-color: transparent;
         }
       }
     }
@@ -349,15 +430,11 @@ button {
 
   .league-matches-container {
     flex: 0 1 60%;
-
-    &.small {
-      flex: 0 1 20%;
-    }
-
     position: relative;
 
     .matchdays-container {
-      height: 60px;
+      min-height: 60px;
+      max-height: 60px;
       width: 100%;
       border-bottom: solid thin $gray-900;
       position: relative;
@@ -503,6 +580,111 @@ button {
     .league-matches {
       width: 100%;
 
+
+      .league-match-section {
+        margin: 0.5rem 0.5rem 1rem 0.5rem;
+
+        .league-match-title {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+
+          &.link {
+            cursor: pointer;
+          }
+        }
+
+        .league-match-item {
+          margin: 0.25rem 0;
+          .match-small {
+            border-radius: 1rem;
+            background-color: $gray-950;
+            padding: 0.25rem;
+            display: block;
+
+            .match-status, .fav-icon {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+          }
+
+          .match-big {
+            border-radius: 1rem;
+            background-color: $gray-950;
+            padding: 0.25rem;
+            display: block;
+            position: relative;
+
+            .close-match {
+              position: absolute;
+              right: 0.75rem;
+              top: 0.25rem;
+            }
+          }
+        }
+      }
+    }
+
+    &.small {
+      flex: 0 1 20%;
+      .matchdays-container {
+        .today, .clava-calendar-container {
+          display: none;
+          visibility: hidden;
+        }
+        &:after {
+          position: absolute;
+          border-radius: 1rem;
+          inset: 0;
+          content: " ";
+          background-image: linear-gradient(to right, transparent 2%, $black 2%, transparent 12%, transparent 88%, $black 98%, transparent 98%);
+          pointer-events: none;
+        }
+        .matchdays {
+          left: 2%;
+          right: 2%;
+        }
+      }
+      .league-matches {
+        .league-match-section {
+          .league-match-item {
+            .match-small {
+              border-radius: 0.5rem;
+              > .row{
+                flex-direction: column;
+                align-items: center;
+                > * {
+                  width: 90%;
+                  .team-name {
+                    > * {
+                      &:nth-child(1) {
+                        width: 100%;
+                      }
+
+                      &:nth-child(2) {
+                        width: 80%
+                      }
+
+                      &:nth-child(3) {
+                        width: 20%;
+                      }
+
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+
+                      img {
+                        width: 48px;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 
@@ -513,8 +695,8 @@ button {
       border-bottom: solid thin $gray-900;
       padding: 1rem 0.5rem;
       text-align: center;
-      min-height: 57px;
-      max-height: 57px;
+      min-height: 60px;
+      max-height: 60px;
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -542,10 +724,11 @@ button {
         justify-content: center;
 
 
-        &.transfers{
+        &.transfers {
           background-color: $gray-900;
           padding: 0.5rem;
         }
+
         img {
           width: #{"max(80%, 500px)"};
           top: 0;
@@ -576,13 +759,15 @@ button {
           align-items: center;
           justify-content: space-between;
           width: 100%;
-          div{
+
+          div {
             flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
           }
+
           img {
             width: 60px;
             margin: 0 1rem;
@@ -624,51 +809,6 @@ button {
   }
 }
 
-.match-small {
-  border-radius: 1rem;
-  background-color: $gray-950;
-  padding: 0.25rem;
-  display: block;
-
-  .match-status, .fav-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-}
-
-.match-big {
-  border-radius: 1rem;
-  background-color: $gray-950;
-  padding: 0.25rem;
-  display: block;
-  position: relative;
-
-  .close-match {
-    position: absolute;
-    right: 0.75rem;
-    top: 0.25rem;
-  }
-}
-
-
-.league-match-section {
-  margin: 0.5rem 0.5rem 1rem 0.5rem;
-
-  .league-match-title {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-
-    &.link {
-      cursor: pointer;
-    }
-  }
-
-  .league-match-item {
-    margin: 0.25rem 0;
-  }
-}
 
 .hidden {
   visibility: hidden;
@@ -932,7 +1072,7 @@ button {
               }
 
               &:after {
-                content: "⇅";
+                content: "";
                 position: absolute;
                 font-weight: 300;
                 font-size: 85%;
@@ -954,6 +1094,8 @@ button {
                   color: $white;
                 }
               }
+
+
             }
 
             &:nth-child(2) {
@@ -991,7 +1133,7 @@ button {
 }
 
 
-.container{
+.container {
   padding-top: 1rem;
 }
 
@@ -1017,11 +1159,13 @@ button {
 
   .form {
     padding: 1rem;
+
     .code-container {
       display: flex;
       flex-direction: column;
       align-items: center;
       width: 100%;
+
       .code {
         display: flex;
         flex-direction: row;
@@ -1029,6 +1173,7 @@ button {
         justify-content: space-around;
         max-width: 300px;
         width: 100%;
+
         input {
           aspect-ratio: 1;
           max-width: 40px;
@@ -1043,37 +1188,39 @@ button {
   }
 }
 
-.profile{
+.profile {
 
-    border: 1px solid $gray-900;
-    border-radius: 1rem;
+  border: 1px solid $gray-900;
+  border-radius: 1rem;
 
-    .profile-header {
-      border-bottom: solid thin $gray-900;
-      padding: 1rem;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+  .profile-header {
+    border-bottom: solid thin $gray-900;
+    padding: 1rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
-      svg{
-        margin: 1rem 0;
-      }
+    svg {
+      margin: 1rem 0;
     }
-    .profile-content{
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
+  }
+
+  .profile-content {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 
 }
 
-.default-modal{
+.default-modal {
   top: 7rem;
-  .default-modal-content{
+
+  .default-modal-content {
     padding: 2rem;
     display: flex;
     flex-direction: column;
@@ -1082,7 +1229,7 @@ button {
     position: relative;
     box-shadow: 0 0 4px $primary;
 
-    .close{
+    .close {
       position: absolute;
       display: flex;
       align-items: center;
@@ -1104,7 +1251,7 @@ button {
   from {
     transform: rotate(0deg);
   }
-  to{
+  to {
     transform: rotate(360deg);
   }
 }
@@ -1124,63 +1271,76 @@ button {
     border: 1px solid $input-border-color;
     aspect-ratio: 1;
     background-color: $gray-900;
-    &.transparent-pointer{
+
+    &.transparent-pointer {
       pointer-events: none;
       cursor: pointer;
-      &:nth-child(3){
+
+      &:nth-child(3) {
         right: 50%;
       }
     }
+
     &.active {
       background-color: $primary;
     }
 
-    &.refreshing{
+    &.refreshing {
       display: none;
     }
-    &.disabled{
+
+    &.disabled {
       color: $input-disabled-color;
       border-color: $input-disabled-border-color;
       cursor: default;
     }
   }
-  &.only-focus{
-    input{
+
+  &.only-focus {
+    input {
       border: none;
       text-align: center;
 
     }
-    .input-group-addon{
+
+    .input-group-addon {
       display: none;
     }
-    &:focus-within{
-      input{
+
+    &:focus-within {
+      input {
         border: initial;
         text-align: left;
       }
-      .input-group-addon{
+
+      .input-group-addon {
         display: flex;
       }
     }
   }
-  &.searching{
-    .input-group-addon.refreshing{
+
+  &.searching {
+    .input-group-addon.refreshing {
       display: flex;
-      svg{
+
+      svg {
         animation: rotateRefresh linear 2s infinite;
       }
     }
   }
 
 }
-.file-preview{
+
+.file-preview {
   position: relative;
   width: 100%;
+
   img.img-preview, svg {
     width: 100%;
     font-size: 300%;
   }
-  .file-progress{
+
+  .file-progress {
     position: absolute;
     top: 0;
     left: 0;
@@ -1192,40 +1352,44 @@ button {
   }
 }
 
-.reset-form{
+.reset-form {
   margin-top: 0.5rem;
   float: right;
 }
 
-.search-addon{
+.search-addon {
   display: flex;
   flex-direction: column;
   align-items: stretch;
   justify-content: flex-start;
-  button{
+
+  button {
     background: none;
     border: solid thin $gray-900;
     margin: 0.125rem 0;
     outline: none;
     text-align: left;
-    &:hover{
+
+    &:hover {
       background: $primary-1;
     }
-    .id{
+
+    .id {
       display: inline-block;
       min-width: 50px;
     }
   }
 }
 
-.adminpanel{
+.adminpanel {
   display: flex;
   flex-direction: row;
   align-items: stretch;
   justify-content: flex-start;
   border: 1px solid $gray-900;
   border-radius: 1rem;
-  .adminpanel-sidebar{
+
+  .adminpanel-sidebar {
     flex: 0 1 20%;
     display: flex;
     flex-direction: column;
@@ -1234,18 +1398,22 @@ button {
     padding: 1rem 1rem 1rem 1rem;
     border-top: solid thin $gray-900;
     margin-top: 56px;
-    & > *{
+
+    & > * {
       display: block;
       padding: 0.5rem;
-      &.selected{
+
+      &.selected {
         color: $primary;
       }
     }
   }
-  .adminpanel-main{
+
+  .adminpanel-main {
     flex: 0 1 80%;
     border-left: solid thin $gray-900;
-    .adminpanel-header{
+
+    .adminpanel-header {
 
       border-bottom: solid thin $gray-900;
       padding: 1rem;
@@ -1256,29 +1424,36 @@ button {
       flex-direction: row;
       align-items: center;
       justify-content: flex-start;
+
       span {
         margin-left: 1rem;
       }
     }
-    .adminpanel-content{
+
+    .adminpanel-content {
       padding: 1rem;
-      .form{
+
+      .form {
         transition: max-height ease-in-out 0.5s;
         padding: 0.5rem;
         border: solid thin $gray-900;
         border-radius: 0.5rem;
         overflow: hidden;
         margin-bottom: 1rem;
-        &.close{
+
+        &.close {
           max-height: calc(29px + 0.5rem);
         }
-        &.open{
+
+        &.open {
           max-height: 100%;
         }
-        &.disabled{
+
+        &.disabled {
           opacity: 0.6;
         }
-        .form-toggler{
+
+        .form-toggler {
           background: none;
           border: none;
           outline: none;
@@ -1287,17 +1462,20 @@ button {
           align-items: stretch;
           justify-content: space-between;
           width: 100%;
-          svg{
+
+          svg {
             color: $white;
           }
         }
-        .options{
+
+        .options {
           display: flex;
           flex-direction: row;
           justify-content: space-evenly;
         }
       }
-      .bulk-game{
+
+      .bulk-game {
         margin-bottom: 1rem;
         padding-bottom: 1rem;
         border-bottom: 1px solid $gray-900;
@@ -1306,23 +1484,40 @@ button {
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 768px) {
+
   .first-open {
+    &:before {
+      content: ' ';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 20%;
+      height: 7%;
+      border-bottom: 3rem solid transparent;
+      border-left: 10rem solid transparent;
+      border-top: 3rem solid $primary;
+      border-right: 10rem solid $primary;
+    }
     .position-absolute {
       position: relative !important;
+    }
+
+    .fav-buttons {
+      grid-template-columns: 20% 20% 20% 20% 20%;
     }
   }
 }
 
-@media (min-width: 420px) {
+@media (min-width: 768px) {
   .first-open {
-    &:after {
+    &:before {
       content: ' ';
       position: absolute;
       bottom: 0;
       left: 0;
-      width: 20rem;
-      height: 7rem;
+      width: 20%;
+      height: 7%;
       border-bottom: 7rem solid $primary;
       border-left: 20rem solid $primary;
       border-top: 7rem solid transparent;
@@ -1331,3 +1526,121 @@ button {
   }
 }
 
+@media (max-width: 950px) {
+
+  .news.small, .league-matches-container.small {
+    display: none;
+    visibility: hidden;
+  }
+}
+
+@media (max-width: 767px) {
+  .hidden-xs {
+    display: none;
+    visibility: hidden;
+  }
+  .home {
+    flex-direction: column;
+    justify-content: flex-start;
+
+    & > * {
+      width: calc(100vw - 2rem);
+
+      &.leagues-small {
+        max-height: 60px;
+        overflow: hidden;
+
+        .search-leagues {
+          border-bottom: none;
+
+          .input-group {
+            .input-group-addon {
+              display: initial;
+              visibility: visible;
+            }
+          }
+        }
+
+        &.open {
+          max-height: 100000px;
+
+          .search-leagues {
+            border-bottom: solid thin $gray-900;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  .first-open {
+    .fav-buttons {
+      grid-template-columns: 25% 25% 25% 25%;
+    }
+  }
+  .clava-table {
+    table {
+      thead, tbody {
+        tr {
+          th, td {
+            &:nth-child(7), &:nth-child(8), &:nth-child(9) {
+              display: none;
+              visibility: hidden;
+            }
+          }
+        }
+      }
+    }
+  }
+  .home{
+    .league-matches-container{
+      .matchdays-container {
+        .today {
+          display: none;
+          visibility: hidden;
+        }
+        &:after {
+          position: absolute;
+          border-radius: 1rem;
+          inset: 0;
+          content: " ";
+          background-image: linear-gradient(to right, transparent 2%, $black 2%, transparent 12%, transparent 80%, $black 90%, transparent 90%);
+          pointer-events: none;
+        }
+        .matchdays {
+          left: 2%;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 400px) {
+  .first-open {
+    .fav-buttons {
+      grid-template-columns: 33.33% 33.33% 33.33%;
+    }
+  }
+  .clava-table {
+    table {
+      thead, tbody {
+        tr {
+          th, td {
+            &:nth-child(4), &:nth-child(5), &:nth-child(6) {
+              display: none;
+              visibility: hidden;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .hidden-xl {
+    display: none;
+    visibility: hidden;
+  }
+}

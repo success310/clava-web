@@ -28,7 +28,7 @@ const reducer: Reducer<NewsState> = (
       return { ...state, statusTransfers: 'loading' };
     }
     case NewsActionTypes.FETCH_VIDEOS: {
-      return { ...state, statusTransfers: 'loading' };
+      return { ...state, statusVideos: 'loading' };
     }
     case NewsActionTypes.FETCH_BULLETINS: {
       return { ...state, statusBulletins: 'loading' };

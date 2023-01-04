@@ -111,7 +111,6 @@ const Table: React.FC<ConnectedProps<typeof connector>> = ({
     if (!standing) return undefined;
     const st = standing[type];
     if (st) {
-      console.log('Sort:  ', st);
       return st.sort(sortFunc);
     }
     return undefined;

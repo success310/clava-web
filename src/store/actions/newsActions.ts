@@ -109,7 +109,7 @@ export function fetchMixed(
     dispatch,
     NewsActionTypes.FETCH_MIXED_SUCCESS,
     NewsActionTypes.FETCH_ERROR,
-    NewsActionTypes.FETCH_TRANSFERS,
+    NewsActionTypes.FETCH_NEWS,
     client().fetchMixed,
     false,
     false,

@@ -35,34 +35,40 @@ const Header: React.FC<ConnectedProps<typeof connector>> = ({
 
   return (
     <>
-      <Navbar className="header">
+      <div className="header">
         <NavLink to="/home">
           <Logo onPress={undefined} />
         </NavLink>
-        <NavLink to="/home">
-          <FontAwesomeIcon icon={faHouse} />
-          {translate('home', l)}
-        </NavLink>
-        <NavLink to="/feed/news">
-          <FontAwesomeIcon icon={faNewspaper} />
-          {translate('news', l)}
-        </NavLink>
-        <NavLink to={!user || user.anonymous ? '/login' : '/profile'}>
-          <FontAwesomeIcon
-            icon={
-              isAdmin(user) ? faUserNinja : isInsider(user) ? faUserTie : faUser
-            }
-          />
-          <span>
-            {!user || user.anonymous
-              ? translate('login', l)
-              : `Hi ${user.username}`}
-          </span>
-        </NavLink>
+        <Navbar className="hidden-xs">
+          <NavLink to="/home">
+            <FontAwesomeIcon icon={faHouse} />
+            {translate('home', l)}
+          </NavLink>
+          <NavLink to="/feed/news">
+            <FontAwesomeIcon icon={faNewspaper} />
+            {translate('news', l)}
+          </NavLink>
+          <NavLink to={!user || user.anonymous ? '/login' : '/profile'}>
+            <FontAwesomeIcon
+              icon={
+                isAdmin(user)
+                  ? faUserNinja
+                  : isInsider(user)
+                  ? faUserTie
+                  : faUser
+              }
+            />
+            <span>
+              {!user || user.anonymous
+                ? translate('login', l)
+                : `Hi ${user.username}`}
+            </span>
+          </NavLink>
+        </Navbar>
         <NavbarToggler onClick={onToggle}>
           <FontAwesomeIcon icon={toggleSidebar ? faArrowRightToLine : faBars} />
         </NavbarToggler>
-      </Navbar>
+      </div>
       <Modal
         isOpen={toggleSidebar}
         modalTransition={SidebarFadeTrans}

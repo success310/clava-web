@@ -86,10 +86,12 @@ const Match: React.FC<ConnectedProps<typeof connector>> = ({
       <Row>
         <Col
           xs={12}
-          md={fullMatch && fullMatch.location ? 6 : 12}
-          className={`match-status ${
+          md={/* fullMatch && fullMatch.location ? 6 : 12 */ 12}
+          className={
+            /* `match-status ${
             fullMatch && fullMatch.location ? 'text-right' : 'text-center'
-          }`}>
+          }` */ 'text-center'
+          }>
           {cancelled ? (
             <span className="text-danger">
               {translate('cancelledShort', l)}
@@ -98,11 +100,11 @@ const Match: React.FC<ConnectedProps<typeof connector>> = ({
             <MatchStatusDisplay startDate={startDate} hideLive />
           )}
         </Col>
-        {fullMatch && fullMatch.location && (
+        {/* fullMatch && fullMatch.location && (
           <Col xs={12} md={6} className="match-location text-left">
             {showTranslated(fullMatch.location.name, l)}
           </Col>
-        )}
+        ) */}
       </Row>
       <Row>
         <Col xs={4}>
@@ -171,6 +173,10 @@ const Match: React.FC<ConnectedProps<typeof connector>> = ({
                   standing2={standing2}
                 />
               ))}
+              {!status && <span>{translate('matchNotStarted', l)}</span>}
+              {filteredEvents.length === 0 && !!status && (
+                <span>{translate('noEventsEntered', l)}</span>
+              )}
             </Col>
             <Col xs={12} className={view === 'lineup' ? '' : 'hidden'}>
               <Lineup
@@ -201,4 +207,4 @@ const Match: React.FC<ConnectedProps<typeof connector>> = ({
 };
 
 export default connector(Match);
-// r eload
+// rel oad
