@@ -33,7 +33,9 @@ import {
   LanguageLocaleEnum,
   LanguageService,
   League,
+  LeagueCreate,
   LeagueMatch,
+  LeaguePatch,
   LeagueService,
   LineupCreate,
   LineupService,
@@ -1052,6 +1054,18 @@ class Client {
     return AdService.getAdAdAdIdGet(id);
   }
 
+  patchLeague(id: IDType, league: LeaguePatch) {
+    return LeagueService.patchLeagueLeagueLeagueIdPatch(id, league);
+  }
+
+  createLeague(league: LeagueCreate) {
+    return LeagueService.createLeagueLeaguePost(league);
+  }
+
+  deleteLeague(id: IDType) {
+    return LeagueService.deleteLeagueLeagueLeagueIdDelete(id);
+  }
+
   searchLeagues(q: string, offset: number, limit: number) {
     return SearchService.searchLeagueSearchLeagueQueryGet(q, limit, offset);
   }
@@ -1080,6 +1094,10 @@ class Client {
 
   searchMatches(q: string, offset: number, limit: number) {
     return client().getMatchesOfTeam(68, limit, false);
+  }
+
+  deleteMatch(id: IDType) {
+    return MatchService.deleteMatchMatchMatchIdDelete(id);
   }
 
   uploadFile(

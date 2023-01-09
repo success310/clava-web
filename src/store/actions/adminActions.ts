@@ -20,6 +20,8 @@ import {
   AdCreate,
   AdPatch,
   ExternalVideoCreateRaw,
+  LeagueCreate,
+  LeaguePatch,
   MatchCreate,
   MatchPatch,
 } from '../../client/api';
@@ -78,6 +80,53 @@ export function createVideo(
   );
 }
 
+export function createLeague(
+  dispatch: Dispatch<AdminActions>,
+  league: LeagueCreate,
+) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.FETCH_LEAGUE_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.FETCH_LEAGUE,
+    client().createLeague,
+    false,
+    false,
+    league,
+  );
+}
+
+export function deleteLeague(dispatch: Dispatch<AdminActions>, id: IDType) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.FETCH_LEAGUE_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.FETCH_LEAGUE,
+    client().deleteLeague,
+    false,
+    false,
+    id,
+  );
+}
+
+export function patchLeague(
+  dispatch: Dispatch<AdminActions>,
+  id: IDType,
+  league: LeaguePatch,
+) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.FETCH_LEAGUE_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.FETCH_LEAGUE,
+    client().patchLeague,
+    false,
+    false,
+    id,
+    league,
+  );
+}
+
 export function createMatch(
   dispatch: Dispatch<AdminActions>,
   match: MatchCreate,
@@ -91,6 +140,18 @@ export function createMatch(
     false,
     false,
     match,
+  );
+}
+export function deleteMatch(dispatch: Dispatch<AdminActions>, id: IDType) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.FETCH_MATCH_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.FETCH_MATCH,
+    client().deleteMatch,
+    false,
+    false,
+    id,
   );
 }
 export function createMatchMultiple(

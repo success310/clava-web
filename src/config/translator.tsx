@@ -2047,6 +2047,71 @@ const generalKeywords = {
     it: 'Datum nicht gesetzt',
     en: 'Datum nicht gesetzt',
   },
+  nameDE: {
+    de: 'Name Deutsch',
+    it: 'Name tedesco',
+    en: 'Name german',
+  },
+  nameIT: {
+    de: 'Name Italienisch',
+    it: 'Nome italiano',
+    en: 'Name italian',
+  },
+  nameEN: {
+    de: 'Name Englisch',
+    it: 'Nome inglese',
+    en: 'Name english',
+  },
+  leagueCategory: {
+    de: 'Categorie',
+    it: 'Categoria',
+    en: 'Category',
+  },
+  leagueRating: {
+    de: 'Tabellenberechnung',
+    it: 'Tabellenberechnung',
+    en: 'Tabellenberechnung',
+  },
+  southtyrol: {
+    de: 'Südtirol',
+    it: 'Alto Adige',
+    en: 'Southtyrol',
+  },
+  trentino: {
+    de: 'Trient',
+    it: 'Trentino',
+    en: 'Trentino',
+  },
+  year: {
+    de: 'Jahr',
+    it: 'Anno',
+    en: 'Year',
+  },
+  mainLeague: {
+    de: 'Hauptliga',
+    it: 'Hauptliga',
+    en: 'Main league',
+  },
+  editLeague: {
+    de: 'Liga bearbeiten',
+    it: 'Liga bearbeiten',
+    en: 'Liga bearbeiten',
+  },
+  deleteLeague: {
+    de: 'Liga löschen',
+    it: 'Liga löschen',
+    en: 'Liga löschen',
+  },
+  searchLeagues: {
+    de: 'Nach Liga suchen',
+    it: 'Nach Liga suchen',
+    en: 'Nach Liga suchen',
+  },
+  createLeague: {
+    de: 'Liga erstellen',
+    it: 'Liga erstellen',
+    en: 'Liga erstellen',
+  },
   emptyString: {
     de: ' ',
     it: '',

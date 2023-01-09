@@ -1,6 +1,11 @@
 import React, { ChangeEventHandler, useCallback, useContext } from 'react';
 import { FormGroup, Input, InputGroup, Label } from 'reactstrap';
-import { translate, TranslatorKeys } from '../../../../config/translator';
+import {
+  showTranslated,
+  Translatable,
+  translate,
+  TranslatorKeys,
+} from '../../../../config/translator';
 import { ClavaContext } from '../../../../config/contexts';
 
 const CheckboxInput: React.FC<{
@@ -8,7 +13,7 @@ const CheckboxInput: React.FC<{
   disabled?: boolean;
   onChange: (checked: boolean) => void;
   name: string;
-  label: TranslatorKeys;
+  label: TranslatorKeys | Translatable;
 }> = ({ label, name, value, disabled, onChange }) => {
   const { l } = useContext(ClavaContext);
 
@@ -23,14 +28,20 @@ const CheckboxInput: React.FC<{
       <InputGroup>
         <Input
           type="checkbox"
-          value={value ? 'on' : 'off'}
+          checked={value}
           name={name}
           id={name}
           disabled={disabled}
           onChange={onValueChange}
           className="me-3"
         />
-        <Label htmlFor={name}>{translate(label, l)}</Label>
+        <Label htmlFor={name}>
+          {typeof label === 'object'
+            ? 'name' in label
+              ? showTranslated(label.name, l)
+              : label.customName
+            : translate(label, l)}
+        </Label>
       </InputGroup>
     </FormGroup>
   );

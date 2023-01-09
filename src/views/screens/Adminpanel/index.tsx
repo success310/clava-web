@@ -1,10 +1,8 @@
-import { ConnectedProps } from 'react-redux';
 import React, { useContext, useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import { ClavaContext } from '../../../config/contexts';
 import { translate, TranslatorKeys } from '../../../config/translator';
-import { connector } from './redux';
 import { isAdmin } from '../../../config/utils';
 import AdminVideo from './AdminVideo';
 import AdminMatch from './AdminMatch';
@@ -14,13 +12,7 @@ import AdminLeague from './AdminLeague';
 import AdminUser from './AdminUser';
 import AdminNews from './AdminNews';
 
-const Adminpanel: React.FC<ConnectedProps<typeof connector>> = ({
-  patchMatch,
-  patchUser,
-  createMatch,
-  createMatchBatch,
-  clearCache,
-}) => {
+const Adminpanel: React.FC = () => {
   const { user, l } = useContext(ClavaContext);
   const navigate = useNavigate();
   const { adminSite } = useParams();
@@ -43,7 +35,7 @@ const Adminpanel: React.FC<ConnectedProps<typeof connector>> = ({
           </NavLink>
           <NavLink
             to="/backoffice/matches"
-            className={adminSite === 'users' ? 'selected bold' : ''}>
+            className={adminSite === 'matches' ? 'selected bold' : ''}>
             {translate('matches', l)}
           </NavLink>
           <NavLink
@@ -96,10 +88,7 @@ const Adminpanel: React.FC<ConnectedProps<typeof connector>> = ({
               ) : adminSite === 'news' ? (
                 <AdminNews />
               ) : (
-                <>
-                  <span>else</span>
-                  <span>lol</span>
-                </>
+                <AdminAdministration />
               )}
             </div>
           ) : (
@@ -115,5 +104,5 @@ const Adminpanel: React.FC<ConnectedProps<typeof connector>> = ({
   );
 };
 
-export default connector(Adminpanel);
+export default Adminpanel;
 // reload

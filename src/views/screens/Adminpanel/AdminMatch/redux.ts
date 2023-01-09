@@ -2,7 +2,11 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import { connect } from 'react-redux';
 import { RootState } from '../../../../store';
-import { getMatch, searchAdmin } from '../../../../store/actions/adminActions';
+import {
+  deleteMatch,
+  getMatch,
+  searchAdmin,
+} from '../../../../store/actions/adminActions';
 import { SEARCH_MATCH } from '../../../../store/actions/types';
 import { IDType } from '../../../../config/types';
 import { performAction } from '../../../../store/actions/all';
@@ -11,8 +15,8 @@ const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
   getMatch: (id: IDType) => {
     performAction({ f: getMatch, p: [dispatch, id] });
   },
-  deleteMatch: () => {
-    // TODO
+  deleteMatch: (id: IDType) => {
+    performAction({ f: deleteMatch, p: [dispatch, id] });
   },
   searchMatch: (q: string) => {
     performAction({ f: searchAdmin, p: [dispatch, q, SEARCH_MATCH] });

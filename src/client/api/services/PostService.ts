@@ -1,6 +1,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Body_upload_media_post_upload_post } from '../models/Body_upload_media_post_upload_post';
+import type { File } from '../models/File';
 import type { Post } from '../models/Post';
 import type { PostCreate } from '../models/PostCreate';
 import type { PostPatch } from '../models/PostPatch';
@@ -113,6 +115,34 @@ postId: number,
             path: {
                 'post_id': postId,
             },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Upload Media
+     * @param caption 
+     * @param filename 
+     * @param formData 
+     * @returns File Successful Response
+     * @throws ApiError
+     */
+    public static uploadMediaPostUploadPost(
+caption: string,
+filename: string,
+formData: Body_upload_media_post_upload_post,
+): CancelablePromise<File> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/post/upload',
+            query: {
+                'caption': caption,
+                'filename': filename,
+            },
+            formData: formData,
+            mediaType: 'multipart/form-data',
             errors: {
                 422: `Validation Error`,
             },

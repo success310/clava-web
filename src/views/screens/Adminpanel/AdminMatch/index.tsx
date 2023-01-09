@@ -6,12 +6,12 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { faChevronDown, faChevronUp } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from 'reactstrap';
 import { ClavaContext } from '../../../../config/contexts';
-import { translate } from '../../../../config/translator';
+import { showTranslated, translate } from '../../../../config/translator';
 import { connector } from './redux';
 import SearchInput from '../SearchInput';
 import { MatchListElement } from '../../../../client/api';
@@ -24,18 +24,17 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
   matches,
   getMatch,
   status,
+  deleteMatch,
   searching,
   searchMatch,
 }) => {
   const { l } = useContext(ClavaContext);
   const { adminMethod, adminElemId } = useParams();
-  const navigate = useNavigate();
   const [method, setMethod] = useState<string>(adminMethod ?? 'search');
   const [query, setQuery] = useState('');
-
   const [selectedMatch, setSelectedMatch] = useState<MatchListElement>();
   const timeout = useRef<number>(-1);
-
+  const isDownloading = useRef(false);
   useEffect(() => {
     if (
       adminElemId &&
@@ -48,7 +47,8 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
       }
     } else if (adminMethod === 'edit' && status !== 'loading') {
       setMethod('search');
-    } else if (match) {
+    } else if (match && isDownloading.current) {
+      isDownloading.current = false;
       setSelectedMatch(match);
     }
   }, [adminElemId, getMatch, method, status, match, adminMethod]);
@@ -92,12 +92,18 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
   const setSelectedMatchCont = useCallback(
     (m: MatchListElement | undefined) => {
       if (m) {
+        isDownloading.current = true;
         getMatch(m.id);
       }
-      setSelectedMatch(m);
     },
     [getMatch],
   );
+  const onDelete = useCallback(() => {
+    if (selectedMatch) {
+      isDownloading.current = true;
+      deleteMatch(selectedMatch.id);
+    }
+  }, [deleteMatch, selectedMatch]);
   return (
     <div>
       <fieldset className={`form ${method === 'search' ? 'open' : 'close'}`}>
@@ -153,6 +159,35 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
         )}
       </fieldset>
       <fieldset
+        className={`form ${selectedMatch ? '' : 'disabled'} ${
+          method === 'delete' ? 'open' : 'close'
+        }`}>
+        <button className="form-toggler" onClick={toggleDelete} type="button">
+          <h6>
+            {translate('deleteLeague', l) +
+              (selectedMatch ? ` [${selectedMatch.id}]` : '')}
+          </h6>
+          <FontAwesomeIcon
+            icon={method === 'delete' ? faChevronUp : faChevronDown}
+          />
+        </button>
+        <div>
+          {!!selectedMatch && (
+            <span>
+              {translate('sureWantDelete', l, {
+                '[title]': `"${showTranslated(
+                  selectedMatch.team1.name,
+                  l,
+                )} vs. ${showTranslated(selectedMatch.team2.name, l)}"`,
+              })}
+            </span>
+          )}
+        </div>
+        <Button type="button" color="primary" onClick={onDelete}>
+          <span>{translate('yes', l)}</span>
+        </Button>
+      </fieldset>
+      <fieldset
         className={`form ${method === 'create-bulk' ? 'open' : 'close'}`}>
         <button
           className="form-toggler"
@@ -170,4 +205,4 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
 };
 
 export default connector(AdminpanelMatch);
-// rel oad
+// reload

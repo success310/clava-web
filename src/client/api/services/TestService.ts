@@ -1,6 +1,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Body_upload_media_test_upload_post } from '../models/Body_upload_media_test_upload_post';
+import type { File } from '../models/File';
 import type { GoalDistribution } from '../models/GoalDistribution';
 import type { GoalDistributionMatch } from '../models/GoalDistributionMatch';
 import type { Lineup } from '../models/Lineup';
@@ -18,6 +20,55 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
 export class TestService {
+
+    /**
+     * Upload Media
+     * @param caption 
+     * @param filename 
+     * @param formData 
+     * @returns File Successful Response
+     * @throws ApiError
+     */
+    public static uploadMediaTestUploadPost(
+caption: string,
+filename: string,
+formData: Body_upload_media_test_upload_post,
+): CancelablePromise<File> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/test/upload',
+            query: {
+                'caption': caption,
+                'filename': filename,
+            },
+            formData: formData,
+            mediaType: 'multipart/form-data',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Convert Media
+     * @param fileId 
+     * @returns File Successful Response
+     * @throws ApiError
+     */
+    public static convertMediaTestConvertMediaFileIdPost(
+fileId: number,
+): CancelablePromise<File> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/test/convert_media/{file_id}',
+            path: {
+                'file_id': fileId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
 
     /**
      * Vote Match By User
@@ -517,27 +568,6 @@ teamId: number,
             path: {
                 'user_id': userId,
                 'team_id': teamId,
-            },
-            errors: {
-                422: `Validation Error`,
-            },
-        });
-    }
-
-    /**
-     * Create Test Goal Event
-     * @param matchId 
-     * @returns any Successful Response
-     * @throws ApiError
-     */
-    public static createTestGoalEventTestCreateTestGoalEventMatchIdGet(
-matchId: number,
-): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/test/create_test_goal_event/{match_id}',
-            path: {
-                'match_id': matchId,
             },
             errors: {
                 422: `Validation Error`,

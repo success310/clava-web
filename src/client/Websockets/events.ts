@@ -304,18 +304,6 @@ class EventsSocket implements EventSocketType {
           EventsSocket.handleUserMessage(message.user_id);
         }
       }
-      if (message.type === 'ping') {
-        if (EventsSocket.isOpen(ws)) {
-          if (EventsSocket.alive) {
-            clearTimeout(EventsSocket.alive);
-          }
-          EventsSocket.alive = window.setTimeout(
-            EventsSocket.checkAlive,
-            EventsSocket.ALIVE_TIMEOUT,
-          );
-          ws.send(JSON.stringify({ type: 'pong' }));
-        }
-      }
       if (message.type === 'event') {
         EventsSocket.handleEventMessage(
           message.league_id,

@@ -15,7 +15,7 @@ import { translate } from '../../../../config/translator';
 import { connector } from './redux';
 import SearchInput from '../SearchInput';
 import { Ad, AdCreate, AdPatch } from '../../../../client/api';
-import EditCreate from './EditCreate';
+import EditCreateAd from './EditCreate';
 
 const AdminpanelAds: React.FC<ConnectedProps<typeof connector>> = ({
   status,
@@ -34,6 +34,7 @@ const AdminpanelAds: React.FC<ConnectedProps<typeof connector>> = ({
   const [query, setQuery] = useState('');
   const [selectedAd, setSelectedAd] = useState<Ad>();
   const isCreating = useRef(false);
+  const isDownloading = useRef(false);
   const timeout = useRef<number>(-1);
 
   useEffect(() => {
@@ -51,6 +52,9 @@ const AdminpanelAds: React.FC<ConnectedProps<typeof connector>> = ({
     } else if (ad && isCreating.current && status !== 'loading') {
       isCreating.current = false;
       setMethod('edit');
+    } else if (ad && isDownloading.current && status !== 'loading') {
+      isDownloading.current = false;
+      setSelectedAd(ad);
     }
   }, [adminElemId, getAd, method, status, ad, adminMethod]);
   const reset = useCallback(() => {
@@ -89,12 +93,11 @@ const AdminpanelAds: React.FC<ConnectedProps<typeof connector>> = ({
   const onEdit = useCallback(
     (adPatch: AdPatch) => {
       if (selectedAd) {
+        isDownloading.current = true;
         patchAd(selectedAd.id, adPatch);
-      } else if (ad) {
-        patchAd(ad.id, adPatch);
       }
     },
-    [ad, patchAd, selectedAd],
+    [patchAd, selectedAd],
   );
   const onCreate = useCallback(
     (adCreate: AdCreate) => {
@@ -105,13 +108,11 @@ const AdminpanelAds: React.FC<ConnectedProps<typeof connector>> = ({
   );
   const onDelete = useCallback(() => {
     if (selectedAd) {
+      isDownloading.current = true;
       deleteAd(selectedAd.id);
       setMethod('search');
-    } else if (ad) {
-      deleteAd(ad.id);
-      setMethod('search');
     }
-  }, [ad, deleteAd, selectedAd]);
+  }, [deleteAd, selectedAd]);
   return (
     <div>
       <fieldset className={`form ${method === 'search' ? 'open' : 'close'}`}>
@@ -150,7 +151,9 @@ const AdminpanelAds: React.FC<ConnectedProps<typeof connector>> = ({
             icon={method === 'create' ? faChevronUp : faChevronDown}
           />
         </button>
-        <EditCreate onSubmit={onCreate} selectedAd={undefined} />
+        {method === 'create' && (
+          <EditCreateAd onSubmit={onCreate} selectedAd={undefined} />
+        )}
       </fieldset>
       <fieldset
         className={`form ${selectedAd ? '' : 'disabled'} ${
@@ -159,15 +162,14 @@ const AdminpanelAds: React.FC<ConnectedProps<typeof connector>> = ({
         <button className="form-toggler" onClick={toggleEdit} type="button">
           <h6>
             {translate('editVideo', l) +
-              (selectedAd ? ` [${selectedAd.id}]` : ad ? ` [${ad.id}]` : '')}
+              (selectedAd ? ` [${selectedAd.id}]` : '')}
           </h6>
           <FontAwesomeIcon
             icon={method === 'edit' ? faChevronUp : faChevronDown}
           />
         </button>
-        {!!ad && <EditCreate onSubmit={onEdit} selectedAd={ad} />}
-        {!ad && !!selectedAd && (
-          <EditCreate onSubmit={onEdit} selectedAd={selectedAd} />
+        {!!selectedAd && (
+          <EditCreateAd onSubmit={onEdit} selectedAd={selectedAd} />
         )}
       </fieldset>
       <fieldset
@@ -177,21 +179,14 @@ const AdminpanelAds: React.FC<ConnectedProps<typeof connector>> = ({
         <button className="form-toggler" onClick={toggleDelete} type="button">
           <h6>
             {translate('deleteAd', l) +
-              (selectedAd ? ` [${selectedAd.id}]` : ad ? ` [${ad.id}]` : '')}
+              (selectedAd ? ` [${selectedAd.id}]` : '')}
           </h6>
           <FontAwesomeIcon
             icon={method === 'delete' ? faChevronUp : faChevronDown}
           />
         </button>
         <div>
-          {!!ad && (
-            <span>
-              {translate('sureWantDelete', l, {
-                '[title]': `"${ad.name}"`,
-              })}
-            </span>
-          )}
-          {!ad && !!selectedAd && (
+          {!!selectedAd && (
             <span>
               {translate('sureWantDelete', l, {
                 '[title]': `"${selectedAd.name}"`,
@@ -208,4 +203,4 @@ const AdminpanelAds: React.FC<ConnectedProps<typeof connector>> = ({
 };
 
 export default connector(AdminpanelAds);
-// reloa
+// rel oa

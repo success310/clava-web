@@ -28,7 +28,7 @@ type EditCreateProps =
       onSubmit: (ad: AdPatch) => void;
     };
 
-const EditCreate: React.FC<EditCreateProps> = ({ selectedAd, onSubmit }) => {
+const EditCreateAd: React.FC<EditCreateProps> = ({ selectedAd, onSubmit }) => {
   const { l } = useContext(ClavaContext);
   const [name, setName] = useState(selectedAd?.name ?? '');
   const [color, setColor] = useState<string>(selectedAd?.color ?? '');
@@ -73,7 +73,21 @@ const EditCreate: React.FC<EditCreateProps> = ({ selectedAd, onSubmit }) => {
         color,
         paused,
       });
-  }, []);
+  }, [
+    color,
+    fileDesktop,
+    fileMobile,
+    l,
+    name,
+    onSubmit,
+    paused,
+    position,
+    priority,
+    start,
+    stop,
+    url,
+    useSameFile,
+  ]);
   const onSetFileMobile = useCallback(
     (file: ClavaFile | undefined) => {
       if (file) {
@@ -137,7 +151,7 @@ const EditCreate: React.FC<EditCreateProps> = ({ selectedAd, onSubmit }) => {
             },
           );
       } else {
-        setFileMobile(undefined);
+        setFileDesktop(undefined);
       }
     },
     [l, name, position],
@@ -234,4 +248,4 @@ const EditCreate: React.FC<EditCreateProps> = ({ selectedAd, onSubmit }) => {
   );
 };
 
-export default EditCreate;
+export default EditCreateAd;
