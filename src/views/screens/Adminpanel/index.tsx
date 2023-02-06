@@ -11,6 +11,7 @@ import AdminAdministration from './AdminAdministration';
 import AdminLeague from './AdminLeague';
 import AdminUser from './AdminUser';
 import AdminNews from './AdminNews';
+import AdminBadges from './AdminBadges';
 
 const Adminpanel: React.FC = () => {
   const { user, l } = useContext(ClavaContext);
@@ -63,6 +64,11 @@ const Adminpanel: React.FC = () => {
             className={adminSite === 'videos' ? 'selected bold' : ''}>
             {translate('videos', l)}
           </NavLink>
+          <NavLink
+            to="/backoffice/badges"
+            className={adminSite === 'badges' ? 'selected bold' : ''}>
+            Badges
+          </NavLink>
         </div>
         <div className="adminpanel-main">
           <div className="adminpanel-header">
@@ -87,6 +93,8 @@ const Adminpanel: React.FC = () => {
                 <AdminLeague />
               ) : adminSite === 'news' ? (
                 <AdminNews />
+              ) : adminSite === 'badges' ? (
+                <AdminBadges />
               ) : (
                 <AdminAdministration />
               )}

@@ -31,5 +31,9 @@ export const $Group = {
     type: 'UserEssential',
     isRequired: true,
 },
+        blocked: {
+    type: 'boolean',
+    isRequired: true,
+},
     },
 } as const;

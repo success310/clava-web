@@ -19,5 +19,15 @@ export const $UserRegister = {
     type: 'string',
     isRequired: true,
 },
+        agbLevel: {
+    type: 'string',
+},
+        newsletter: {
+    type: 'boolean',
+},
+        tel: {
+    type: 'string',
+    isRequired: true,
+},
     },
 } as const;

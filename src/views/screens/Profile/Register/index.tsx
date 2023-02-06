@@ -36,6 +36,9 @@ const Register: React.FC<ConnectedProps<typeof connector>> = ({
   const [givenName, setGivenName] = useState<string>('');
   const [familyName, setFamilyName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
+  const [tel, setTel] = useState<string>('');
+  const [newsletter, setNewsletter] = useState<boolean>(false);
+  const [agbLevel, setAgbLevel] = useState<boolean>(false);
   const [password, setPassword] = useState<string>('');
   const [passwordRepeat, setPasswordRepeat] = useState<string>('');
   const [pwVisible, setPwVisible] = useState<boolean>(false);
@@ -44,6 +47,10 @@ const Register: React.FC<ConnectedProps<typeof connector>> = ({
   }, [reset]);
   const mailValid = useMemo(
     () => registerStatus !== 'mailGiven' && registerStatus !== 'mailInvalid',
+    [registerStatus],
+  );
+  const telValid = useMemo(
+    () => registerStatus !== 'telGiven' && registerStatus !== 'telInvalid',
     [registerStatus],
   );
   const pwValid = useMemo(
@@ -71,6 +78,9 @@ const Register: React.FC<ConnectedProps<typeof connector>> = ({
     },
     [],
   );
+  const onChangeTel = useCallback<ChangeEventHandler<HTMLInputElement>>((e) => {
+    setTel(e.target.value);
+  }, []);
   const onChangePw = useCallback<ChangeEventHandler<HTMLInputElement>>((e) => {
     setPassword(e.target.value);
   }, []);
@@ -95,9 +105,34 @@ const Register: React.FC<ConnectedProps<typeof connector>> = ({
   const onTogglePWVisible = useCallback(() => {
     setPwVisible((v) => !v);
   }, []);
+  const onToggleAgb = useCallback(() => {
+    setAgbLevel((a) => !a);
+  }, []);
+  const onToggleNewsletter = useCallback(() => {
+    setNewsletter((a) => !a);
+  }, []);
   const onSubmit = useCallback(() => {
-    submit(givenName, familyName, email, password, passwordRepeat);
-  }, [email, familyName, givenName, password, passwordRepeat, submit]);
+    if (agbLevel)
+      submit(
+        givenName,
+        familyName,
+        email,
+        password,
+        passwordRepeat,
+        tel,
+        newsletter,
+      );
+  }, [
+    agbLevel,
+    submit,
+    givenName,
+    familyName,
+    email,
+    password,
+    passwordRepeat,
+    tel,
+    newsletter,
+  ]);
   return (
     <div className="container">
       <div className="auth">
@@ -165,6 +200,22 @@ const Register: React.FC<ConnectedProps<typeof connector>> = ({
             </InputGroup>
           </FormGroup>
           <FormGroup>
+            <Label htmlFor="tel">{translate('tel', l)}</Label>
+            <InputGroup>
+              <Input
+                type="text"
+                name="tel"
+                id="tel"
+                className={telValid ? '' : 'invalid'}
+                autoComplete="tel"
+                value={tel}
+                onChange={onChangeTel}
+                tabIndex={0}
+                placeholder="+39 0123456789"
+              />
+            </InputGroup>
+          </FormGroup>
+          <FormGroup>
             <Label htmlFor="password"> {translate('password', l)}</Label>
 
             <InputGroup>
@@ -210,6 +261,49 @@ const Register: React.FC<ConnectedProps<typeof connector>> = ({
               </button>
             </InputGroup>
           </FormGroup>
+
+          <Row className="mt-2">
+            <Col xs={12} md={6}>
+              <FormGroup>
+                <Label htmlFor="agbLevel">
+                  {translate('acceptAgb1', l)}
+                  <a
+                    href="https://www.clava-sports.com/tos.html"
+                    className="nav-link">
+                    {translate('tos', l)}
+                  </a>
+                  {translate('acceptAgb2', l)}
+                  <a
+                    href="https://www.clava-sports.com/privacy.html"
+                    className="nav-link">
+                    {translate('privacy', l)}
+                  </a>
+                  {translate('acceptAgb3', l)}
+                </Label>
+                <Input
+                  type="checkbox"
+                  onClick={onToggleAgb}
+                  checked={agbLevel}
+                  id="agbLevel"
+                  name="agbLevel"
+                />
+              </FormGroup>
+            </Col>
+            <Col xs={12} md={6}>
+              <FormGroup>
+                <Label htmlFor="newsletter">
+                  {translate('wantNewsletter', l)}
+                </Label>
+                <Input
+                  type="checkbox"
+                  onClick={onToggleNewsletter}
+                  checked={newsletter}
+                  id="newsletter"
+                  name="newsletter"
+                />
+              </FormGroup>
+            </Col>
+          </Row>
 
           <Row className="mt-2">
             <Col xs={12} md={6}>

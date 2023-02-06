@@ -31,8 +31,22 @@ export const $UserEssential = {
     type: 'boolean',
     isRequired: true,
 },
+        telConfirmed: {
+    type: 'boolean',
+    isRequired: true,
+},
         anonymous: {
     type: 'boolean',
+    isRequired: true,
+},
+        thumb: {
+    type: 'File',
+},
+        badges: {
+    type: 'array',
+    contains: {
+        type: 'UserBadge',
+    },
     isRequired: true,
 },
     },

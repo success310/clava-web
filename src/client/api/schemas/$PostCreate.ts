@@ -3,13 +3,12 @@
 /* eslint-disable */
 export const $PostCreate = {
     properties: {
-        text: {
+        content: {
     type: 'string',
     isRequired: true,
 },
         mediaId: {
     type: 'number',
-    isRequired: true,
 },
         matchId: {
     type: 'number',

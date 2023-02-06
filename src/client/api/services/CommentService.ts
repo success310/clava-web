@@ -3,6 +3,7 @@
 /* eslint-disable */
 import type { Comment } from '../models/Comment';
 import type { CommentCreate } from '../models/CommentCreate';
+import type { CommentList } from '../models/CommentList';
 import type { CommentPatch } from '../models/CommentPatch';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -10,6 +11,27 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
 export class CommentService {
+
+    /**
+     * Get Comments From Post
+     * @param postId 
+     * @returns CommentList Successful Response
+     * @throws ApiError
+     */
+    public static getCommentsFromPostCommentPostPostIdGet(
+postId: number,
+): CancelablePromise<CommentList> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/comment/post/{post_id}',
+            path: {
+                'post_id': postId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
 
     /**
      * Comment Post

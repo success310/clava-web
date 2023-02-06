@@ -8,8 +8,10 @@ import type { Group } from './Group';
 import type { Language } from './Language';
 import type { LeagueListElement } from './LeagueListElement';
 import type { MatchListElement } from './MatchListElement';
+import type { PlayerListElement } from './PlayerListElement';
 import type { Scope } from './Scope';
 import type { TeamListElement } from './TeamListElement';
+import type { UserBadge } from './UserBadge';
 
 export type User = {
     id: number;
@@ -20,8 +22,10 @@ export type User = {
     tel?: string;
     premium: boolean;
     emailConfirmed: boolean;
+    telConfirmed: boolean;
     anonymous: boolean;
     thumb?: File;
+    badges: Array<UserBadge>;
     language: Language;
     groups: Array<Group>;
     scopes: Array<Scope>;
@@ -29,4 +33,7 @@ export type User = {
     favoriteMatches: Array<MatchListElement>;
     favoriteTeams: Array<TeamListElement>;
     favoriteLeagues: Array<LeagueListElement>;
+    player?: PlayerListElement;
+    agbLevel?: string;
+    newsletter: boolean;
 };

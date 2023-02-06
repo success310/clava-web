@@ -28,4 +28,5 @@ export type Match = {
     lineupTeam2?: Lineup;
     events: Array<EventType>;
     punishments: Array<Punishment>;
+    report?: string;
 };

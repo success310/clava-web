@@ -12,6 +12,9 @@ export const LEAGUE_CATEGORIES: LeagueCategoryEnum[] = [
   LeagueCategoryEnum.WOMEN,
   LeagueCategoryEnum.YOUTH,
   LeagueCategoryEnum.CUP,
+  LeagueCategoryEnum.VSS_YOUTH,
+  LeagueCategoryEnum.VSS_FREE_TIME,
+  LeagueCategoryEnum.VIENNA,
 ];
 
 export const PROD_ENDPOINT = 'api.clava-sports.com';
@@ -39,3 +42,4 @@ export const DefaultFadeTrans = {
   timeout: 250,
   baseClass: 'default-modal',
 };
+export const AGB_LEVEL = 'v1.0';

@@ -15,6 +15,10 @@ export const $Format = {
     type: 'string',
     isRequired: true,
 },
+        internalPath: {
+    type: 'string',
+    isRequired: true,
+},
         type: {
     type: 'FormatTypeEnum',
     isRequired: true,
@@ -29,6 +33,10 @@ export const $Format = {
 },
         ext: {
     type: 'string',
+    isRequired: true,
+},
+        rotation: {
+    type: 'number',
     isRequired: true,
 },
     },

@@ -27,6 +27,18 @@ export const $File = {
     type: 'string',
     isRequired: true,
 },
+        height: {
+    type: 'number',
+    isRequired: true,
+},
+        width: {
+    type: 'number',
+    isRequired: true,
+},
+        rotation: {
+    type: 'number',
+    isRequired: true,
+},
         id: {
     type: 'number',
     isRequired: true,
@@ -36,6 +48,10 @@ export const $File = {
     contains: {
         type: 'Format',
     },
+    isRequired: true,
+},
+        internalPath: {
+    type: 'string',
     isRequired: true,
 },
     },

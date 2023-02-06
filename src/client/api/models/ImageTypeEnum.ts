@@ -13,4 +13,6 @@ export enum ImageTypeEnum {
     AD_MOBILE_SMALL = 'ad_mobile_small',
     AD_MOBILE_MEDIUM = 'ad_mobile_medium',
     AD_DESKTOP = 'ad_desktop',
+    PROFILE_PICTURE = 'profile_picture',
+    BADGE = 'badge',
 }

@@ -34,6 +34,30 @@ export const $League = {
     type: 'string',
     isRequired: true,
 },
+        hasPlayerStatistics: {
+    type: 'boolean',
+    isRequired: true,
+},
+        hasTeamStatistics: {
+    type: 'boolean',
+    isRequired: true,
+},
+        hasManOfTheMatch: {
+    type: 'boolean',
+    isRequired: true,
+},
+        hasLineup: {
+    type: 'boolean',
+    isRequired: true,
+},
+        matchDurationMinutes: {
+    type: 'number',
+    isRequired: true,
+},
+        halftimeDurationMinutes: {
+    type: 'number',
+    isRequired: true,
+},
         currentMatchDay: {
     type: 'number',
     isRequired: true,

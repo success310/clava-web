@@ -12,6 +12,8 @@ const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
     email: string,
     password: string,
     passwordRepeat: string,
+    tel: string,
+    newsletter: boolean,
   ) => {
     registerPatch(
       dispatch,
@@ -20,6 +22,8 @@ const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
       email,
       password,
       passwordRepeat,
+      tel,
+      newsletter,
     );
   },
   reset: () => {

@@ -3,9 +3,11 @@
 /* eslint-disable */
 import type { LeagueList } from '../models/LeagueList';
 import type { LocationList } from '../models/LocationList';
+import type { MatchListElementList } from '../models/MatchListElementList';
 import type { PlayerSearchElementList } from '../models/PlayerSearchElementList';
 import type { SearchResult } from '../models/SearchResult';
 import type { TeamListElementList } from '../models/TeamListElementList';
+import type { UserEssential } from '../models/UserEssential';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -145,6 +147,64 @@ offset: number,
         return __request(OpenAPI, {
             method: 'GET',
             url: '/search/location/{query}',
+            path: {
+                'query': query,
+            },
+            query: {
+                'length': length,
+                'offset': offset,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Search Location
+     * @param query 
+     * @param length 
+     * @param offset 
+     * @returns MatchListElementList Successful Response
+     * @throws ApiError
+     */
+    public static searchLocationSearchMatchQueryGet(
+query: string,
+length: number,
+offset: number,
+): CancelablePromise<MatchListElementList> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/search/match/{query}',
+            path: {
+                'query': query,
+            },
+            query: {
+                'length': length,
+                'offset': offset,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Search User
+     * @param query 
+     * @param length 
+     * @param offset 
+     * @returns UserEssential Successful Response
+     * @throws ApiError
+     */
+    public static searchUserSearchUserQueryGet(
+query: string,
+length: number,
+offset: number,
+): CancelablePromise<UserEssential> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/search/user/{query}',
             path: {
                 'query': query,
             },

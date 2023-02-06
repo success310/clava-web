@@ -7,4 +7,7 @@ export type UserRegister = {
     familyName: string;
     email: string;
     password: string;
+    agbLevel?: string;
+    newsletter?: boolean;
+    tel: string;
 };

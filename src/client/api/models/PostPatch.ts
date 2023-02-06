@@ -3,5 +3,5 @@
 /* eslint-disable */
 
 export type PostPatch = {
-    text?: string;
+    content?: string;
 };

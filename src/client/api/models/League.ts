@@ -17,6 +17,12 @@ export type League = {
     name: Translation;
     year: number;
     officialName: string;
+    hasPlayerStatistics: boolean;
+    hasTeamStatistics: boolean;
+    hasManOfTheMatch: boolean;
+    hasLineup: boolean;
+    matchDurationMinutes: number;
+    halftimeDurationMinutes: number;
     currentMatchDay: number;
     areasOfInterest: Array<AreaOfInterest>;
     punishments: Array<Punishment>;

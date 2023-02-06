@@ -26,6 +26,12 @@ export const $Player = {
     type: 'number',
     isRequired: true,
 },
+        foot: {
+    type: 'FootEnum',
+},
+        height: {
+    type: 'number',
+},
         playerPosition: {
     type: 'PlayerPosition',
     isRequired: true,
@@ -36,6 +42,9 @@ export const $Player = {
         type: 'TeamListElement',
     },
     isRequired: true,
+},
+        user: {
+    type: 'UserEssential',
 },
     },
 } as const;

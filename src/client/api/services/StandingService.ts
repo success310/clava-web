@@ -81,4 +81,25 @@ team2Id: number,
         });
     }
 
+    /**
+     * Get Standing History Of Team
+     * @param teamId 
+     * @returns number Successful Response
+     * @throws ApiError
+     */
+    public static getStandingHistoryOfTeamStandingHistoryTeamTeamIdGet(
+teamId: number,
+): CancelablePromise<Record<string, number>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/standing/history/team/{team_id}',
+            path: {
+                'team_id': teamId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
 }

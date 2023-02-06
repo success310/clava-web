@@ -34,6 +34,9 @@ export const $Team = {
     type: 'JerseyModeEnum',
     isRequired: true,
 },
+        club: {
+    type: 'ClubListElement',
+},
         leader: {
     type: 'Person',
 },

@@ -16,6 +16,8 @@ export type Standing = {
     points: number;
     matchDay: number;
     type: MatchLocationEnum;
+    matchesToZero: number;
+    matchesPlayed: number;
     team: TeamListElement;
     league: League;
 };

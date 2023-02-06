@@ -8,6 +8,7 @@ import {
   SEARCH_LOCATION,
   SEARCH_MATCH,
   SEARCH_TEAMS,
+  SEARCH_USERS,
   SEARCH_VIDEOS,
 } from '../actions/types';
 
@@ -24,6 +25,7 @@ const initialState: AdminState = {
   locations: [],
   ad: null,
   ads: [],
+  badges: [],
   news: null,
   newses: [],
   video: null,
@@ -38,16 +40,34 @@ const reducer: Reducer<AdminState> = (
   state = initialState,
   action: AdminActions,
 ) => {
+  let found = false;
   switch (action.type) {
     case AdminActionTypes.FETCH_MATCH:
     case AdminActionTypes.FETCH_USER:
     case AdminActionTypes.FETCH_TEAM:
     case AdminActionTypes.CREATE_TASK:
     case AdminActionTypes.FETCH_LEAGUE:
+    case AdminActionTypes.FETCH_BADGES:
     case AdminActionTypes.FETCH_NEWS:
     case AdminActionTypes.FETCH_VIDEO:
     case AdminActionTypes.FETCH_AD:
       return { ...state, status: 'loading' };
+    case AdminActionTypes.FETCH_BADGES_SUCCESS:
+      return { ...state, status: 'idle', badges: action.payload };
+    case AdminActionTypes.PATCH_BADGE_SUCCESS:
+      return {
+        ...state,
+        status: 'idle',
+        badges: state.badges
+          .map((b) => {
+            if (b.badgeType === action.payload.badgeType) {
+              found = true;
+              return action.payload;
+            }
+            return b;
+          })
+          .concat(found ? [] : [action.payload]),
+      };
     case AdminActionTypes.SEARCH:
       return { ...state, statusSearch: 'loading' };
     case AdminActionTypes.FETCH_VIDEO_SUCCESS: {
@@ -94,6 +114,12 @@ const reducer: Reducer<AdminState> = (
           ...state,
           statusSearch: 'idle',
           locations: action.payload.response,
+        };
+      if (action.payload.id === SEARCH_USERS)
+        return {
+          ...state,
+          statusSearch: 'idle',
+          users: action.payload.response,
         };
       return state;
     }

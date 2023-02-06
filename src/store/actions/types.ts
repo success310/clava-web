@@ -1,6 +1,7 @@
 import {
   Ad,
   AreaOfInterest,
+  Badge,
   Blog,
   Bulletin,
   CardType,
@@ -723,6 +724,9 @@ export enum AdminActionTypes {
   SEARCH_SUCCESS = '@@admin/SEARCH_SUCCESS',
   FETCH_ERROR = '@@admin/FETCH_ERROR',
   CREATE_TASK = '@@admin/CREATE_TASK',
+  FETCH_BADGES = '@@admin/FETCH_BADGES',
+  FETCH_BADGES_SUCCESS = '@@admin/FETCH_BADGES_SUCCESS',
+  PATCH_BADGE_SUCCESS = '@@admin/PATCH_BADGE_SUCCESS',
   CREATE_TASK_SUCCESS = '@@admin/CREATE_TASK_SUCCESS',
 }
 
@@ -762,6 +766,7 @@ export type AdminActions =
         | AdminActionTypes.FETCH_LEAGUE
         | AdminActionTypes.FETCH_TEAM
         | AdminActionTypes.FETCH_USER
+        | AdminActionTypes.FETCH_BADGES
         | AdminActionTypes.CREATE_TASK
         | AdminActionTypes.SEARCH;
     }
@@ -780,6 +785,14 @@ export type AdminActions =
   | {
       type: AdminActionTypes.FETCH_MATCH_SUCCESS;
       payload: Match | Match[];
+    }
+  | {
+      type: AdminActionTypes.FETCH_BADGES_SUCCESS;
+      payload: Badge[];
+    }
+  | {
+      type: AdminActionTypes.PATCH_BADGE_SUCCESS;
+      payload: Badge;
     }
   | {
       type: AdminActionTypes.FETCH_USER_SUCCESS;

@@ -74,5 +74,8 @@ export const $Match = {
     },
     isRequired: true,
 },
+        report: {
+    type: 'string',
+},
     },
 } as const;

@@ -11,4 +11,6 @@ export type UserPatch = {
     languageId?: number;
     thumbId?: number;
     areaOfInterestId?: number;
+    agbLevel?: string;
+    newsletter?: boolean;
 };

@@ -199,22 +199,17 @@ key?: string,
     }
 
     /**
-     * Force Update Standings League
-     * @param leagueId 
+     * Update All Standings
      * @param key 
      * @returns any Successful Response
      * @throws ApiError
      */
-    public static forceUpdateStandingsLeagueAdminForceUpdateStandingsLeagueLeagueIdPost(
-leagueId: number,
+    public static updateAllStandingsAdminRefreshAllStandingsPost(
 key?: string,
 ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/admin/force_update_standings_league/{league_id}',
-            path: {
-                'league_id': leagueId,
-            },
+            url: '/admin/refresh_all_standings',
             query: {
                 'key': key,
             },
@@ -301,6 +296,95 @@ key?: string,
             },
             formData: formData,
             mediaType: 'multipart/form-data',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Update Times Matches
+     * @param key 
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static updateTimesMatchesAdminUpdateTimesMatchesPost(
+key?: string,
+): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/admin/update_times_matches',
+            query: {
+                'key': key,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Fix Goals League
+     * @param leagueId 
+     * @param key 
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static fixGoalsLeagueAdminFixGoalsLeagueLeagueIdPost(
+leagueId: number,
+key?: string,
+): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/admin/fix_goals_league/{league_id}',
+            path: {
+                'league_id': leagueId,
+            },
+            query: {
+                'key': key,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Import Vienna
+     * @param key 
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static importViennaAdminImportViennaPost(
+key?: string,
+): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/admin/import_vienna',
+            query: {
+                'key': key,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Test Motm Awards Statistics
+     * @param key 
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static testMotmAwardsStatisticsAdminTestMotmAwardsStatisticsPost(
+key?: string,
+): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/admin/test_motm_awards_statistics',
+            query: {
+                'key': key,
+            },
             errors: {
                 422: `Validation Error`,
             },

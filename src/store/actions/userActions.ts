@@ -8,6 +8,7 @@ import { MatchActionTypes, UserActions, UserActionTypes } from './types';
 import { defaultGet } from './all';
 import { checkMail } from '../../config/utils';
 import {
+  AGB_LEVEL,
   AS_AOI,
   AS_CUSTOM_USERNAME,
   AS_FAVORITES,
@@ -271,7 +272,7 @@ export function changeUsername(
     .usernameAvailable(username)
     .then(
       (response) => {
-        if (response)
+        if (response) {
           defaultGet(
             dispatch,
             UserActionTypes.PATCH_SUCCESS,
@@ -282,7 +283,7 @@ export function changeUsername(
             false,
             username,
           );
-        else
+        } else
           dispatch({
             type: UserActionTypes.USER_FORM_INVALID,
             payload: 'usernameGiven',
@@ -322,6 +323,8 @@ export function registerPatch(
   email: string,
   password: string,
   passwordRepeat: string,
+  tel: string,
+  newsletter: boolean,
 ) {
   if (password !== passwordRepeat) {
     dispatch({
@@ -343,19 +346,33 @@ export function registerPatch(
       .then(
         (response) => {
           if (response) {
-            defaultGet(
-              dispatch,
-              UserActionTypes.PATCH_SUCCESS,
-              UserActionTypes.PATCH_FAILED,
-              UserActionTypes.PATCH_USER,
-              client().registerPatch,
-              false,
-              false,
-              givenName,
-              familyName,
-              email,
-              password,
-            );
+            client()
+              .telAvailable(tel)
+              .then((responseTel) => {
+                if (responseTel) {
+                  defaultGet(
+                    dispatch,
+                    UserActionTypes.PATCH_SUCCESS,
+                    UserActionTypes.PATCH_FAILED,
+                    UserActionTypes.PATCH_USER,
+                    client().registerPatch,
+                    false,
+                    false,
+                    givenName,
+                    familyName,
+                    email,
+                    password,
+                    tel,
+                    newsletter,
+                    AGB_LEVEL,
+                  );
+                } else {
+                  dispatch({
+                    type: UserActionTypes.REGISTER_FORM_INVALID,
+                    payload: 'telGiven',
+                  });
+                }
+              });
           } else
             dispatch({
               type: UserActionTypes.REGISTER_FORM_INVALID,

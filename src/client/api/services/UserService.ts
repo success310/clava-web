@@ -310,6 +310,27 @@ code: string,
     }
 
     /**
+     * Confirm Mail
+     * @param code 
+     * @returns AuthResponse Successful Response
+     * @throws ApiError
+     */
+    public static confirmMailUserTelConfirmPost(
+code: string,
+): CancelablePromise<AuthResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/user/tel_confirm',
+            query: {
+                'code': code,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
      * Email Available
      * @param email 
      * @returns boolean Successful Response
@@ -344,6 +365,27 @@ username: string,
             url: '/user/username_available/{username}',
             path: {
                 'username': username,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Tel Available
+     * @param tel 
+     * @returns boolean Successful Response
+     * @throws ApiError
+     */
+    public static telAvailableUserTelAvailableTelGet(
+tel: string,
+): CancelablePromise<boolean> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/user/tel_available/{tel}',
+            path: {
+                'tel': tel,
             },
             errors: {
                 422: `Validation Error`,
@@ -481,6 +523,30 @@ teamId: number,
         return __request(OpenAPI, {
             method: 'POST',
             url: '/user/group/downgrade/user/{user_id}/team/{team_id}',
+            path: {
+                'user_id': userId,
+                'team_id': teamId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Block User Group
+     * @param userId 
+     * @param teamId 
+     * @returns boolean Successful Response
+     * @throws ApiError
+     */
+    public static blockUserGroupUserGroupBlockUserUserIdTeamTeamIdPost(
+userId: number,
+teamId: number,
+): CancelablePromise<boolean> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/user/group/block/user/{user_id}/team/{team_id}',
             path: {
                 'user_id': userId,
                 'team_id': teamId,

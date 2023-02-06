@@ -2,16 +2,17 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { Comment } from './Comment';
 import type { File } from './File';
 import type { MatchListElement } from './MatchListElement';
 import type { UserEssential } from './UserEssential';
 
 export type Post = {
-    text: string;
+    content: string;
     id: number;
-    media: File;
+    media?: File;
     match: MatchListElement;
     likes: Array<UserEssential>;
-    comments: Array<Comment>;
+    author: UserEssential;
+    created: string;
+    deleted: boolean;
 };

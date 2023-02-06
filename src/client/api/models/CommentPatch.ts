@@ -3,5 +3,5 @@
 /* eslint-disable */
 
 export type CommentPatch = {
-    text?: string;
+    content?: string;
 };

@@ -27,5 +27,11 @@ export const $UserPatch = {
         areaOfInterestId: {
     type: 'number',
 },
+        agbLevel: {
+    type: 'string',
+},
+        newsletter: {
+    type: 'boolean',
+},
     },
 } as const;

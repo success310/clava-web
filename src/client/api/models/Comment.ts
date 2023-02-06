@@ -5,8 +5,10 @@
 import type { UserEssential } from './UserEssential';
 
 export type Comment = {
-    text: string;
+    content: string;
     id: number;
     comments: Array<Comment>;
     likes: Array<UserEssential>;
+    created: string;
+    author: UserEssential;
 };

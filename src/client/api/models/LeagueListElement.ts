@@ -15,4 +15,10 @@ export type LeagueListElement = {
     name: Translation;
     year: number;
     officialName: string;
+    hasPlayerStatistics: boolean;
+    hasTeamStatistics: boolean;
+    hasManOfTheMatch: boolean;
+    hasLineup: boolean;
+    matchDurationMinutes: number;
+    halftimeDurationMinutes: number;
 };

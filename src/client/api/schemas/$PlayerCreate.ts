@@ -22,6 +22,12 @@ export const $PlayerCreate = {
     type: 'number',
     isRequired: true,
 },
+        foot: {
+    type: 'FootEnum',
+},
+        height: {
+    type: 'number',
+},
         playerPositionKey: {
     type: 'PlayerPositionEnum',
     isRequired: true,

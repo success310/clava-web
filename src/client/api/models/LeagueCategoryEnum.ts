@@ -10,4 +10,7 @@ export enum LeagueCategoryEnum {
     CUP = 'CUP',
     YOUTH = 'YOUTH',
     WOMEN = 'WOMEN',
+    VSS_YOUTH = 'VSS_YOUTH',
+    VSS_FREE_TIME = 'VSS_FREE_TIME',
+    VIENNA = 'VIENNA',
 }

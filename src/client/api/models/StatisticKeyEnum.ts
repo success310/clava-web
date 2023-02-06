@@ -29,4 +29,8 @@ export enum StatisticKeyEnum {
     TEAM_MOST_GOALS_END = 'team_most_goals_end',
     TEAM_MOST_GOALS_START = 'team_most_goals_start',
     KEEPER_MOST_GAMES_WITHOUT_GOAL = 'keeper_most_games_without_goal',
+    PLAYER_MOST_CHANGE_IN = 'player_most_change_in',
+    PLAYER_MOST_CHANGE_OUT = 'player_most_change_out',
+    PLAYER_MOST_START_11 = 'player_most_start_11',
+    PLAYER_MOST_TOTW_AWARDS = 'player_most_totw_awards',
 }

@@ -641,11 +641,13 @@ export function shouldAdBePlaced(
   matchCounter: number,
   numOfAds: number,
 ): boolean {
-  return (
+  return false;
+  /* //TODO define ads
+ return (
     numOfAds === 0 ||
     (matchCounter > MIN_AD_DISTANCE &&
       matchCounter - MIN_AD_DISTANCE > Math.random() * MAX_AD_DISTANCE * 3)
-  );
+  );*/
 }
 
 export function filterTranslatable(name: Translation, q: string) {

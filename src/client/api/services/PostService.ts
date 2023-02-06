@@ -34,6 +34,27 @@ requestBody: PostCreate,
     }
 
     /**
+     * Get Post
+     * @param postId 
+     * @returns Post Successful Response
+     * @throws ApiError
+     */
+    public static getPostPostPostIdGet(
+postId: number,
+): CancelablePromise<Post> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/post/{post_id}',
+            path: {
+                'post_id': postId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
      * Delete Post
      * @param postId 
      * @returns Post Successful Response

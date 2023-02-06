@@ -109,6 +109,7 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
       <fieldset className={`form ${method === 'search' ? 'open' : 'close'}`}>
         <button className="form-toggler" onClick={toggleSearch} type="button">
           <h6>{translate('search', l)}</h6>
+          <span>{translate('searchMatchExpl', l)}</span>
           <FontAwesomeIcon
             icon={method === 'search' ? faChevronUp : faChevronDown}
           />

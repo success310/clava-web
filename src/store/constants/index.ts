@@ -1,6 +1,7 @@
 import {
   Ad,
   AreaOfInterest,
+  Badge,
   Blog,
   Bulletin,
   CardType,
@@ -173,6 +174,7 @@ export interface AdminState {
   readonly leagues: LeagueListElement[];
   readonly ad: Ad | null;
   readonly ads: Ad[];
+  readonly badges: Badge[];
   readonly location: Location | null;
   readonly locations: Location[];
   readonly news: Blog | null;
@@ -203,6 +205,8 @@ export type FormResponses =
         | 'pwWrong'
         | 'notRegistered'
         | 'mailInvalid'
+        | 'telGiven'
+        | 'telInvalid'
         | 'mailGiven'
         | 'usernameGiven'
         | 'failed'

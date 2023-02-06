@@ -3,7 +3,7 @@
 /* eslint-disable */
 export const $PostPatch = {
     properties: {
-        text: {
+        content: {
     type: 'string',
 },
     },

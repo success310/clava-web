@@ -15,4 +15,5 @@ export type Group = {
     request: boolean;
     message: string;
     user: UserEssential;
+    blocked: boolean;
 };

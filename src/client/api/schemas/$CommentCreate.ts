@@ -3,7 +3,7 @@
 /* eslint-disable */
 export const $CommentCreate = {
     properties: {
-        text: {
+        content: {
     type: 'string',
     isRequired: true,
 },

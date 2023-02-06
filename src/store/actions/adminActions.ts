@@ -10,6 +10,7 @@ import {
   SEARCH_MATCH,
   SEARCH_TEAMS,
   SEARCH_TYPES,
+  SEARCH_USERS,
   SEARCH_VIDEOS,
   STATISTICS_TASK,
   TASK_TYPES,
@@ -19,11 +20,15 @@ import { IDType } from '../../config/types';
 import {
   AdCreate,
   AdPatch,
+  BadgeCreate,
+  BadgePatch,
+  BadgeTypeEnum,
   ExternalVideoCreateRaw,
   LeagueCreate,
   LeaguePatch,
   MatchCreate,
   MatchPatch,
+  UserBadgeCreateDelete,
 } from '../../client/api';
 
 export function getMatch(dispatch: Dispatch<AdminActions>, matchId: IDType) {
@@ -260,7 +265,9 @@ export function searchAdmin(
     AdminActionTypes.SEARCH_SUCCESS,
     AdminActionTypes.FETCH_ERROR,
     AdminActionTypes.SEARCH,
-    type === SEARCH_VIDEOS
+    type === SEARCH_USERS
+      ? client().searchUser
+      : type === SEARCH_VIDEOS
       ? client().searchVideos
       : type === SEARCH_LEAGUES
       ? client().searchLeagues
@@ -299,6 +306,83 @@ export function createTask(
     false,
     false,
     key,
+  );
+}
+
+export function getBadges(dispatch: Dispatch<AdminActions>) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.FETCH_BADGES_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.FETCH_BADGES,
+    client().getBadges,
+    false,
+    false,
+  );
+}
+
+export function patchBadge(
+  dispatch: Dispatch<AdminActions>,
+  id: BadgeTypeEnum,
+  badge: BadgePatch,
+) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.PATCH_BADGE_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.FETCH_BADGES,
+    client().patchBadge,
+    false,
+    false,
+    id,
+    badge,
+  );
+}
+
+export function createBadge(
+  dispatch: Dispatch<AdminActions>,
+  badge: BadgeCreate,
+) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.PATCH_BADGE_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.FETCH_BADGES,
+    client().createBadge,
+    false,
+    false,
+    badge,
+  );
+}
+export function giveBadge(
+  dispatch: Dispatch<AdminActions>,
+  badge: UserBadgeCreateDelete,
+) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.PATCH_BADGE_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.FETCH_BADGES,
+    client().giveBadge,
+    false,
+    false,
+    badge,
+  );
+}
+
+export function removeBadge(
+  dispatch: Dispatch<AdminActions>,
+  badge: UserBadgeCreateDelete,
+) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.PATCH_BADGE_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.FETCH_BADGES,
+    client().removeBadge,
+    false,
+    false,
+    badge,
   );
 }
 

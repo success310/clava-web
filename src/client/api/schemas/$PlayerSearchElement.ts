@@ -19,9 +19,18 @@ export const $PlayerSearchElement = {
     type: 'number',
     isRequired: true,
 },
+        thumb: {
+    type: 'File',
+},
         jersey: {
     type: 'number',
     isRequired: true,
+},
+        foot: {
+    type: 'FootEnum',
+},
+        height: {
+    type: 'number',
 },
         playerPosition: {
     type: 'PlayerPosition',

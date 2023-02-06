@@ -11,6 +11,10 @@ export type File = {
     ext: string;
     hash: string;
     caption: string;
+    height: number;
+    width: number;
+    rotation: number;
     id: number;
     formats: Array<Format>;
+    internalPath: string;
 };

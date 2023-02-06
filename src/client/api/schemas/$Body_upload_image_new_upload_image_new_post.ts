@@ -1,11 +1,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export const $Body_upload_media_test_upload_post = {
+export const $Body_upload_image_new_upload_image_new_post = {
     properties: {
         file: {
     type: 'binary',
-    description: `Single file as bytes`,
     isRequired: true,
     format: 'binary',
 },

@@ -15,4 +15,5 @@ export type TeamPatch = {
     jerseyColor1?: string;
     jerseyColor2?: string;
     jerseyMode?: JerseyModeEnum;
+    thumbId?: number;
 };

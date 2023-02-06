@@ -39,6 +39,14 @@ export const $Standing = {
     type: 'MatchLocationEnum',
     isRequired: true,
 },
+        matchesToZero: {
+    type: 'number',
+    isRequired: true,
+},
+        matchesPlayed: {
+    type: 'number',
+    isRequired: true,
+},
         team: {
     type: 'TeamListElement',
     isRequired: true,

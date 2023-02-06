@@ -4,6 +4,7 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import {
@@ -37,6 +38,7 @@ const Login: React.FC<ConnectedProps<typeof connector>> = ({
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const pwInput = useRef<HTMLInputElement>(null);
   const [pwVisible, setPwVisible] = useState<boolean>(false);
   const mailValid = useMemo(
     () => loginStatus !== 'mailGiven' && loginStatus !== 'mailInvalid',
@@ -55,7 +57,9 @@ const Login: React.FC<ConnectedProps<typeof connector>> = ({
   const onLogin = useCallback(() => {
     login(email, password);
   }, [email, password]);
-
+  const onSubmitEmail = useCallback(() => {
+    if (pwInput.current) pwInput.current.focus();
+  }, []);
   const onChangeEmail = useCallback<ChangeEventHandler<HTMLInputElement>>(
     (e) => {
       setEmail(e.target.value);
@@ -116,6 +120,7 @@ const Login: React.FC<ConnectedProps<typeof connector>> = ({
                 type="text"
                 name="email"
                 id="email"
+                onSubmit={onSubmitEmail}
                 className={mailValid ? '' : 'invalid'}
                 value={email}
                 autoComplete="email-address"
@@ -139,6 +144,8 @@ const Login: React.FC<ConnectedProps<typeof connector>> = ({
                 id="password"
                 autoComplete="password"
                 value={password}
+                innerRef={pwInput}
+                onSubmit={onLogin}
                 className={loginStatus === 'failed' ? 'invalid' : ''}
                 onChange={onChangePw}
                 tabIndex={0}

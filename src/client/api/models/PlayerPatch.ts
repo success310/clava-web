@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { FootEnum } from './FootEnum';
 import type { PlayerPositionEnum } from './PlayerPositionEnum';
 
 export type PlayerPatch = {
@@ -11,4 +12,6 @@ export type PlayerPatch = {
     thumbId?: number;
     jersey?: number;
     playerPositionKey?: PlayerPositionEnum;
+    foot?: FootEnum;
+    height?: number;
 };

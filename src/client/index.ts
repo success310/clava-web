@@ -18,6 +18,10 @@ import {
   AreaOfInterestService,
   AuthenticationService,
   AuthResponse,
+  BadgeCreate,
+  BadgePatch,
+  BadgeService,
+  BadgeTypeEnum,
   Blog,
   BlogService,
   BulletinService,
@@ -71,6 +75,7 @@ import {
   Transfer,
   TransferService,
   User,
+  UserBadgeCreateDelete,
   UserCreate,
   UserService,
 } from './api';
@@ -182,11 +187,18 @@ class Client {
     });
   }
 
+  public telAvailable(tel: string) {
+    return UserService.telAvailableUserTelAvailableTelGet(tel);
+  }
+
   public registerPatch(
     givenName: string,
     familyName: string,
     email: string,
     password: string,
+    tel: string,
+    newsletter: boolean,
+    agbLevel: string,
   ) {
     return new CancelablePromise((resolve) => {
       UserService.registerUserUserRegisterPost({
@@ -194,6 +206,9 @@ class Client {
         email,
         password,
         givenName,
+        tel,
+        newsletter,
+        agbLevel,
       }).then((response) => {
         Client.setToken(response);
         resolve(response.user);
@@ -566,7 +581,7 @@ class Client {
   }
 
   getLeaguePlayerStatistics(id: IDType) {
-    return StatisticsService.getPlayerStatisticsStatisticsPlayerLeagueLeagueIdGet(
+    return StatisticsService.getPlayerStatisticsLeagueStatisticsPlayerLeagueLeagueIdGet(
       id,
     );
   }
@@ -590,7 +605,7 @@ class Client {
   }
 
   getDetailLeaguePlayerStatistics(id: IDType, key: StatisticKeyEnum) {
-    return StatisticsService.getPlayerStatisticsDetailStatisticsPlayerLeagueLeagueIdDetailStatisticKeyGet(
+    return StatisticsService.getPlayerStatisticsLeagueDetailStatisticsPlayerLeagueLeagueIdDetailStatisticKeyGet(
       id,
       key,
       20,
@@ -1080,6 +1095,10 @@ class Client {
     );
   }
 
+  searchUser(q: string, offset: number, limit: number) {
+    return SearchService.searchUserSearchUserQueryGet(q, limit, offset);
+  }
+
   deleteAd(id: IDType) {
     return AdService.patchAdAdAdIdPatch(id, { paused: true });
   }
@@ -1173,9 +1192,8 @@ class Client {
     );
   }
 
-  forceRecalculateStanding(leagueId: IDType, key: string) {
-    return AdministrationService.forceUpdateStandingsLeagueAdminForceUpdateStandingsLeagueLeagueIdPost(
-      leagueId,
+  forceRecalculateStanding(key: string) {
+    return AdministrationService.updateAllStandingsAdminRefreshAllStandingsPost(
       key,
     );
   }
@@ -1193,6 +1211,26 @@ class Client {
       scope,
       key,
     );
+  }
+
+  getBadges() {
+    return BadgeService.getBadgesBadgeGet();
+  }
+
+  patchBadge(id: BadgeTypeEnum, badge: BadgePatch) {
+    return BadgeService.patchBadgesBadgeBadgeTypePatch(id, badge);
+  }
+
+  createBadge(badge: BadgeCreate) {
+    return BadgeService.patchBadgesBadgePost(badge);
+  }
+
+  giveBadge(badge: UserBadgeCreateDelete) {
+    return BadgeService.giveUserBadgeBadgeGivePut(badge);
+  }
+
+  removeBadge(badge: UserBadgeCreateDelete) {
+    return BadgeService.removeUserBadgeBadgeRemoveDelete(badge);
   }
 
   private filterAoi(

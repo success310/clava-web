@@ -59,12 +59,12 @@ statisticKey: StatisticKeyEnum,
     }
 
     /**
-     * Get Player Statistics
+     * Get Player Statistics League
      * @param leagueId 
      * @returns PlayerStatisticList Successful Response
      * @throws ApiError
      */
-    public static getPlayerStatisticsStatisticsPlayerLeagueLeagueIdGet(
+    public static getPlayerStatisticsLeagueStatisticsPlayerLeagueLeagueIdGet(
 leagueId: number,
 ): CancelablePromise<PlayerStatisticList> {
         return __request(OpenAPI, {
@@ -80,14 +80,14 @@ leagueId: number,
     }
 
     /**
-     * Get Player Statistics Detail
+     * Get Player Statistics League Detail
      * @param leagueId 
      * @param statisticKey 
      * @param limit 
      * @returns PlayerStatisticDetail Successful Response
      * @throws ApiError
      */
-    public static getPlayerStatisticsDetailStatisticsPlayerLeagueLeagueIdDetailStatisticKeyGet(
+    public static getPlayerStatisticsLeagueDetailStatisticsPlayerLeagueLeagueIdDetailStatisticKeyGet(
 leagueId: number,
 statisticKey: StatisticKeyEnum,
 limit: number,
@@ -97,6 +97,35 @@ limit: number,
             url: '/statistics/player/league/{league_id}/detail/{statistic_key}',
             path: {
                 'league_id': leagueId,
+                'statistic_key': statisticKey,
+            },
+            query: {
+                'limit': limit,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Get Player Statistics Match Detail
+     * @param matchId 
+     * @param statisticKey 
+     * @param limit 
+     * @returns PlayerStatisticDetail Successful Response
+     * @throws ApiError
+     */
+    public static getPlayerStatisticsMatchDetailStatisticsPlayerMatchMatchIdDetailStatisticKeyGet(
+matchId: number,
+statisticKey: StatisticKeyEnum,
+limit: number,
+): CancelablePromise<PlayerStatisticDetail> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/statistics/player/match/{match_id}/detail/{statistic_key}',
+            path: {
+                'match_id': matchId,
                 'statistic_key': statisticKey,
             },
             query: {

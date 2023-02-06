@@ -458,14 +458,14 @@ const generalKeywords = {
     en: 'Impressum',
   },
   privacy: {
-    de: 'Privacy',
-    it: 'Privacy',
-    en: 'Privacy',
+    de: 'Datenschutzerklärung',
+    it: 'Informativa sulla privacy',
+    en: 'Privacy policy',
   },
   tos: {
-    de: 'Agb',
-    it: 'Tos',
-    en: 'Tos',
+    de: 'Nutzungsbedingungen',
+    it: 'Termini di utilizzo',
+    en: 'Terms of Use',
   },
   cancelledShort: {
     de: 'Abges.',
@@ -1702,6 +1702,21 @@ const generalKeywords = {
     it: 'Femminile',
     en: 'Women',
   },
+  VIENNA: {
+    de: 'Wien',
+    it: 'Wien',
+    en: 'Wien',
+  },
+  VSS_YOUTH: {
+    de: 'VSS',
+    it: 'VSS',
+    en: 'VSS',
+  },
+  VSS_FREE_TIME: {
+    de: 'VSS Freizeit',
+    it: 'VSS Freizeit',
+    en: 'VSS Freizeit',
+  },
   statsSoonAvailable: {
     de: 'Bald verfügbar',
     it: 'Disponibile a breve',
@@ -1801,6 +1816,11 @@ const generalKeywords = {
     de: 'Video Bearbeiten',
     it: 'Video Bearbeiten',
     en: 'Edit Video',
+  },
+  editBadge: {
+    de: 'Badge Bearbeiten',
+    it: 'Badge Bearbeiten',
+    en: 'Edit Badge',
   },
   deleteVideo: {
     de: 'Video löschen',
@@ -2062,6 +2082,21 @@ const generalKeywords = {
     it: 'Nome inglese',
     en: 'Name english',
   },
+  descriptionDE: {
+    de: 'Beschreibung Deutsch',
+    it: 'Beschreibung tedesco',
+    en: 'Beschreibung german',
+  },
+  descriptionIT: {
+    de: 'Beschreibung Italienisch',
+    it: 'Beschreibung italiano',
+    en: 'Beschreibung italian',
+  },
+  descriptionEN: {
+    de: 'Beschreibung Englisch',
+    it: 'Beschreibung inglese',
+    en: 'Beschreibung english',
+  },
   leagueCategory: {
     de: 'Categorie',
     it: 'Categoria',
@@ -2111,6 +2146,66 @@ const generalKeywords = {
     de: 'Liga erstellen',
     it: 'Liga erstellen',
     en: 'Liga erstellen',
+  },
+  searchMatchExpl: {
+    de: 'Suche nach ein Spiel indem du nach den gegenüberstehenden Mannschaften suchst (z.B.: "Feld Bri", würde alle Spiele Feldthurns gegen Brixen finden)',
+    it: 'Suche nach ein Spiel indem du nach den gegenüberstehenden Mannschaften suchst (z.B.: "Feld Bri", würde alle Spiele Feldthurns gegen Brixen finden)',
+    en: 'Suche nach ein Spiel indem du nach den gegenüberstehenden Mannschaften suchst (z.B.: "Feld Bri", würde alle Spiele Feldthurns gegen Brixen finden)',
+  },
+  giveBadge: {
+    de: 'Badge geben',
+    it: 'Badge geben',
+    en: 'Badge geben',
+  },
+  createBadge: {
+    de: 'Badge erstellen',
+    it: 'Badge erstellen',
+    en: 'Badge erstellen',
+  },
+  removeBadge: {
+    de: 'Badge nehmen',
+    it: 'Badge nehmen',
+    en: 'Badge nehmen',
+  },
+  acceptAgb1: {
+    de: 'Hiermit bestätige ich dass ich die ',
+    it: 'Hiermit bestätige ich dass ich die ',
+    en: 'Hiermit bestätige ich dass ich die ',
+  },
+  acceptAgb2: {
+    de: ' und die ',
+    it: ' und die ',
+    en: ' und die ',
+  },
+  acceptAgb3: {
+    de: ' gelesen habe und akzeptiere sie!',
+    it: ' gelesen habe und akzeptiere sie!',
+    en: ' gelesen habe und akzeptiere sie!',
+  },
+  wantNewsletter: {
+    de: 'Ich möchte Emails mit Neuigkeiten und Informationen rund um Clava erhalten',
+    it: 'Ich möchte Emails mit Neuigkeiten und Informationen rund um Clava erhalten',
+    en: 'Ich möchte Emails mit Neuigkeiten und Informationen rund um Clava erhalten',
+  },
+  telGiven: {
+    de: 'Telefonnummer bereits vergeben',
+    it: 'Numero già utilizzato',
+    en: 'Phone number already taken',
+  },
+  telInvalid: {
+    de: 'Telefonnummer Adresse ungültig',
+    it: 'Numero non valido',
+    en: 'Phone number invalid',
+  },
+  searchUsers: {
+    de: 'Nach Benutzer suchen',
+    it: 'Nach Benutzer suchen',
+    en: 'Nach Benutzer suchen',
+  },
+  availableBadges: {
+    de: 'Verfügbare Badges:',
+    it: 'Verfügbare Badges:',
+    en: 'Verfügbare Badges:',
   },
   emptyString: {
     de: ' ',

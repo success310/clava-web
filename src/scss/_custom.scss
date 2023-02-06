@@ -596,6 +596,7 @@ button {
 
         .league-match-item {
           margin: 0.25rem 0;
+          padding: 0.5rem 0.25rem;
           .match-small {
             border-radius: 1rem;
             background-color: $gray-950;
@@ -1484,6 +1485,19 @@ button {
   }
 }
 
+.badges{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  button.badge-small{
+    background-color: transparent;
+    &.selected{
+      background-color: $primary-4;
+    }
+  }
+}
+
 @media (max-width: 768px) {
 
   .first-open {
@@ -1634,6 +1648,12 @@ button {
           }
         }
       }
+    }
+  }
+
+  .league-matches {
+    .league-match-item {
+      padding: 0;
     }
   }
 }

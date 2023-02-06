@@ -3,7 +3,7 @@
 /* eslint-disable */
 export const $Comment = {
     properties: {
-        text: {
+        content: {
     type: 'string',
     isRequired: true,
 },
@@ -23,6 +23,15 @@ export const $Comment = {
     contains: {
         type: 'UserEssential',
     },
+    isRequired: true,
+},
+        created: {
+    type: 'string',
+    isRequired: true,
+    format: 'date-time',
+},
+        author: {
+    type: 'UserEssential',
     isRequired: true,
 },
     },

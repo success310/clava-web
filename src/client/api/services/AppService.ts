@@ -61,4 +61,16 @@ version: string,
         });
     }
 
+    /**
+     * Get Agb Level
+     * @returns string Successful Response
+     * @throws ApiError
+     */
+    public static getAgbLevelSrcAgbLevelGet(): CancelablePromise<string> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/src/agb_level',
+        });
+    }
+
 }

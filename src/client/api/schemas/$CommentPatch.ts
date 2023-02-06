@@ -3,7 +3,7 @@
 /* eslint-disable */
 export const $CommentPatch = {
     properties: {
-        text: {
+        content: {
     type: 'string',
 },
     },

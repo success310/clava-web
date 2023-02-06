@@ -31,12 +31,23 @@ export const $User = {
     type: 'boolean',
     isRequired: true,
 },
+        telConfirmed: {
+    type: 'boolean',
+    isRequired: true,
+},
         anonymous: {
     type: 'boolean',
     isRequired: true,
 },
         thumb: {
     type: 'File',
+},
+        badges: {
+    type: 'array',
+    contains: {
+        type: 'UserBadge',
+    },
+    isRequired: true,
 },
         language: {
     type: 'Language',
@@ -79,6 +90,16 @@ export const $User = {
     contains: {
         type: 'LeagueListElement',
     },
+    isRequired: true,
+},
+        player: {
+    type: 'PlayerListElement',
+},
+        agbLevel: {
+    type: 'string',
+},
+        newsletter: {
+    type: 'boolean',
     isRequired: true,
 },
     },

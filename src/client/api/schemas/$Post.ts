@@ -3,7 +3,7 @@
 /* eslint-disable */
 export const $Post = {
     properties: {
-        text: {
+        content: {
     type: 'string',
     isRequired: true,
 },
@@ -13,7 +13,6 @@ export const $Post = {
 },
         media: {
     type: 'File',
-    isRequired: true,
 },
         match: {
     type: 'MatchListElement',
@@ -26,11 +25,17 @@ export const $Post = {
     },
     isRequired: true,
 },
-        comments: {
-    type: 'array',
-    contains: {
-        type: 'Comment',
-    },
+        author: {
+    type: 'UserEssential',
+    isRequired: true,
+},
+        created: {
+    type: 'string',
+    isRequired: true,
+    format: 'date-time',
+},
+        deleted: {
+    type: 'boolean',
     isRequired: true,
 },
     },

@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Player } from '../models/Player';
+import type { PlayerCard } from '../models/PlayerCard';
 import type { PlayerCreate } from '../models/PlayerCreate';
 import type { PlayerListElementList } from '../models/PlayerListElementList';
 import type { PlayerPatch } from '../models/PlayerPatch';
@@ -119,6 +120,27 @@ requestBody: PlayerPatch,
     }
 
     /**
+     * Get Player Card
+     * @param playerId 
+     * @returns PlayerCard Successful Response
+     * @throws ApiError
+     */
+    public static getPlayerCardPlayerCardPlayerIdGet(
+playerId: number,
+): CancelablePromise<PlayerCard> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/player/card/{player_id}',
+            path: {
+                'player_id': playerId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
      * Create Player
      * @param requestBody 
      * @returns Player Successful Response
@@ -132,6 +154,48 @@ requestBody: PlayerCreate,
             url: '/player',
             body: requestBody,
             mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Claim Player
+     * @param playerId 
+     * @returns Player Successful Response
+     * @throws ApiError
+     */
+    public static claimPlayerPlayerClaimPlayerIdPost(
+playerId: number,
+): CancelablePromise<Player> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/player/claim/{player_id}',
+            path: {
+                'player_id': playerId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Un Claim Player
+     * @param playerId 
+     * @returns Player Successful Response
+     * @throws ApiError
+     */
+    public static unClaimPlayerPlayerUnClaimPlayerIdPost(
+playerId: number,
+): CancelablePromise<Player> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/player/un_claim/{player_id}',
+            path: {
+                'player_id': playerId,
+            },
             errors: {
                 422: `Validation Error`,
             },

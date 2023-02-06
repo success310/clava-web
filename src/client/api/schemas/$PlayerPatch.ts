@@ -22,5 +22,11 @@ export const $PlayerPatch = {
         playerPositionKey: {
     type: 'PlayerPositionEnum',
 },
+        foot: {
+    type: 'FootEnum',
+},
+        height: {
+    type: 'number',
+},
     },
 } as const;

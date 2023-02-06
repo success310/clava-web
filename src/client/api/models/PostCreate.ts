@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 export type PostCreate = {
-    text: string;
-    mediaId: number;
+    content: string;
+    mediaId?: number;
     matchId: number;
 };

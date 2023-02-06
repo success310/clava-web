@@ -321,6 +321,32 @@ newStartTime: string,
     }
 
     /**
+     * Set Match Report
+     * @param matchId 
+     * @param report 
+     * @returns Match Successful Response
+     * @throws ApiError
+     */
+    public static setMatchReportMatchReportMatchIdPut(
+matchId: number,
+report: string,
+): CancelablePromise<Match> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/match/report/{match_id}',
+            path: {
+                'match_id': matchId,
+            },
+            query: {
+                'report': report,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
      * Get League Match By Date
      * @param date 
      * @param areaOfInterest 

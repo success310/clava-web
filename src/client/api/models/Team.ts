@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { ClubListElement } from './ClubListElement';
 import type { File } from './File';
 import type { JerseyModeEnum } from './JerseyModeEnum';
 import type { LeagueListElement } from './LeagueListElement';
@@ -19,6 +20,7 @@ export type Team = {
     jerseyColor1: string;
     jerseyColor2: string;
     jerseyMode: JerseyModeEnum;
+    club?: ClubListElement;
     leader?: Person;
     titles: Array<Translation>;
     sponsors: Array<Sponsor>;
