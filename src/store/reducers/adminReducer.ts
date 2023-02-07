@@ -11,6 +11,7 @@ import {
   SEARCH_USERS,
   SEARCH_VIDEOS,
 } from '../actions/types';
+import { getGoalEvents } from '../../config/utils';
 
 const initialState: AdminState = {
   user: null,
@@ -135,6 +136,49 @@ const reducer: Reducer<AdminState> = (
         status: 'idle',
         match: action.payload,
       };
+    case AdminActionTypes.FETCH_EVENT_SUCCESS: {
+      if (state.match && state.match.id === action.payload.id) {
+        const newEvents = state.match.events.concat([action.payload.response]);
+        return {
+          ...state,
+          status: 'idle',
+          match: {
+            ...state.match,
+
+            goal1: getGoalEvents(newEvents, state.match.team1.id).length,
+            goal2: getGoalEvents(newEvents, state.match.team2.id).length,
+            events: newEvents,
+          },
+        };
+      }
+      return {
+        ...state,
+        status: 'idle',
+      };
+    }
+    case AdminActionTypes.DELETE_EVENT_SUCCESS: {
+      if (state.match) {
+        const newEvents = state.match.events.filter(
+          (e) => e.id !== action.payload,
+        );
+        return {
+          ...state,
+          status: 'idle',
+          match: state.match
+            ? {
+                ...state.match,
+                goal1: getGoalEvents(newEvents, state.match.team1.id).length,
+                goal2: getGoalEvents(newEvents, state.match.team2.id).length,
+                events: newEvents,
+              }
+            : null,
+        };
+      }
+      return {
+        ...state,
+        status: 'idle',
+      };
+    }
     default: {
       return state;
     }

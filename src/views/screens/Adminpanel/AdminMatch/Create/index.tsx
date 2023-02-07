@@ -42,9 +42,9 @@ const AdminCreateMatch: React.FC<ConnectedProps<typeof connector>> = ({
         window.clearTimeout(timeout.current);
       }
       setQueryLeague(q);
-      window.setTimeout(() => {
+      timeout.current = window.setTimeout(() => {
         searchLeague(q);
-      }, 100);
+      }, 500);
     },
     [searchLeague],
   );
@@ -54,9 +54,9 @@ const AdminCreateMatch: React.FC<ConnectedProps<typeof connector>> = ({
         window.clearTimeout(timeout.current);
       }
       setQueryTeam1(q);
-      window.setTimeout(() => {
+      timeout.current = window.setTimeout(() => {
         searchTeams(q);
-      }, 100);
+      }, 500);
     },
     [searchTeams],
   );
@@ -66,9 +66,9 @@ const AdminCreateMatch: React.FC<ConnectedProps<typeof connector>> = ({
         window.clearTimeout(timeout.current);
       }
       setQueryTeam2(q);
-      window.setTimeout(() => {
+      timeout.current = window.setTimeout(() => {
         searchTeams(q);
-      }, 100);
+      }, 500);
     },
     [searchTeams],
   );
@@ -79,9 +79,9 @@ const AdminCreateMatch: React.FC<ConnectedProps<typeof connector>> = ({
         window.clearTimeout(timeout.current);
       }
       setQueryLocation(q);
-      window.setTimeout(() => {
+      timeout.current = window.setTimeout(() => {
         searchLocation(q);
-      }, 100);
+      }, 500);
     },
     [searchLocation],
   );

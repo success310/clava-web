@@ -19,6 +19,7 @@ type TextInputProps<T extends string | number> = {
   isFocused?: boolean;
   index?: number;
   label: TranslatorKeys;
+  changed?: boolean;
 };
 
 function TextInput<T extends string | number>({
@@ -30,6 +31,7 @@ function TextInput<T extends string | number>({
   onFocus,
   isFocused,
   multiline,
+  changed,
   disabled,
 }: TextInputProps<T>) {
   const { l } = useContext(ClavaContext);
@@ -63,6 +65,7 @@ function TextInput<T extends string | number>({
           typeof value === 'number' ? 'number' : multiline ? 'textarea' : 'text'
         }
         disabled={disabled}
+        className={changed ? 'changed' : ''}
         value={value}
         onFocus={onFocusCont}
         autoFocus={isFocused}
@@ -79,6 +82,7 @@ TextInput.defaultProps = {
   multiline: false,
   isFocused: false,
   onFocus: undefined,
+  changed: undefined,
   index: undefined,
   disabled: false,
 };

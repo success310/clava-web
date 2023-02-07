@@ -3,7 +3,9 @@ import { AnyAction } from 'redux';
 import { connect } from 'react-redux';
 import { RootState } from '../../../../../store';
 import {
+  deleteEventAdmin,
   patchMatch,
+  postGoalEventAdmin,
   searchAdmin,
 } from '../../../../../store/actions/adminActions';
 import { SEARCH_LOCATION } from '../../../../../store/actions/types';
@@ -17,6 +19,18 @@ const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
   },
   searchLocation: (q: string) => {
     performAction({ f: searchAdmin, p: [dispatch, q, SEARCH_LOCATION] });
+  },
+  addGoal: (matchId: IDType, teamId: IDType, goal1: number, goal2: number) => {
+    performAction({
+      f: postGoalEventAdmin,
+      p: [dispatch, matchId, teamId, goal1, goal2],
+    });
+  },
+  deleteGoal: (eventId: IDType, matchId: IDType) => {
+    performAction({
+      f: deleteEventAdmin,
+      p: [dispatch, eventId, matchId],
+    });
   },
 });
 

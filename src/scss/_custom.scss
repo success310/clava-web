@@ -73,6 +73,12 @@ button {
   border-radius: var(--bs-btn-border-radius);
 }
 
+input.form-control{
+  &.changed{
+    border-color: $yellow;
+  }
+}
+
 .logo, .logo-vertical {
   display: flex;
   align-items: center;

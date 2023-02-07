@@ -722,16 +722,21 @@ class Client {
     playerId?: IDType,
     assistId?: IDType,
     goalTypeId?: IDType,
+    ignoreChecks?: boolean,
   ) {
-    return EventService.addGoalEventEventGoalMatchIdPost(matchID, {
-      minute,
-      teamId,
-      playerId,
-      assistId,
-      goal1,
-      goal2,
-      goalTypeId,
-    });
+    return EventService.addGoalEventEventGoalMatchIdPost(
+      matchID,
+      {
+        minute,
+        teamId,
+        playerId,
+        assistId,
+        goal1,
+        goal2,
+        goalTypeId,
+      },
+      ignoreChecks,
+    );
   }
 
   patchCardEvent(
@@ -1112,7 +1117,7 @@ class Client {
   }
 
   searchMatches(q: string, offset: number, limit: number) {
-    return client().getMatchesOfTeam(68, limit, false);
+    return SearchService.searchMatchSearchMatchQueryGet(q, limit, offset);
   }
 
   deleteMatch(id: IDType) {

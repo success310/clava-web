@@ -10,6 +10,7 @@ import {
   ExternalVideo,
   File,
   GoalDistributionMatch,
+  GoalEvent,
   GoalType,
   Group,
   Language,
@@ -710,6 +711,8 @@ export enum AdminActionTypes {
   FETCH_USER_SUCCESS = '@@admin/FETCH_USER_SUCCESS',
   FETCH_MATCH = '@@admin/FETCH_MATCH',
   FETCH_MATCH_SUCCESS = '@@admin/FETCH_MATCH_SUCCESS',
+  FETCH_EVENT_SUCCESS = '@@admin/FETCH_EVENT_SUCCESS',
+  DELETE_EVENT_SUCCESS = '@@admin/DELETE_EVENT_SUCCESS',
   FETCH_LEAGUE = '@@admin/FETCH_LEAGUE',
   FETCH_LEAGUE_SUCCESS = '@@admin/FETCH_LEAGUE_SUCCESS',
   FETCH_AD = '@@admin/FETCH_AD',
@@ -773,6 +776,14 @@ export type AdminActions =
   | {
       type: AdminActionTypes.FETCH_NEWS_SUCCESS;
       payload: Blog;
+    }
+  | {
+      type: AdminActionTypes.DELETE_EVENT_SUCCESS;
+      payload: number;
+    }
+  | {
+      type: AdminActionTypes.FETCH_EVENT_SUCCESS;
+      payload: ValueStore<GoalEvent>;
     }
   | {
       type: AdminActionTypes.CREATE_TASK_SUCCESS;

@@ -386,4 +386,47 @@ export function removeBadge(
   );
 }
 
+export function postGoalEventAdmin(
+  dispatch: Dispatch<AdminActions>,
+  matchID: IDType,
+  teamId: IDType,
+  goal1: number,
+  goal2: number,
+) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.FETCH_EVENT_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.FETCH_MATCH,
+    client().postGoalEvent,
+    false,
+    { id: matchID },
+    matchID,
+    90,
+    teamId,
+    goal1,
+    goal2,
+    undefined,
+    undefined,
+    undefined,
+    true,
+  );
+}
+
+export function deleteEventAdmin(
+  dispatch: Dispatch<AdminActions>,
+  eventId: IDType,
+  matchID: IDType,
+) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.DELETE_EVENT_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.FETCH_MATCH,
+    client().deleteEvent,
+    false,
+    { id: matchID },
+    eventId,
+  );
+}
 // asf

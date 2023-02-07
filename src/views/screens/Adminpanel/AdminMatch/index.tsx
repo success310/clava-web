@@ -83,14 +83,16 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
         window.clearTimeout(timeout.current);
       }
       setQuery(q);
-      window.setTimeout(() => {
+      timeout.current = window.setTimeout(() => {
         searchMatch(q);
-      }, 100);
+        window.clearTimeout(timeout.current);
+      }, 500);
     },
     [searchMatch],
   );
   const setSelectedMatchCont = useCallback(
     (m: MatchListElement | undefined) => {
+      setSelectedMatch(m);
       if (m) {
         isDownloading.current = true;
         getMatch(m.id);

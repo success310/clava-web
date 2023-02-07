@@ -101,9 +101,9 @@ const AdminpanelBadges: React.FC<ConnectedProps<typeof connector>> = ({
         window.clearTimeout(timeout.current);
       }
       setQuery(q);
-      window.setTimeout(() => {
+      timeout.current = window.setTimeout(() => {
         doSearch(q);
-      }, 100);
+      }, 500);
     },
     [doSearch],
   );

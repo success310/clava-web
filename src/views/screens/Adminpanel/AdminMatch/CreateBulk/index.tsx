@@ -326,9 +326,9 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
         lgs[Math.floor(currentIndex.current / 6)] = q;
         return [...lgs];
       });
-      window.setTimeout(() => {
+      timeout.current = window.setTimeout(() => {
         searchLeague(q);
-      }, 100);
+      }, 500);
     },
     [searchLeague],
   );
@@ -341,9 +341,9 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
         tms[Math.floor(currentIndex.current / 6)] = q;
         return [...tms];
       });
-      window.setTimeout(() => {
+      timeout.current = window.setTimeout(() => {
         searchTeams(q);
-      }, 100);
+      }, 500);
     },
     [searchTeams],
   );
@@ -356,9 +356,9 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
         tms[Math.floor(currentIndex.current / 6)] = q;
         return [...tms];
       });
-      window.setTimeout(() => {
+      timeout.current = window.setTimeout(() => {
         searchTeams(q);
-      }, 100);
+      }, 500);
     },
     [searchTeams],
   );
@@ -372,9 +372,9 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
         lcs[Math.floor(currentIndex.current / 6)] = q;
         return [...lcs];
       });
-      window.setTimeout(() => {
+      timeout.current = window.setTimeout(() => {
         searchLocation(q);
-      }, 100);
+      }, 500);
     },
     [searchLocation],
   );

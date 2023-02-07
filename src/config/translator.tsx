@@ -2207,6 +2207,26 @@ const generalKeywords = {
     it: 'Verfügbare Badges:',
     en: 'Verfügbare Badges:',
   },
+  changeOutcome: {
+    de: 'Ergebniss ändern',
+    it: 'Ergebniss ändern',
+    en: 'Ergebniss ändern',
+  },
+  changeOutcomeCont: {
+    de: 'Es werden Tore ohne Torschütze in die 90. Minute hinzugefügt, bzw. Tore gelöscht',
+    it: 'Es werden Tore ohne Torschütze in die 90. Minute hinzugefügt, bzw. Tore gelöscht',
+    en: 'Es werden Tore ohne Torschütze in die 90. Minute hinzugefügt, bzw. Tore gelöscht',
+  },
+  goal1: {
+    de: 'Heim',
+    it: 'Heim',
+    en: 'Heim',
+  },
+  goal2: {
+    de: 'Gast',
+    it: 'Gast',
+    en: 'Gast',
+  },
   emptyString: {
     de: ' ',
     it: '',

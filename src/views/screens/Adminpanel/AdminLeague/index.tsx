@@ -92,9 +92,9 @@ const AdminpanelLeague: React.FC<ConnectedProps<typeof connector>> = ({
         window.clearTimeout(timeout.current);
       }
       setQuery(q);
-      window.setTimeout(() => {
+      timeout.current = window.setTimeout(() => {
         searchLeague(q);
-      }, 100);
+      }, 500);
     },
     [searchLeague],
   );

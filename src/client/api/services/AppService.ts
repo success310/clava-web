@@ -12,10 +12,10 @@ export class AppService {
      * @returns string Successful Response
      * @throws ApiError
      */
-    public static getAppVersionSrcVersionGet(): CancelablePromise<string> {
+    public static getAppVersionAppVersionGet(): CancelablePromise<string> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/src/version',
+            url: '/app/version',
         });
     }
 
@@ -25,12 +25,12 @@ export class AppService {
      * @returns boolean Successful Response
      * @throws ApiError
      */
-    public static getUpdateRequiredNewSrcUpdateRequiredNewVersionGet(
+    public static getUpdateRequiredNewAppUpdateRequiredNewVersionGet(
 version: string,
 ): CancelablePromise<boolean> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/src/update_required_new/{version}',
+            url: '/app/update_required_new/{version}',
             path: {
                 'version': version,
             },
@@ -46,12 +46,12 @@ version: string,
      * @returns boolean Successful Response
      * @throws ApiError
      */
-    public static getUpdateRequiredSrcUpdateRequiredVersionGet(
+    public static getUpdateRequiredAppUpdateRequiredVersionGet(
 version: string,
 ): CancelablePromise<boolean> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/src/update_required/{version}',
+            url: '/app/update_required/{version}',
             path: {
                 'version': version,
             },
@@ -66,10 +66,10 @@ version: string,
      * @returns string Successful Response
      * @throws ApiError
      */
-    public static getAgbLevelSrcAgbLevelGet(): CancelablePromise<string> {
+    public static getAgbLevelAppAgbLevelGet(): CancelablePromise<string> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/src/agb_level',
+            url: '/app/agb_level',
         });
     }
 

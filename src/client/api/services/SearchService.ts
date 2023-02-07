@@ -161,14 +161,14 @@ offset: number,
     }
 
     /**
-     * Search Location
+     * Search Match
      * @param query 
      * @param length 
      * @param offset 
      * @returns MatchListElementList Successful Response
      * @throws ApiError
      */
-    public static searchLocationSearchMatchQueryGet(
+    public static searchMatchSearchMatchQueryGet(
 query: string,
 length: number,
 offset: number,
