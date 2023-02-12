@@ -182,7 +182,7 @@ const Sidebar: React.FC<ConnectedProps<typeof connector>> = ({
           <span>{translate('adsOnClava', l)}</span>
           <small className="text-end" />
         </a>
-        <a href="https://about.clava-sports.com" className="nav-link">
+        <a href="https://info.clava-sports.com" className="nav-link">
           <FontAwesomeIcon icon={faInfoCircle} />
           <span>{translate('aboutUs', l)}</span>
           <small className="text-end" />

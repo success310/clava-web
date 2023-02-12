@@ -613,6 +613,9 @@ input.form-control{
               display: flex;
               align-items: center;
               justify-content: center;
+              .live{
+                color: $live;
+              }
             }
           }
 
@@ -1419,7 +1422,7 @@ input.form-control{
   .adminpanel-main {
     flex: 0 1 80%;
     border-left: solid thin $gray-900;
-
+    max-width: 80%;
     .adminpanel-header {
 
       border-bottom: solid thin $gray-900;

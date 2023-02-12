@@ -16,6 +16,7 @@ import { showTranslated, translate } from '../../../config/translator';
 import { parseParams } from '../../../config/routes';
 import ClavaImage from '../ClavaImage';
 import Loading from '../Loading';
+import { Blog } from '../../../client/api';
 
 const NEWS_LIMIT = 20;
 
@@ -152,7 +153,7 @@ const News: React.FC<ConnectedProps<typeof connector>> = ({
     }
   }, [user, items.length, pageNews, getNews, loading, small, feedType]);
 
-  const openNews = useMemo(() => {
+  const openNews = useMemo<Blog | undefined>(() => {
     if (feedType === 'news' && feedId && !Number.isNaN(parseInt(feedId, 10))) {
       return news.find((n) => n.id === parseInt(feedId, 10));
     }
@@ -166,9 +167,9 @@ const News: React.FC<ConnectedProps<typeof connector>> = ({
             <h5>{translate('back', l)}</h5>
           </NavLink>
           {openNews.link && (
-            <NavLink to={openNews.link}>
+            <a href={openNews.link} className="nav-link">
               <h5 className="text-primary">{translate('viewExtern', l)}</h5>
-            </NavLink>
+            </a>
           )}
         </div>
         <div className="news-list">
