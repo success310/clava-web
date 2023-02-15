@@ -130,28 +130,6 @@ export const DAY_IN_MS = 1000 * 60 * 60 * 24;
 
 const MATCH_LENGTH = 1000 * 60 * 105;
 
-/**
- * Return true if match done, flase if match not startet or the number of minutes passed
- * @param match
- */
-export function matchStatus(match: Match | MatchListElement): boolean | number {
-  const startDate = getMatchDate(match).getTime();
-  const now = new Date().getTime();
-  return now > startDate && now < startDate + MATCH_LENGTH
-    ? Math.ceil((now - startDate) / 60000)
-    : now > startDate;
-}
-/**
- * Return true if match done, flase if match not startet or the number of minutes passed
- * @param match
- */
-export function matchStatusDate(startDate: number): boolean | number {
-  const now = new Date().getTime();
-  return now > startDate && now < startDate + MATCH_LENGTH
-    ? Math.ceil((now - startDate) / 60000)
-    : now > startDate;
-}
-
 export function removeDuplicateMatchDays(dates: Date[]): Date[] {
   return dates
     .map((date) => date.getTime())
@@ -408,14 +386,6 @@ export function isPremium(user: User | null | undefined): boolean {
 
 export function isRegistered(user: User | undefined | null): boolean {
   return !!(user && !user.anonymous);
-}
-
-export function calcMinute(match: Match | undefined | null): number {
-  if (match) {
-    const now = new Date();
-    return Math.ceil((now.getTime() - getMatchDate(match).getTime()) / 60000);
-  }
-  return 0;
 }
 
 export function searchFilter(t: Translatable, query: string) {
@@ -685,3 +655,66 @@ export function getBiggest(file: File | undefined): string {
   return formats[biggestIdx].url ?? '';
 }
 // reload
+
+/**
+ * Return true if match done, flase if match not startet or the number of minutes passed
+ * @param match
+ */
+export function matchStatus(match: Match | MatchListElement): boolean | number {
+  const startDate = getMatchDate(match).getTime();
+  const now = new Date().getTime();
+  return now > startDate && now < startDate + calcFullMatchLength(match) * 60000
+    ? Math.ceil((now - startDate) / 60000)
+    : now > startDate;
+}
+
+/**
+ * Return true if match done, flase if match not startet or the number of minutes passed
+ * @param startDate
+ * @param matchLength
+ */
+export function matchStatusDate(
+  startDate: number,
+  matchLength: number,
+): boolean | number {
+  const now = new Date().getTime();
+  return now > startDate && now < startDate + matchLength * 60000
+    ? Math.ceil((now - startDate) / 60000)
+    : now > startDate;
+}
+
+export function calcMinute(match: Match | undefined | null): number {
+  if (match) {
+    const now = new Date();
+    return Math.ceil((now.getTime() - getMatchDate(match).getTime()) / 60000);
+  }
+  return 0;
+}
+export function calcFullMatchLength(
+  match: Match | MatchListElement | undefined | null,
+): number {
+  if (match) {
+    return (
+      match.league.matchDurationMinutes + match.league.halftimeDurationMinutes
+    );
+  }
+  return 105;
+}
+
+export function getActualMatchMinute(
+  minute: number,
+  length: number,
+  halftimeDuration: number,
+): number {
+  return Math.max(
+    0,
+    Math.min(
+      minute > length / 2
+        ? minute > length / 2 + halftimeDuration
+          ? minute - halftimeDuration
+          : Math.floor(length / 2)
+        : minute,
+      length + halftimeDuration,
+    ),
+  );
+}

@@ -24,15 +24,31 @@ const MatchSmall: React.FC<ConnectedProps<typeof connector>> = ({
   const { user, l } = useContext(ClavaContext);
   const params = useParams();
   const { matchId } = params;
-  const [status, setStatus] = useState(matchStatusDate(startDate));
+  const [status, setStatus] = useState(
+    matchStatusDate(
+      startDate,
+      match
+        ? match.league.matchDurationMinutes +
+            match.league.halftimeDurationMinutes
+        : 110,
+    ),
+  );
   useEffect(() => {
     const interval = setInterval(() => {
-      setStatus(matchStatusDate(startDate));
+      setStatus(
+        matchStatusDate(
+          startDate,
+          match
+            ? match.league.matchDurationMinutes +
+                match.league.halftimeDurationMinutes
+            : 110,
+        ),
+      );
     }, 5000);
     return () => {
       clearInterval(interval);
     };
-  }, [startDate]);
+  }, [match, startDate]);
   const realMatchId = useMemo(() => {
     if (!matchId) return -1;
     const id = parseInt(matchId, 10);
@@ -54,7 +70,12 @@ const MatchSmall: React.FC<ConnectedProps<typeof connector>> = ({
               {translate('cancelledShort', l)}
             </span>
           ) : (
-            <MatchStatusDisplay startDate={startDate} hideLive />
+            <MatchStatusDisplay
+              startDate={startDate}
+              matchLength={match.league.matchDurationMinutes}
+              halftimeDuration={match.league.halftimeDurationMinutes}
+              hideLive
+            />
           )}
         </Col>
         <Col xs={8}>

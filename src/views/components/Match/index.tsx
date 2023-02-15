@@ -33,7 +33,12 @@ const Match: React.FC<ConnectedProps<typeof connector>> = ({
   goal2,
   goal1,
 }) => {
-  const [status, setStatus] = useState(matchStatusDate(startDate));
+  const [status, setStatus] = useState(
+    matchStatusDate(
+      startDate,
+      match.league.matchDurationMinutes + match.league.halftimeDurationMinutes,
+    ),
+  );
   const { l } = useContext(ClavaContext);
   const params = useParams();
   const { view } = params;
@@ -44,7 +49,13 @@ const Match: React.FC<ConnectedProps<typeof connector>> = ({
   }, [thisMatchId, getMatch]);
   useEffect(() => {
     const interval = setInterval(() => {
-      setStatus(matchStatusDate(startDate));
+      setStatus(
+        matchStatusDate(
+          startDate,
+          match.league.matchDurationMinutes +
+            match.league.halftimeDurationMinutes,
+        ),
+      );
     }, 5000);
     return () => {
       clearInterval(interval);
@@ -97,7 +108,12 @@ const Match: React.FC<ConnectedProps<typeof connector>> = ({
               {translate('cancelledShort', l)}
             </span>
           ) : (
-            <MatchStatusDisplay startDate={startDate} hideLive />
+            <MatchStatusDisplay
+              startDate={startDate}
+              matchLength={match.league.matchDurationMinutes}
+              halftimeDuration={match.league.halftimeDurationMinutes}
+              hideLive
+            />
           )}
         </Col>
         {/* fullMatch && fullMatch.location && (
