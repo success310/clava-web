@@ -37,5 +37,9 @@ export const $TeamListElement = {
         club: {
     type: 'ClubListElement',
 },
+        outOfCompetition: {
+    type: 'boolean',
+    isRequired: true,
+},
     },
 } as const;

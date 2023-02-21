@@ -49,6 +49,9 @@ export const $User = {
     },
     isRequired: true,
 },
+        playerId: {
+    type: 'number',
+},
         language: {
     type: 'Language',
     isRequired: true,

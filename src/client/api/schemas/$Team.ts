@@ -37,6 +37,10 @@ export const $Team = {
         club: {
     type: 'ClubListElement',
 },
+        outOfCompetition: {
+    type: 'boolean',
+    isRequired: true,
+},
         leader: {
     type: 'Person',
 },

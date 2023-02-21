@@ -17,4 +17,5 @@ export type TeamListElement = {
     jerseyColor2: string;
     jerseyMode: JerseyModeEnum;
     club?: ClubListElement;
+    outOfCompetition: boolean;
 };

@@ -18,4 +18,5 @@ export type UserEssential = {
     anonymous: boolean;
     thumb?: File;
     badges: Array<UserBadge>;
+    playerId?: number;
 };

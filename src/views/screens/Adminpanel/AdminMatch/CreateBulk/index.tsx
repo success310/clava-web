@@ -354,6 +354,7 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
   leagues,
   teams,
   searchLocation,
+  error,
   locations,
   createMultiple,
 }) => {
@@ -600,6 +601,7 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
   const toggleInfo = useCallback(() => {
     setInfo((i) => !i);
   }, []);
+  const sent = useRef(false);
   const onSubmit = useCallback(() => {
     try {
       const matchCreates: MatchCreate[] = dates.map((date, index) => {
@@ -608,12 +610,12 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
           setCreateError({ index, type: 'errorTeam1' });
           throw new Error(`Team1 not set on Match ${index}`);
         }
-        const team2 = selectedTeam1s[index];
+        const team2 = selectedTeam2s[index];
         if (!team2) {
           setCreateError({ index, type: 'errorTeam2' });
           throw new Error(`Team2 not set on Match ${index}`);
         }
-        const league = selectedTeam1s[index];
+        const league = selectedLeagues[index];
         if (!league) {
           setCreateError({ index, type: 'errorLeague' });
           throw new Error(`League not set on Match ${index}`);
@@ -633,11 +635,21 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
         };
       });
       setCreateError(undefined);
+      sent.current = true;
       createMultiple(matchCreates);
     } catch (e) {
       Sentry.captureException(e);
     }
-  }, [createMultiple, dates, l, locations, matchDays, selectedTeam1s]);
+  }, [
+    createMultiple,
+    dates,
+    l,
+    locations,
+    matchDays,
+    selectedLeagues,
+    selectedTeam1s,
+    selectedTeam2s,
+  ]);
   return (
     <>
       <Row>
@@ -676,12 +688,12 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
       )}
       {errors.length !== 0 && (
         <Row className="my-4">
-          {errors.map((error) => (
-            <div key={`${error.file}-${error.line}-${error.message}`}>
+          {errors.map((e) => (
+            <div key={`${e.file}-${e.line}-${e.message}`}>
               <span className="text-danger">
-                {translate(error.message, l, {
-                  '[line]': error.line.toString(10),
-                  '[file]': error.file,
+                {translate(e.message, l, {
+                  '[line]': e.line.toString(10),
+                  '[file]': e.file,
                 })}
               </span>
             </div>
@@ -864,11 +876,18 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
           </Button>
         </Col>
         <Col xs={6} className="text-center">
-          <Button color="primary" onClick={onSubmit}>
+          <Button color="primary" onClick={onSubmit} disabled={sent.current}>
             <span>{translate('submitAll', l)}</span>
           </Button>
         </Col>
       </Row>
+      {error && (
+        <Row className="my-4">
+          <Col xs={12} className="text-center">
+            <span className="text-danger">{translate(error, l)}</span>
+          </Col>
+        </Row>
+      )}
     </>
   );
 };

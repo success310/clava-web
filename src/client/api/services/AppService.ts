@@ -73,4 +73,70 @@ version: string,
         });
     }
 
+    /**
+     * Get App Version
+     * @returns string Successful Response
+     * @throws ApiError
+     */
+    public static getAppVersionSrcVersionGet(): CancelablePromise<string> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/src/version',
+        });
+    }
+
+    /**
+     * Get Update Required New
+     * @param version 
+     * @returns boolean Successful Response
+     * @throws ApiError
+     */
+    public static getUpdateRequiredNewSrcUpdateRequiredNewVersionGet(
+version: string,
+): CancelablePromise<boolean> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/src/update_required_new/{version}',
+            path: {
+                'version': version,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Get Update Required
+     * @param version 
+     * @returns boolean Successful Response
+     * @throws ApiError
+     */
+    public static getUpdateRequiredSrcUpdateRequiredVersionGet(
+version: string,
+): CancelablePromise<boolean> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/src/update_required/{version}',
+            path: {
+                'version': version,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Get Agb Level
+     * @returns string Successful Response
+     * @throws ApiError
+     */
+    public static getAgbLevelSrcAgbLevelGet(): CancelablePromise<string> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/src/agb_level',
+        });
+    }
+
 }

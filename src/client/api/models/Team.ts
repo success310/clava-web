@@ -21,6 +21,7 @@ export type Team = {
     jerseyColor2: string;
     jerseyMode: JerseyModeEnum;
     club?: ClubListElement;
+    outOfCompetition: boolean;
     leader?: Person;
     titles: Array<Translation>;
     sponsors: Array<Sponsor>;

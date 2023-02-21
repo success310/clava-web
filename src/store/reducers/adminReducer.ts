@@ -55,6 +55,9 @@ const reducer: Reducer<AdminState> = (
       return { ...state, status: 'loading' };
     case AdminActionTypes.FETCH_BADGES_SUCCESS:
       return { ...state, status: 'idle', badges: action.payload };
+    case AdminActionTypes.FETCH_ERROR: {
+      return { ...state, status: 'failed', error: action.payload };
+    }
     case AdminActionTypes.PATCH_BADGE_SUCCESS:
       return {
         ...state,

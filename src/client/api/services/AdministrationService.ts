@@ -350,17 +350,17 @@ key?: string,
     }
 
     /**
-     * Import Vienna
+     * Do Work
      * @param key 
      * @returns any Successful Response
      * @throws ApiError
      */
-    public static importViennaAdminImportViennaPost(
+    public static doWorkAdminDoWorkPost(
 key?: string,
 ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/admin/import_vienna',
+            url: '/admin/do_work',
             query: {
                 'key': key,
             },
@@ -371,19 +371,43 @@ key?: string,
     }
 
     /**
-     * Test Motm Awards Statistics
+     * Test News
      * @param key 
      * @returns any Successful Response
      * @throws ApiError
      */
-    public static testMotmAwardsStatisticsAdminTestMotmAwardsStatisticsPost(
+    public static testNewsAdminTestNewsPost(
 key?: string,
 ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/admin/test_motm_awards_statistics',
+            url: '/admin/test_news',
             query: {
                 'key': key,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Reset Match Day Cache
+     * @param leagueId 
+     * @param matchDay 
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static resetMatchDayCacheAdminResetMatchDayCachePost(
+leagueId: number,
+matchDay: number,
+): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/admin/reset_match_day_cache',
+            query: {
+                'league_id': leagueId,
+                'match_day': matchDay,
             },
             errors: {
                 422: `Validation Error`,

@@ -33,6 +33,7 @@ const props = (state: RootState) => ({
   match: state.admin.match,
   matches: state.admin.matches,
   searching: state.admin.statusSearch === 'loading',
+  error: state.admin.error,
   status: state.admin.status,
   leagues: state.admin.leagues,
   locations: state.admin.locations,

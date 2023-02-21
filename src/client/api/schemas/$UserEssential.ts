@@ -49,5 +49,8 @@ export const $UserEssential = {
     },
     isRequired: true,
 },
+        playerId: {
+    type: 'number',
+},
     },
 } as const;

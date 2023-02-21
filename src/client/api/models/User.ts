@@ -26,6 +26,7 @@ export type User = {
     anonymous: boolean;
     thumb?: File;
     badges: Array<UserBadge>;
+    playerId?: number;
     language: Language;
     groups: Array<Group>;
     scopes: Array<Scope>;
