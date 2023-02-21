@@ -19,9 +19,11 @@ import * as Sentry from '@sentry/react';
 import SearchInput from '../../SearchInput';
 import TextInput from '../../TextInput';
 import {
+  League,
   LeagueListElement,
   Location,
   MatchCreate,
+  Team,
   TeamListElement,
 } from '../../../../../client/api';
 import { connector } from './redux';
@@ -64,33 +66,80 @@ type Parsed = {
 type SearchResult =
   | {
       type: 'team';
-      result: TeamListElement[];
+      result: TeamListElement[] | Team[];
     }
-  | { type: 'league'; result: LeagueListElement[] }
+  | { type: 'league'; result: LeagueListElement[] | League[] }
   | { type: 'location'; result: Location[] };
 
 const foundResults: Record<string, SearchResult> = {};
 
-function determineLeague(leagueString: string): Promise<LeagueListElement[]> {
-  if (leagueString in foundResults) {
-    const res = foundResults[leagueString];
-    if (res.type === 'league')
-      return new Promise<LeagueListElement[]>((r) => {
-        r(res.result);
-      });
-  }
-  return client().searchLeagues(leagueString, 0, 10);
+const idRegex = /[0-9]{1,5}$/;
+
+function determineLeague(
+  leagueString: string,
+): Promise<LeagueListElement[] | League[]> {
+  return new Promise<LeagueListElement[] | League[]>((resolve, reject) => {
+    if (idRegex.test(leagueString)) {
+      if (`league_id_${leagueString}` in foundResults) {
+        const res = foundResults[`league_id_${leagueString}`];
+        if (res.type === 'league') resolve(res.result);
+      }
+      client()
+        .getLeague(parseInt(leagueString, 10))
+        .then((l) => {
+          foundResults[`league_id_${leagueString}`] = {
+            type: 'league',
+            result: [l],
+          };
+          resolve([l]);
+        });
+    } else {
+      if (leagueString in foundResults) {
+        const res = foundResults[leagueString];
+        if (res.type === 'league') resolve(res.result);
+      }
+
+      client()
+        .searchLeagues(leagueString, 0, 10)
+        .then((l) => {
+          foundResults[leagueString] = { type: 'league', result: l };
+          resolve(l);
+        }, reject);
+    }
+  });
 }
 
-function determineTeam(teamString: string): Promise<TeamListElement[]> {
-  if (teamString in foundResults) {
-    const res = foundResults[teamString];
-    if (res.type === 'team')
-      return new Promise<TeamListElement[]>((r) => {
-        r(res.result);
-      });
-  }
-  return client().searchTeams(teamString, 0, 10);
+function determineTeam(
+  teamString: string,
+): Promise<TeamListElement[] | Team[]> {
+  return new Promise<TeamListElement[] | Team[]>((resolve, reject) => {
+    if (idRegex.test(teamString)) {
+      if (`team_id_${teamString}` in foundResults) {
+        const res = foundResults[`team_id_${teamString}`];
+        if (res.type === 'team') resolve(res.result);
+      }
+      client()
+        .getTeam(parseInt(teamString, 10))
+        .then((l) => {
+          foundResults[`team_id_${teamString}`] = {
+            type: 'team',
+            result: [l],
+          };
+          resolve([l]);
+        });
+    } else {
+      if (teamString in foundResults) {
+        const res = foundResults[teamString];
+        if (res.type === 'team') resolve(res.result);
+      }
+      client()
+        .searchTeams(teamString, 0, 10)
+        .then((l) => {
+          foundResults[teamString] = { type: 'team', result: l };
+          resolve(l);
+        }, reject);
+    }
+  });
 }
 
 function determineLocation(
@@ -124,7 +173,7 @@ function createMatch(
       determineTeam(team1String).then((team1s) => {
         determineTeam(team2String).then((team2s) => {
           determineLocation(locationString).then((locations) => {
-            resolve({
+            const match = {
               matchDay: matchday,
               team1: team1s.length ? team1s[0] : undefined,
               team2: team2s.length ? team2s[0] : undefined,
@@ -135,7 +184,9 @@ function createMatch(
               team2String,
               leagueString,
               locationString: locationString ?? '',
-            });
+            };
+            console.log(match);
+            resolve(match);
           });
         });
       });
@@ -171,12 +222,26 @@ function parseCsv(file: File): Promise<Parsed> {
               }
               return;
             }
-            const date = new Date(line[1]);
-            const time = new Date(line[2]);
-            date.setHours(time.getHours());
-            date.setMinutes(time.getMinutes());
-            date.setSeconds(0);
+            const dateParts = line[1].replaceAll('.', '-').split('-');
+            const dateString =
+              dateParts.length === 3
+                ? `${dateParts[1]}-${dateParts[0]}-${dateParts[2]}`
+                : 'invalidDate';
+            const timeParts = line[2].split(':');
+            const date = new Date(dateString);
+            if (timeParts.length === 2) {
+              date.setHours(parseInt(timeParts[0], 10));
+              date.setMinutes(parseInt(timeParts[1], 10));
+            }
             date.setMilliseconds(0);
+            date.setSeconds(0);
+            if (Number.isNaN(date.getTime())) {
+              errors.push({
+                file: file.name,
+                line: index + 1,
+                message: 'errorDate',
+              });
+            }
             const leagueString = line[3];
             const team1String = line[4];
             const team2String = line[5];
@@ -809,4 +874,4 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
 };
 
 export default connector(AdminCreateBulkMatch);
-// reload
+// relo ad

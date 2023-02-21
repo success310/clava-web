@@ -219,6 +219,8 @@ const Sidebar: React.FC<ConnectedProps<typeof connector>> = ({
             {`${translate('tos', l)} | ${translate('privacy', l)}`}
             <br />
             &copy; Copyright 2022, Clava Sports
+            <br />
+            v1.0.13
           </small>
         </Link>
       </Navbar>
