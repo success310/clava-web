@@ -1878,9 +1878,9 @@ const generalKeywords = {
     en: 'Mehrere Erstellen',
   },
   uploadSheet: {
-    de: 'Liste hochladen',
-    it: 'Liste hochladen',
-    en: 'Liste hochladen',
+    de: 'Liste hochladen ( Funktioniert nicht auf Safari )',
+    it: 'Liste hochladen ( Funktioniert nicht auf Safari )',
+    en: 'Liste hochladen ( Funktioniert nicht auf Safari )',
   },
   validateSheet: {
     de: 'Auswerten',
@@ -2226,6 +2226,11 @@ const generalKeywords = {
     de: 'Gast',
     it: 'Gast',
     en: 'Gast',
+  },
+  leagueNotFound: {
+    de: 'Liga nicht gefunden',
+    it: 'Liga nicht gefunden',
+    en: 'Liga nicht gefunden',
   },
   emptyString: {
     de: ' ',

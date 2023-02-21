@@ -1,21 +1,40 @@
-import { Button, Col, Input, InputGroup, Modal, Row } from "reactstrap";
-import React, { ChangeEventHandler, useCallback, useContext, useRef, useState } from "react";
-import { ConnectedProps } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClose, faInfo, faMinus, faPlus } from "@fortawesome/pro-regular-svg-icons";
-import Papa from "papaparse";
-import * as Sentry from "@sentry/react";
-import SearchInput from "../../SearchInput";
-import TextInput from "../../TextInput";
-import { League, LeagueListElement, Location, MatchCreate, Team, TeamListElement } from "../../../../../client/api";
-import { connector } from "./redux";
-import DateInput from "../../DateInput";
-import { formatDate, generatePW } from "../../../../../config/utils";
-import { translate, TranslatorKeys } from "../../../../../config/translator";
-import { ClavaContext } from "../../../../../config/contexts";
-import Loading from "../../../../components/Loading";
-import { DefaultFadeTrans } from "../../../../../config/constants";
-import client from "../../../../../client";
+import { Button, Col, Input, InputGroup, Modal, Row } from 'reactstrap';
+import React, {
+  ChangeEventHandler,
+  useCallback,
+  useContext,
+  useRef,
+  useState,
+} from 'react';
+import { ConnectedProps } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faClose,
+  faInfo,
+  faMinus,
+  faPlus,
+} from '@fortawesome/pro-regular-svg-icons';
+import Papa from 'papaparse';
+import * as Sentry from '@sentry/react';
+import SearchInput from '../../SearchInput';
+import TextInput from '../../TextInput';
+import {
+  League,
+  LeagueListElement,
+  Location,
+  MatchCreate,
+  Team,
+  TeamListElement,
+} from '../../../../../client/api';
+import { connector } from './redux';
+import DateInput from '../../DateInput';
+import { formatDate, generatePW } from '../../../../../config/utils';
+import { translate, TranslatorKeys } from '../../../../../config/translator';
+import { ClavaContext } from '../../../../../config/contexts';
+import Loading from '../../../../components/Loading';
+import { DefaultFadeTrans } from '../../../../../config/constants';
+import client from '../../../../../client';
+import { IDType } from '../../../../../config/types';
 
 type ParseError = {
   file: string;
@@ -50,7 +69,7 @@ type SearchResult =
       type: 'team';
       result: TeamListElement[] | Team[];
     }
-  | { type: 'league'; result: LeagueListElement[] | League[] }
+  | { type: 'league'; result: LeagueListElement | League }
   | { type: 'location'; result: Location[] };
 
 const foundResults: Record<string, SearchResult> = {};
@@ -59,8 +78,8 @@ const idRegex = /[0-9]{1,5}$/;
 
 function determineLeague(
   leagueString: string,
-): Promise<LeagueListElement[] | League[]> {
-  return new Promise<LeagueListElement[] | League[]>((resolve, reject) => {
+): Promise<LeagueListElement | League> {
+  return new Promise<LeagueListElement | League>((resolve, reject) => {
     if (idRegex.test(leagueString)) {
       if (`league_id_${leagueString}` in foundResults) {
         const res = foundResults[`league_id_${leagueString}`];
@@ -71,9 +90,9 @@ function determineLeague(
         .then((l) => {
           foundResults[`league_id_${leagueString}`] = {
             type: 'league',
-            result: [l],
+            result: l,
           };
-          resolve([l]);
+          resolve(l);
         });
     } else {
       if (leagueString in foundResults) {
@@ -84,8 +103,10 @@ function determineLeague(
       client()
         .searchLeagues(leagueString, 0, 10)
         .then((l) => {
-          foundResults[leagueString] = { type: 'league', result: l };
-          resolve(l);
+          if (l.length !== 0) {
+            foundResults[leagueString] = { type: 'league', result: l[0] };
+            resolve(l[0]);
+          } else reject();
         }, reject);
     }
   });
@@ -93,6 +114,7 @@ function determineLeague(
 
 function determineTeam(
   teamString: string,
+  leagueId: IDType,
 ): Promise<TeamListElement[] | Team[]> {
   return new Promise<TeamListElement[] | Team[]>((resolve, reject) => {
     if (idRegex.test(teamString)) {
@@ -111,13 +133,16 @@ function determineTeam(
         });
     } else {
       if (teamString in foundResults) {
-        const res = foundResults[teamString];
+        const res = foundResults[`${teamString}_${leagueId}`];
         if (res.type === 'team') resolve(res.result);
       }
       client()
-        .searchTeams(teamString, 0, 10)
+        .searchTeams(teamString, 0, 10, leagueId)
         .then((l) => {
-          foundResults[teamString] = { type: 'team', result: l };
+          foundResults[`${teamString}_${leagueId}`] = {
+            type: 'team',
+            result: l,
+          };
           resolve(l);
         }, reject);
     }
@@ -148,31 +173,38 @@ function createMatch(
   leagueString: string,
   team1String: string,
   team2String: string,
+  errors: ParseError[],
+  file: string,
+  line: number,
   locationString?: string,
 ): Promise<MatchCreateCont> {
-  return new Promise<MatchCreateCont>((resolve) => {
-    determineLeague(leagueString).then((leagues) => {
-      determineTeam(team1String).then((team1s) => {
-        determineTeam(team2String).then((team2s) => {
-          determineLocation(locationString).then((locations) => {
-            const match = {
-              matchDay: matchday,
-              team1: team1s.length ? team1s[0] : undefined,
-              team2: team2s.length ? team2s[0] : undefined,
-              league: leagues.length ? leagues[0] : undefined,
-              location: locations.length ? locations[0] : undefined,
-              date,
-              team1String,
-              team2String,
-              leagueString,
-              locationString: locationString ?? '',
-            };
-            console.log(match);
-            resolve(match);
+  return new Promise<MatchCreateCont>((resolve, reject) => {
+    determineLeague(leagueString).then(
+      (league) => {
+        determineTeam(team1String, league.id).then((team1s) => {
+          determineTeam(team2String, league.id).then((team2s) => {
+            determineLocation(locationString).then((locations) => {
+              const match = {
+                matchDay: matchday,
+                team1: team1s.length ? team1s[0] : undefined,
+                team2: team2s.length ? team2s[0] : undefined,
+                league,
+                location: locations.length ? locations[0] : undefined,
+                date,
+                team1String,
+                team2String,
+                leagueString,
+                locationString: locationString ?? '',
+              };
+              resolve(match);
+            });
           });
         });
-      });
-    });
+      },
+      () => {
+        errors.push({ file, line, message: 'leagueNotFound' });
+      },
+    );
   });
 }
 
@@ -181,7 +213,6 @@ function parseCsv(file: File): Promise<Parsed> {
     Papa.parse(file, {
       skipEmptyLines: true,
       complete: (result) => {
-        console.log(result);
         const matches: MatchCreateCont[] = [];
         const errors: ParseError[] = [];
         const promises: Promise<MatchCreateCont>[] = [];
@@ -236,6 +267,9 @@ function parseCsv(file: File): Promise<Parsed> {
                   leagueString,
                   team1String,
                   team2String,
+                  errors,
+                  file.name,
+                  index + 1,
                   locationString,
                 ),
               );
@@ -247,6 +281,9 @@ function parseCsv(file: File): Promise<Parsed> {
                   leagueString,
                   team1String,
                   team2String,
+                  errors,
+                  file.name,
+                  index + 1,
                 ),
               );
             }
@@ -428,16 +465,6 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
     [searchLocation],
   );
 
-  const setSelectedLeagueCont = useCallback(
-    (league: LeagueListElement | undefined) => {
-      setSelectedLeague((lgs) => {
-        lgs[Math.floor(currentIndex.current / 6)] = league;
-        if (league) currentIndex.current++;
-        return [...lgs];
-      });
-    },
-    [],
-  );
   const setSelectedTeam1Cont = useCallback(
     (team: TeamListElement | undefined) => {
       setSelectedTeam1((tms) => {
@@ -454,6 +481,18 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
         tms[Math.floor(currentIndex.current / 6)] = team;
         if (team) currentIndex.current++;
         return [...tms];
+      });
+    },
+    [],
+  );
+  const setSelectedLeagueCont = useCallback(
+    (league: LeagueListElement | undefined) => {
+      setSelectedLeague((lgs) => {
+        lgs[Math.floor(currentIndex.current / 6)] = league;
+        setSelectedTeam1Cont(undefined);
+        setSelectedTeam2Cont(undefined);
+        if (league) currentIndex.current++;
+        return [...lgs];
       });
     },
     [],
@@ -528,7 +567,6 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
   const onAddRow = useCallback(() => {
     currentIndex.current = dates.length * 6;
     setTimeout(() => {
-      console.log(document.body.scrollHeight);
       window.scrollTo({
         top: document.body.scrollHeight,
         left: 0,
@@ -564,7 +602,6 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
     if (files) {
       setLoading(true);
       parseSheets(files).then((parsed) => {
-        console.log(parsed);
         setLoading(false);
         setErrors(parsed.errors);
         setQueryLeague(parsed.matches.map((m) => m.leagueString));
@@ -638,7 +675,7 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
       <Row>
         <h6>{translate('uploadSheet', l)}</h6>
       </Row>
-      <Row className="mb-4">
+      <Row className="mb-4 ">
         <Col xs={6}>
           <InputGroup>
             <Input

@@ -1090,8 +1090,13 @@ class Client {
     return SearchService.searchLeagueSearchLeagueQueryGet(q, limit, offset);
   }
 
-  searchTeams(q: string, offset: number, limit: number) {
-    return SearchService.searchTeamSearchTeamQueryGet(q, limit, offset);
+  searchTeams(q: string, offset: number, limit: number, leagueId?: IDType) {
+    return SearchService.searchTeamSearchTeamQueryGet(
+      q,
+      limit,
+      offset,
+      leagueId,
+    );
   }
 
   searchAds(q: string, offset: number, limit: number) {

@@ -49,6 +49,7 @@ offset: number,
      * @param query 
      * @param length 
      * @param offset 
+     * @param leagueId 
      * @returns TeamListElementList Successful Response
      * @throws ApiError
      */
@@ -56,6 +57,7 @@ offset: number,
 query: string,
 length: number,
 offset: number,
+leagueId?: number,
 ): CancelablePromise<TeamListElementList> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -66,6 +68,7 @@ offset: number,
             query: {
                 'length': length,
                 'offset': offset,
+                'league_id': leagueId,
             },
             errors: {
                 422: `Validation Error`,
