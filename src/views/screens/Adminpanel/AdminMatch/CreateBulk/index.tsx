@@ -1,39 +1,21 @@
-import { Button, Col, Input, InputGroup, Modal, Row } from 'reactstrap';
-import React, {
-  ChangeEventHandler,
-  useCallback,
-  useContext,
-  useRef,
-  useState,
-} from 'react';
-import { ConnectedProps } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faClose,
-  faInfo,
-  faMinus,
-  faPlus,
-} from '@fortawesome/pro-regular-svg-icons';
-import Papa from 'papaparse';
-import * as Sentry from '@sentry/react';
-import SearchInput from '../../SearchInput';
-import TextInput from '../../TextInput';
-import {
-  League,
-  LeagueListElement,
-  Location,
-  MatchCreate,
-  Team,
-  TeamListElement,
-} from '../../../../../client/api';
-import { connector } from './redux';
-import DateInput from '../../DateInput';
-import { formatDate, generatePW } from '../../../../../config/utils';
-import { translate, TranslatorKeys } from '../../../../../config/translator';
-import { ClavaContext } from '../../../../../config/contexts';
-import Loading from '../../../../components/Loading';
-import { DefaultFadeTrans } from '../../../../../config/constants';
-import client from '../../../../../client';
+import { Button, Col, Input, InputGroup, Modal, Row } from "reactstrap";
+import React, { ChangeEventHandler, useCallback, useContext, useRef, useState } from "react";
+import { ConnectedProps } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClose, faInfo, faMinus, faPlus } from "@fortawesome/pro-regular-svg-icons";
+import Papa from "papaparse";
+import * as Sentry from "@sentry/react";
+import SearchInput from "../../SearchInput";
+import TextInput from "../../TextInput";
+import { League, LeagueListElement, Location, MatchCreate, Team, TeamListElement } from "../../../../../client/api";
+import { connector } from "./redux";
+import DateInput from "../../DateInput";
+import { formatDate, generatePW } from "../../../../../config/utils";
+import { translate, TranslatorKeys } from "../../../../../config/translator";
+import { ClavaContext } from "../../../../../config/contexts";
+import Loading from "../../../../components/Loading";
+import { DefaultFadeTrans } from "../../../../../config/constants";
+import client from "../../../../../client";
 
 type ParseError = {
   file: string;
@@ -354,6 +336,7 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
   leagues,
   teams,
   searchLocation,
+  status,
   error,
   locations,
   createMultiple,
@@ -447,9 +430,9 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
 
   const setSelectedLeagueCont = useCallback(
     (league: LeagueListElement | undefined) => {
-      if (league) currentIndex.current++;
       setSelectedLeague((lgs) => {
         lgs[Math.floor(currentIndex.current / 6)] = league;
+        if (league) currentIndex.current++;
         return [...lgs];
       });
     },
@@ -457,9 +440,9 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
   );
   const setSelectedTeam1Cont = useCallback(
     (team: TeamListElement | undefined) => {
-      if (team) currentIndex.current++;
       setSelectedTeam1((tms) => {
         tms[Math.floor(currentIndex.current / 6)] = team;
+        if (team) currentIndex.current++;
         return [...tms];
       });
     },
@@ -467,9 +450,9 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
   );
   const setSelectedTeam2Cont = useCallback(
     (team: TeamListElement | undefined) => {
-      if (team) currentIndex.current++;
       setSelectedTeam2((tms) => {
         tms[Math.floor(currentIndex.current / 6)] = team;
+        if (team) currentIndex.current++;
         return [...tms];
       });
     },
@@ -686,6 +669,13 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
           <Loading small />
         </Row>
       )}
+      {status === 'idle' && sent.current && (
+        <Row className="my-4">
+          <Col xs={12} className="text-center">
+            <span className="text-success">Success</span>
+          </Col>
+        </Row>
+      )}
       {errors.length !== 0 && (
         <Row className="my-4">
           {errors.map((e) => (
@@ -724,7 +714,9 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
       {Array(dates.length)
         .fill(0)
         .map((_, index) => (
-          <div className="bulk-game" key={`bulk-create${generatePW(index)}`}>
+          <div
+            className="bulk-game"
+            key={`bulk-create${generatePW(index + 1)}`}>
             <Row>
               <Col
                 xs={12}

@@ -98,7 +98,7 @@ function SearchInput<T extends Searchable>({
         onChange(value.slice(0, -1));
       }
     },
-    [onSelect, selectedItem],
+    [onChange, onSelect, selectedItem, value],
   );
   const onFocusCont = useCallback(() => {
     if (onFocus) {
