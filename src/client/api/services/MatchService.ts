@@ -37,12 +37,12 @@ matchId: number,
     /**
      * Delete Match
      * @param matchId 
-     * @returns Match Successful Response
+     * @returns number Successful Response
      * @throws ApiError
      */
     public static deleteMatchMatchMatchIdDelete(
 matchId: number,
-): CancelablePromise<Match> {
+): CancelablePromise<number> {
         return __request(OpenAPI, {
             method: 'DELETE',
             url: '/match/{match_id}',

@@ -50,6 +50,10 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
     } else if (match && isDownloading.current) {
       isDownloading.current = false;
       setSelectedMatch(match);
+    } else if (!match && isDownloading.current && adminMethod === 'delete') {
+      isDownloading.current = false;
+      setMethod('search');
+      setSelectedMatch(undefined);
     }
   }, [adminElemId, getMatch, method, status, match, adminMethod]);
   const reset = useCallback(() => {
@@ -167,7 +171,7 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
         }`}>
         <button className="form-toggler" onClick={toggleDelete} type="button">
           <h6>
-            {translate('deleteLeague', l) +
+            {translate('deleteMatch', l) +
               (selectedMatch ? ` [${selectedMatch.id}]` : '')}
           </h6>
           <FontAwesomeIcon

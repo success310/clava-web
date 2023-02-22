@@ -711,6 +711,7 @@ export enum AdminActionTypes {
   FETCH_USER_SUCCESS = '@@admin/FETCH_USER_SUCCESS',
   FETCH_MATCH = '@@admin/FETCH_MATCH',
   FETCH_MATCH_SUCCESS = '@@admin/FETCH_MATCH_SUCCESS',
+  DELETE_MATCH_SUCCESS = '@@admin/DELETE_MATCH_SUCCESS',
   FETCH_EVENT_SUCCESS = '@@admin/FETCH_EVENT_SUCCESS',
   DELETE_EVENT_SUCCESS = '@@admin/DELETE_EVENT_SUCCESS',
   FETCH_LEAGUE = '@@admin/FETCH_LEAGUE',
@@ -776,6 +777,10 @@ export type AdminActions =
   | {
       type: AdminActionTypes.FETCH_NEWS_SUCCESS;
       payload: Blog;
+    }
+  | {
+      type: AdminActionTypes.DELETE_MATCH_SUCCESS;
+      payload: IDType;
     }
   | {
       type: AdminActionTypes.DELETE_EVENT_SUCCESS;

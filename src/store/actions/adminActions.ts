@@ -150,7 +150,7 @@ export function createMatch(
 export function deleteMatch(dispatch: Dispatch<AdminActions>, id: IDType) {
   defaultGet(
     dispatch,
-    AdminActionTypes.FETCH_MATCH_SUCCESS,
+    AdminActionTypes.DELETE_MATCH_SUCCESS,
     AdminActionTypes.FETCH_ERROR,
     AdminActionTypes.FETCH_MATCH,
     client().deleteMatch,

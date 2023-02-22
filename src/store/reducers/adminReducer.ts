@@ -139,6 +139,12 @@ const reducer: Reducer<AdminState> = (
         status: 'idle',
         match: action.payload,
       };
+    case AdminActionTypes.DELETE_MATCH_SUCCESS:
+      return {
+        ...state,
+        status: 'idle',
+        match: null,
+      };
     case AdminActionTypes.FETCH_EVENT_SUCCESS: {
       if (state.match && state.match.id === action.payload.id) {
         const newEvents = state.match.events.concat([action.payload.response]);
