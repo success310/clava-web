@@ -124,7 +124,7 @@ const News: React.FC<ConnectedProps<typeof connector>> = ({
           image: undefined,
           teamTo: undefined,
           teamFrom: undefined,
-          url: undefined,
+          url: b.url,
         }))
       : transfers.map<NewsListElementType>((t, i) => ({
           id: i,

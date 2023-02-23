@@ -1,6 +1,6 @@
 {
   "name": "clava-web",
-  "version": "1.0.19",
+  "version": "1.0.22",
   "private": true,
   "scripts": {
     "start": "react-scripts start",

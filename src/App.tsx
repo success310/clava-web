@@ -16,22 +16,22 @@ import 'intl/locale-data/jsonp/en-US';
 import 'intl/locale-data/jsonp/it-IT';
 
 const App: React.FC = () => {
+  const theme = window.localStorage.getItem(AS_THEME);
   const [rootContext, setRootContext] = useState<ClavaRootContextType>({
-    theme: 'dark',
+    theme: theme === 'dark' || theme === 'light' ? theme : 'dark',
     fbToken: '',
-    initialized: false,
+    initialized: true,
   });
   useEffect(() => {
     initFb().then(() => {
       const fbToken = fb().getFirebaseToken();
-      const theme = window.localStorage.getItem(AS_THEME);
       setRootContext({
         theme: theme === 'dark' || theme === 'light' ? theme : 'dark',
         fbToken,
         initialized: true,
       });
     });
-  }, []);
+  }, [theme]);
   if (rootContext.initialized) {
     return (
       <ClavaRootContext.Provider value={rootContext}>

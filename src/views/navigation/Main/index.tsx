@@ -53,7 +53,7 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
   useEffect(() => {
     if (status === 'failed') {
       if (error === 'not_registered') {
-        if (aoi && languageObject && !user)
+        if (aoi && languageObject && !user && fbToken !== '')
           createUser({
             deviceId: new DeviceUUID().get(),
             deviceInfo: JSON.stringify(getDeviceInfo()),
