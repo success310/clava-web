@@ -252,7 +252,7 @@ function parseCsv(file: File): Promise<Parsed> {
               errors.push({
                 file: file.name,
                 line: index + 1,
-                message: 'errorDate',
+                message: 'errorDateCont',
               });
             }
             const leagueString = line[3];
@@ -626,6 +626,7 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
     try {
       const matchCreates: MatchCreate[] = dates.map((date, index) => {
         const team1 = selectedTeam1s[index];
+
         if (!team1) {
           setCreateError({ index, type: 'errorTeam1' });
           throw new Error(`Team1 not set on Match ${index}`);
@@ -640,7 +641,7 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
           setCreateError({ index, type: 'errorLeague' });
           throw new Error(`League not set on Match ${index}`);
         }
-        if (!date) {
+        if (!date || Number.isNaN(date.getTime())) {
           setCreateError({ index, type: 'errorDate' });
           throw new Error(`Date not set on Match ${index}`);
         }
@@ -743,7 +744,9 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
         <Row>
           <Col xs={12}>
             <h6 className="text-danger">
-              {`${translate(createError.type, l)} ${createError.index + 1}`}
+              {`${translate(createError.type, l)}. Zeile: ${
+                createError.index + 1
+              }`}
             </h6>
           </Col>
         </Row>
@@ -774,6 +777,13 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
                   onFocus={onSetFocus}
                   label="date"
                   type="datetime"
+                  className={
+                    createError &&
+                    createError.index === index &&
+                    createError.type === 'errorDate'
+                      ? 'alert-danger'
+                      : ''
+                  }
                 />
               </Col>
               <Col xs={12} md={6}>
@@ -811,6 +821,13 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
                   items={leagues}
                   selectedItem={selectedLeagues[index]}
                   onSelect={setSelectedLeagueCont}
+                  className={
+                    createError &&
+                    createError.index === index &&
+                    createError.type === 'errorLeague'
+                      ? 'alert-danger'
+                      : ''
+                  }
                 />
               </Col>
               <Col xs={12} md={6}>
@@ -852,6 +869,13 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
                   items={teams}
                   selectedItem={selectedTeam1s[index]}
                   onSelect={setSelectedTeam1Cont}
+                  className={
+                    createError &&
+                    createError.index === index &&
+                    createError.type === 'errorTeam1'
+                      ? 'alert-danger'
+                      : ''
+                  }
                 />
               </Col>
               <Col
@@ -876,6 +900,13 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
                   items={teams}
                   selectedItem={selectedTeam2s[index]}
                   onSelect={setSelectedTeam2Cont}
+                  className={
+                    createError &&
+                    createError.index === index &&
+                    createError.type === 'errorTeam2'
+                      ? 'alert-danger'
+                      : ''
+                  }
                 />
               </Col>
             </Row>
@@ -910,6 +941,7 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
           </Button>
         </Col>
       </Row>
+
       {error && (
         <Row className="my-4">
           <Col xs={12} className="text-center">

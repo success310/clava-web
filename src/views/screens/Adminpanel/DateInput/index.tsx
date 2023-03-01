@@ -33,6 +33,7 @@ const DateInput: React.FC<{
   name: string;
   onFocus?: (index: number | undefined) => void;
   isFocused?: boolean;
+  className?: string;
   index?: number;
   label: TranslatorKeys;
   type: 'date' | 'datetime' | 'time';
@@ -45,6 +46,7 @@ const DateInput: React.FC<{
   isFocused,
   disabled,
   value,
+  className,
   onChange,
 }) => {
   const { l } = useContext(ClavaContext);
@@ -85,7 +87,9 @@ const DateInput: React.FC<{
   }, [index, onFocus]);
   return (
     <FormGroup>
-      <Label htmlFor={name}>{translate(label, l)}</Label>
+      <Label htmlFor={name} className={className}>
+        {translate(label, l)}
+      </Label>
       <InputGroup>
         <Input
           tabIndex={0}
@@ -94,6 +98,7 @@ const DateInput: React.FC<{
           value={type === 'time' ? time.current : date.current}
           name={name}
           id={name}
+          className={className}
           innerRef={inputElem}
           onFocus={onFocusCont}
           autoFocus={isFocused}
@@ -135,6 +140,7 @@ DateInput.defaultProps = {
   disabled: false,
   isFocused: false,
   index: undefined,
+  className: undefined,
   onFocus: undefined,
 };
 

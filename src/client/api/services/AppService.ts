@@ -1,6 +1,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { ChangeLogElement } from '../models/ChangeLogElement';
+
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
@@ -70,6 +72,30 @@ version: string,
         return __request(OpenAPI, {
             method: 'GET',
             url: '/app/agb_level',
+        });
+    }
+
+    /**
+     * Get Changelog
+     * @param offset 
+     * @param limit 
+     * @returns ChangeLogElement Successful Response
+     * @throws ApiError
+     */
+    public static getChangelogAppChangelogGet(
+offset?: number,
+limit: number = 50,
+): CancelablePromise<Array<ChangeLogElement>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/app/changelog',
+            query: {
+                'offset': offset,
+                'limit': limit,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
         });
     }
 

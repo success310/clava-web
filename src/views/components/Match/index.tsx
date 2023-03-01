@@ -151,7 +151,7 @@ const Match: React.FC<ConnectedProps<typeof connector>> = ({
       {fullMatch && (
         <>
           <Row className="text-center mt-4 border-bottom mx-1">
-            <Col xs={4}>
+            <Col xs={match.league.hasLineup ? 4 : 6}>
               <NavLink
                 to={parseParams({ view: 'highlights' }, params)}
                 className={
@@ -160,14 +160,16 @@ const Match: React.FC<ConnectedProps<typeof connector>> = ({
                 {translate('highlights', l)}
               </NavLink>
             </Col>
-            <Col xs={4}>
-              <NavLink
-                to={parseParams({ view: 'lineup' }, params)}
-                className={view === 'lineup' ? 'text-primary bold' : ''}>
-                {translate('lineup', l)}
-              </NavLink>
-            </Col>
-            <Col xs={4}>
+            {match.league.hasLineup && (
+              <Col xs={4}>
+                <NavLink
+                  to={parseParams({ view: 'lineup' }, params)}
+                  className={view === 'lineup' ? 'text-primary bold' : ''}>
+                  {translate('lineup', l)}
+                </NavLink>
+              </Col>
+            )}
+            <Col xs={match.league.hasLineup ? 4 : 6}>
               <NavLink
                 to={parseParams({ view: 'table' }, params)}
                 className={view === 'table' ? 'text-primary bold' : ''}>
@@ -194,20 +196,22 @@ const Match: React.FC<ConnectedProps<typeof connector>> = ({
                 <span>{translate('noEventsEntered', l)}</span>
               )}
             </Col>
-            <Col xs={12} className={view === 'lineup' ? '' : 'hidden'}>
-              <Lineup
-                matchId={fullMatch.id}
-                team1Id={fullMatch.team1.id}
-                team2Id={fullMatch.team2.id}
-                team1={fullMatch.team1}
-                team2={fullMatch.team2}
-                lineup1={fullMatch.lineupTeam1}
-                lineup2={fullMatch.lineupTeam2}
-                cardEvents={getCardEvents(fullMatch.events)}
-                changeEvents={getChangeEvents(fullMatch.events)}
-                goalEvents={getGoalEvents(fullMatch.events)}
-              />
-            </Col>
+            {match.league.hasLineup && (
+              <Col xs={12} className={view === 'lineup' ? '' : 'hidden'}>
+                <Lineup
+                  matchId={fullMatch.id}
+                  team1Id={fullMatch.team1.id}
+                  team2Id={fullMatch.team2.id}
+                  team1={fullMatch.team1}
+                  team2={fullMatch.team2}
+                  lineup1={fullMatch.lineupTeam1}
+                  lineup2={fullMatch.lineupTeam2}
+                  cardEvents={getCardEvents(fullMatch.events)}
+                  changeEvents={getChangeEvents(fullMatch.events)}
+                  goalEvents={getGoalEvents(fullMatch.events)}
+                />
+              </Col>
+            )}
             <Col xs={12} className={view === 'table' ? '' : 'hidden'}>
               <Table
                 team2Id={fullMatch.team2.id}

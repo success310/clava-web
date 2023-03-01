@@ -86,6 +86,9 @@ const reducer: Reducer<AdminState> = (
     case AdminActionTypes.FETCH_LEAGUE_SUCCESS: {
       return { ...state, status: 'idle', league: action.payload };
     }
+    case AdminActionTypes.FETCH_NEWS_SUCCESS: {
+      return { ...state, news: action.payload, status: 'idle' };
+    }
     case AdminActionTypes.SEARCH_SUCCESS: {
       if (action.payload.id === SEARCH_VIDEOS)
         return {

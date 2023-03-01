@@ -2,11 +2,14 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import { connect } from 'react-redux';
 import { RootState } from '../../../../store';
-import { searchAdmin } from '../../../../store/actions/adminActions';
+import {
+  createNews,
+  searchAdmin,
+} from '../../../../store/actions/adminActions';
 import { SEARCH_NEWS } from '../../../../store/actions/types';
 import { IDType } from '../../../../config/types';
 import { performAction } from '../../../../store/actions/all';
-import { ExternalVideoCreateRaw } from '../../../../client/api';
+import { BlogCreate } from '../../../../client/api';
 import { fetchAois } from '../../../../store/actions/aoiActions';
 
 const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
@@ -16,8 +19,8 @@ const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
   patchNews: (id: IDType) => {
     // TODO
   },
-  createNews: (video: ExternalVideoCreateRaw) => {
-    // TODO
+  createNews: (news: BlogCreate) => {
+    performAction({ f: createNews, p: [dispatch, news] });
   },
   deleteNews: () => {
     // TODO

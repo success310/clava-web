@@ -2067,6 +2067,11 @@ const generalKeywords = {
     it: 'Datum nicht gesetzt',
     en: 'Datum nicht gesetzt',
   },
+  errorDateCont: {
+    de: '[file]: Zeile [line]: Datum nicht gesetzt',
+    it: '[file]: Zeile [line]: Datum nicht gesetzt',
+    en: '[file]: Zeile [line]: Datum nicht gesetzt',
+  },
   nameDE: {
     de: 'Name Deutsch',
     it: 'Name tedesco',
@@ -2231,6 +2236,56 @@ const generalKeywords = {
     de: 'Liga nicht gefunden',
     it: 'Liga nicht gefunden',
     en: 'Liga nicht gefunden',
+  },
+  titleDE: {
+    de: 'Titel DE',
+    it: 'Titolo DE',
+    en: 'Title DE',
+  },
+  titleIT: {
+    de: 'Titel IT',
+    it: 'Titolo IT',
+    en: 'Title IT',
+  },
+  titleEN: {
+    de: 'Titel EN',
+    it: 'Titolo EN',
+    en: 'Title EN',
+  },
+  summaryDE: {
+    de: 'Zusammenfassung DE',
+    it: 'Sommario DE',
+    en: 'Summary DE',
+  },
+  summaryIT: {
+    de: 'Zusammenfassung IT',
+    it: 'Sommario IT',
+    en: 'Summary IT',
+  },
+  summaryEN: {
+    de: 'Zusammenfassung EN',
+    it: 'Sommario EN',
+    en: 'Summary EN',
+  },
+  bodyDE: {
+    de: 'Text DE',
+    it: 'Testo DE',
+    en: 'Body DE',
+  },
+  bodyIT: {
+    de: 'Text IT',
+    it: 'Testo IT',
+    en: 'Body IT',
+  },
+  bodyEN: {
+    de: 'Text EN',
+    it: 'Testo EN',
+    en: 'Body EN',
+  },
+  uid: {
+    de: 'Eindeutige ID',
+    it: 'ID Unica',
+    en: 'Unique ID',
   },
   emptyString: {
     de: ' ',

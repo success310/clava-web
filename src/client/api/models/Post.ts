@@ -15,4 +15,5 @@ export type Post = {
     author: UserEssential;
     created: string;
     deleted: boolean;
+    amountComments: number;
 };

@@ -50,6 +50,7 @@ type SearchInputProps<T extends Searchable> = {
   onFocus?: (index: number | undefined) => void;
   isFocused?: boolean;
   index?: number;
+  className?: string;
   onSelect: (item: T | undefined) => void;
 };
 
@@ -61,6 +62,7 @@ function SearchInput<T extends Searchable>({
   isFocused,
   onSelect,
   value,
+  className,
   index,
   selectedItem,
   name,
@@ -107,13 +109,17 @@ function SearchInput<T extends Searchable>({
   }, [index, onFocus]);
   return (
     <FormGroup>
-      <Label htmlFor={`search${name}`}>{translate(label, l)}</Label>
+      <Label htmlFor={`search${name}`} className={className}>
+        {translate(label, l)}
+      </Label>
       <InputGroup className={searching && isFocused ? 'searching' : ''}>
         <Input
           onFocus={onFocusCont}
           autoFocus={isFocused}
           tabIndex={0}
-          className={selectedItem ? 'text-white' : 'text-white-50'}
+          className={
+            (selectedItem ? 'text-white' : 'text-white-50') + className
+          }
           disabled={disabled}
           innerRef={inputElem}
           title={
@@ -135,7 +141,7 @@ function SearchInput<T extends Searchable>({
                     : 'title' in selectedItem
                     ? showTranslated(selectedItem.title, l)
                     : 'fileMobile' in selectedItem
-                    ? selectedItem.name
+                    ? selectedItem.name + selectedItem
                     : 'team1' in selectedItem
                     ? `${showTranslated(
                         selectedItem.team1.name,
@@ -207,9 +213,10 @@ SearchInput.defaultProps = {
   disabled: false,
   isFocused: false,
   index: undefined,
+  className: undefined,
   onFocus: undefined,
   selectedItem: undefined,
 };
 
 export default SearchInput;
-// relo ad
+// reload

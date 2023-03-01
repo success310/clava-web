@@ -77,21 +77,21 @@ export const $User = {
         favoriteMatches: {
     type: 'array',
     contains: {
-        type: 'MatchListElement',
+        type: 'MatchListMinimum',
     },
     isRequired: true,
 },
         favoriteTeams: {
     type: 'array',
     contains: {
-        type: 'TeamListElement',
+        type: 'TeamListMinimum',
     },
     isRequired: true,
 },
         favoriteLeagues: {
     type: 'array',
     contains: {
-        type: 'LeagueListElement',
+        type: 'LeagueListMinimum',
     },
     isRequired: true,
 },

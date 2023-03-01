@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -36,7 +37,20 @@ const AdminpanelAds: React.FC<ConnectedProps<typeof connector>> = ({
   const isCreating = useRef(false);
   const isDownloading = useRef(false);
   const timeout = useRef<number>(-1);
-
+  useEffect(() => {
+    if (ads.length === 0) {
+      searchAd('');
+    }
+  }, []);
+  const filteredAds = useMemo(
+    () =>
+      ads.filter(
+        (a) =>
+          a.name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+          a.url.indexOf(query.toLowerCase()) !== -1,
+      ),
+    [ads, query],
+  );
   useEffect(() => {
     if (
       adminElemId &&
@@ -78,18 +92,7 @@ const AdminpanelAds: React.FC<ConnectedProps<typeof connector>> = ({
   const toggleDelete = useCallback(() => {
     setMethod((m) => (m === 'delete' ? 'search' : 'delete'));
   }, []);
-  const onSearch = useCallback(
-    (q: string) => {
-      if (timeout.current !== -1) {
-        window.clearTimeout(timeout.current);
-      }
-      setQuery(q);
-      timeout.current = window.setTimeout(() => {
-        searchAd(q);
-      }, 500);
-    },
-    [searchAd],
-  );
+
   const onEdit = useCallback(
     (adPatch: AdPatch) => {
       if (selectedAd) {
@@ -124,13 +127,13 @@ const AdminpanelAds: React.FC<ConnectedProps<typeof connector>> = ({
         </button>
         <SearchInput
           value={query}
-          onChange={onSearch}
+          onChange={setQuery}
           label="searchAds"
           isFocused={method === 'search'}
           selectedItem={selectedAd}
           name="searchAds"
           onSelect={setSelectedAd}
-          items={ads}
+          items={filteredAds}
           searching={searching}
         />
         {selectedAd && (

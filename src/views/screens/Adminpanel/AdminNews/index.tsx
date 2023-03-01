@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { ClavaContext } from '../../../../config/contexts';
 import { connector } from './redux';
+import EditCreateNews from './EditCreate';
 
 const AdminpanelNews: React.FC<ConnectedProps<typeof connector>> = ({
   news,
@@ -11,6 +12,7 @@ const AdminpanelNews: React.FC<ConnectedProps<typeof connector>> = ({
   getNews,
   aois,
   getAois,
+  createNews,
   deleteNews,
   status,
   searching,
@@ -26,7 +28,7 @@ const AdminpanelNews: React.FC<ConnectedProps<typeof connector>> = ({
   return (
     <div>
       <fieldset className={`form ${method === 'search' ? 'open' : 'close'}`}>
-        <span>Nothing here jet</span>
+        <EditCreateNews onSubmit={createNews} selectedNews={undefined} />
       </fieldset>
     </div>
   );

@@ -23,6 +23,7 @@ import {
   BadgeService,
   BadgeTypeEnum,
   Blog,
+  BlogCreate,
   BlogService,
   BulletinService,
   CancelablePromise,
@@ -946,6 +947,10 @@ class Client {
     return BlogService.getBlogsBlogGet(limit, offset);
   }
 
+  createNews(news: BlogCreate) {
+    return BlogService.createBlogBlogPost(news);
+  }
+
   fetchVideos(aoiId: IDType, offset: number, limit: number) {
     return ExternalVideoService.getExternalVideosExternalVideoGet(
       limit,
@@ -1100,9 +1105,21 @@ class Client {
   }
 
   searchAds(q: string, offset: number, limit: number) {
-    return AdService.getAdsByPositionAdPositionPositionGet(
-      AdPositionEnum.HOME_MATCH,
-    );
+    return new CancelablePromise((resolve, reject) => {
+      AdService.getAdsByPositionAdPositionPositionGet(
+        AdPositionEnum.HOME_MATCH,
+      ).then((a) => {
+        AdService.getAdsByPositionAdPositionPositionGet(
+          AdPositionEnum.LEAGUE_MATCH_MATCH,
+        ).then((b) => {
+          AdService.getAdsByPositionAdPositionPositionGet(
+            AdPositionEnum.MATCH_HISTORY_BOTTOM,
+          ).then((c) => {
+            resolve(a.concat(b).concat(c));
+          }, reject);
+        }, reject);
+      }, reject);
+    });
   }
 
   searchUser(q: string, offset: number, limit: number) {

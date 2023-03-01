@@ -23,6 +23,7 @@ import {
   BadgeCreate,
   BadgePatch,
   BadgeTypeEnum,
+  BlogCreate,
   ExternalVideoCreateRaw,
   LeagueCreate,
   LeaguePatch,
@@ -427,6 +428,20 @@ export function deleteEventAdmin(
     false,
     { id: matchID },
     eventId,
+  );
+}
+// asf
+
+export function createNews(dispatch: Dispatch<AdminActions>, news: BlogCreate) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.FETCH_NEWS_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.FETCH_NEWS,
+    client().createNews,
+    false,
+    false,
+    news,
   );
 }
 // asf

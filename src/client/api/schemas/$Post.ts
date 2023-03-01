@@ -38,5 +38,9 @@ export const $Post = {
     type: 'boolean',
     isRequired: true,
 },
+        amountComments: {
+    type: 'number',
+    isRequired: true,
+},
     },
 } as const;

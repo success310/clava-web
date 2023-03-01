@@ -79,6 +79,14 @@ input.form-control{
   }
 }
 
+.alert-danger{
+  color: $danger;
+  border-color: $danger;
+  & > *{
+    color: $danger;
+    border-color: $danger;
+  }
+}
 .logo, .logo-vertical {
   display: flex;
   align-items: center;
