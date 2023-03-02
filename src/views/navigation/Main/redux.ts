@@ -36,12 +36,16 @@ const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
   },
 });
 
-const props = (state: RootState) => ({
+const props = (
+  state: RootState,
+  prevProps: { setTheme: (t: 'dark' | 'light') => void },
+) => ({
   user: state.user.value,
   error: state.user.error,
   status: state.user.status,
   languageObject: state.user.language,
   aoi: state.user.areaOfInterest,
+  ...prevProps,
 });
 
 export const connector = connect(props, mapper);

@@ -8,6 +8,9 @@ import React, {
 } from 'react';
 import { DeviceUUID } from 'device-uuid';
 import { Route, Routes } from 'react-router';
+import { Button } from 'reactstrap';
+import { faPalette } from '@fortawesome/pro-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connector } from './redux';
 import socket from '../../../client/Websockets/events';
 import { browserLang, getDeviceInfo } from '../../../config/utils';
@@ -25,6 +28,7 @@ import Profile from '../../screens/Profile';
 import Register from '../../screens/Profile/Register';
 import ConfirmMail from '../../screens/Profile/ConfirmMail';
 import Adminpanel from '../../screens/Adminpanel';
+import { translate, TranslatorKeys } from '../../../config/translator';
 
 const Main: React.FC<ConnectedProps<typeof connector>> = ({
   user,
@@ -35,11 +39,15 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
   error,
   getInsidersByTeam,
   initBaseDataUser,
+  setTheme,
   status,
   getLeagues,
 }) => {
   const [firstOpen, setFirstOpen] = useState(false);
-  const { fbToken } = useContext(ClavaRootContext);
+  const { fbToken, theme } = useContext(ClavaRootContext);
+  const toggleTheme = useCallback(() => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  }, [setTheme, theme]);
   useEffect(() => {
     const endpoint = window.localStorage.getItem(AS_ENDPOINT);
     socket(endpoint ?? PROD_ENDPOINT).open();
@@ -121,55 +129,67 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
   if (!user) return <Loading />;
   return (
     <ClavaContext.Provider value={clavaContext}>
-      <Header />
-      <div className="content">
-        <Routes>
-          <Route path="*" element={<Home />} />
-          <Route index element={<Home />} />
-          <Route path="/home/:date" element={<Home />} />
-          <Route path="/home/match/:matchId" element={<Home />} />
-          <Route path="/home/match/:matchId/:view" element={<Home />} />
-          <Route path="/home/:date/match/:matchId" element={<Home />} />
-          <Route path="/home/:date/match/:matchId/:view" element={<Home />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/league/:leagueId" element={<Home />} />
-          <Route path="/league/:leagueId/:date" element={<Home />} />
-          <Route path="/league/:leagueId/match/:matchId" element={<Home />} />
-          <Route
-            path="/league/:leagueId/match/:matchId/:view"
-            element={<Home />}
-          />
-          <Route
-            path="/league/:leagueId/:date/match/:matchId"
-            element={<Home />}
-          />
-          <Route path="/feed/:feedType" element={<Home />} />
-          <Route path="/feed/:feedType/:feedId" element={<Home />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/login/:redirectAfter" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/register/:redirectAfter" element={<Register />} />
-          <Route path="/confirm" element={<ConfirmMail />} />
-          <Route path="/confirm/:redirectAfter" element={<ConfirmMail />} />
-          <Route
-            path="/confirm/:redirectAfter/:pwForgot"
-            element={<ConfirmMail />}
-          />
-          <Route path="/backoffice" element={<Adminpanel />} />
-          <Route path="/backoffice/:adminSite" element={<Adminpanel />} />
-          <Route
-            path="/backoffice/:adminSite/:adminMethod"
-            element={<Adminpanel />}
-          />
-          <Route
-            path="/backoffice/:adminSite/:adminMethod/:adminElemId"
-            element={<Adminpanel />}
-          />
-        </Routes>
+      <div className={`root ${theme}`}>
+        <Header />
+        <div className="content">
+          <Routes>
+            <Route path="*" element={<Home />} />
+            <Route index element={<Home />} />
+            <Route path="/home/:date" element={<Home />} />
+            <Route path="/home/match/:matchId" element={<Home />} />
+            <Route path="/home/match/:matchId/:view" element={<Home />} />
+            <Route path="/home/:date/match/:matchId" element={<Home />} />
+            <Route path="/home/:date/match/:matchId/:view" element={<Home />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/league/:leagueId" element={<Home />} />
+            <Route path="/league/:leagueId/:date" element={<Home />} />
+            <Route path="/league/:leagueId/match/:matchId" element={<Home />} />
+            <Route
+              path="/league/:leagueId/match/:matchId/:view"
+              element={<Home />}
+            />
+            <Route
+              path="/league/:leagueId/:date/match/:matchId"
+              element={<Home />}
+            />
+            <Route path="/feed/:feedType" element={<Home />} />
+            <Route path="/feed/:feedType/:feedId" element={<Home />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/login/:redirectAfter" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/register/:redirectAfter" element={<Register />} />
+            <Route path="/confirm" element={<ConfirmMail />} />
+            <Route path="/confirm/:redirectAfter" element={<ConfirmMail />} />
+            <Route
+              path="/confirm/:redirectAfter/:pwForgot"
+              element={<ConfirmMail />}
+            />
+            <Route path="/backoffice" element={<Adminpanel />} />
+            <Route path="/backoffice/:adminSite" element={<Adminpanel />} />
+            <Route
+              path="/backoffice/:adminSite/:adminMethod"
+              element={<Adminpanel />}
+            />
+            <Route
+              path="/backoffice/:adminSite/:adminMethod/:adminElemId"
+              element={<Adminpanel />}
+            />
+          </Routes>
+          <Button
+            className="theme-switcher"
+            role="button"
+            onClick={toggleTheme}>
+            <FontAwesomeIcon icon={faPalette} />
+            <span>
+              {translate(`theme${theme}` as TranslatorKeys, clavaContext.l)}
+            </span>
+            <div className="spacer" />
+          </Button>
+        </div>
       </div>
     </ClavaContext.Provider>
   );
 };
-// reloa d
+// reload
 export default connector(Main);

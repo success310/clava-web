@@ -48,7 +48,7 @@ const Header: React.FC<ConnectedProps<typeof connector>> = ({
             {translate('news',  l)}
           </NavLink>
           */}
-          <a href="https://app.clava.link">
+          <a href="https://clava.app.link">
             <FontAwesomeIcon icon={faMobileAndroid} />
             <span>{` ${translate('watchApp', l)}`}</span>
           </a>

@@ -1,719 +1,777 @@
-* {
-  //transition: background-color 1s ease;
-}
+.root {
+  transition: background-color,color 1s linear;
 
-html, body {
-  max-width: 100vw;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-span, p, a, button {
-  font-family: "Lexend", sans-serif;
-  font-weight: 200;
-  color: $white;
-}
-
-abbr {
-  font-family: "Lexend", sans-serif;
-  font-weight: 200;
-  color: $white;
-}
-
-abbr[title] {
-  text-decoration: none;
-  cursor: default;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: "Lexend", sans-serif;
-  font-weight: 600;
-  color: $white;
-}
-
-bold, strong, span.bold, a.bold {
-  font-family: "Lexend", sans-serif;
-  font-weight: 400;
-}
-
-a {
-  text-decoration: none;
-}
-
-/* width */
-::-webkit-scrollbar {
-  width: 5px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: $black;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: $primary;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: $primary;
-}
-
-
-.text-right {
-  text-align: right;
-}
-
-.main {
-  padding: 2rem;
-}
-
-button {
-  border-radius: var(--bs-btn-border-radius);
-}
-
-input.form-control {
-  &.changed {
-    border-color: $yellow;
+  &.light {
+    --bs-white: #000;
+    --bs-black: #fff;
+    --bs-gray-100: #212529;
+    --bs-gray-200: #343a40;
+    --bs-gray-300: #495057;
+    --bs-gray-400: #6c757d;
+    --bs-gray-500: #adb5bd;
+    --bs-gray-600: #ced4da;
+    --bs-gray-700: #dee2e6;
+    --bs-gray-800: #e9ecef;
+    --bs-gray-900: #dee2e6;
+    --bs-gray-950: #c7c7c7;
+    --bs-body-bg: #fff;
+    --bs-header: #eee;
   }
-}
-
-.alert-danger {
-  color: $danger;
-  border-color: $danger;
-
-  & > * {
-    color: $danger;
-    border-color: $danger;
-  }
-}
-
-.logo, .logo-vertical {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  margin: 2rem;
-
-  img {
-    width: 200px;
-    max-width: 50vw;
-  }
-
-  &.beta {
-    background-color: $primary;
-  }
-}
-
-.spacer {
-  margin: 1rem 0;
-}
-
-.first-open {
-  .fav-buttons {
-    display: grid;
-    grid-template-columns: 20% 20% 20% 20% 20%;
-    max-width: 768px;
-
-    .fav-button {
-      margin: 0.125rem;
-      aspect-ratio: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-
-      img {
-        width: 50%;
-      }
-
-      &.selected {
-        background-color: $form-file-button-hover-bg;
-      }
-    }
-  }
-}
-
-.picker {
-  background: $input-bg;
-  color: $input-color;
-  padding: 0.5rem 1rem;
-  border-radius: 2rem;
-  width: 100%;
-  border: 1px solid $input-border-color;
-  position: relative;
-
-  svg {
-    position: absolute;
-    right: 1rem;
-    top: 0.65rem
-  }
-
-  .options {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    border: 1px solid $input-border-color;
-    border-top-width: 0;
-    opacity: 0;
-    border-image-outset: 1;
-    border-bottom-left-radius: 2rem;
-    border-bottom-right-radius: 2rem;
-    margin: 0 -1px;
-    max-height: 0;
-    background-color: black;
-    display: none;
-    z-index: 100;
-  }
-
-  .option {
+  .content {
     width: 100%;
+    margin-top: 7rem;
+    background-color: var(--bs-body-bg);
+  }
+
+  .theme-switcher{
+    position: fixed;
+    left: 1rem;
+    bottom: 1rem;
+    max-width: 42px;
+    width: 42px;
+    max-height: 42px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    transition: max-width, width 400ms ease-in-out;
+    border: none;
     overflow: hidden;
-    padding: 0.5rem 1rem;
-    color: $input-color;
-    background-color: transparent;
-    border-color: transparent;
-    border-top: 1px dotted $input-border-color;
-    border-radius: 0;
-    transition: height, opacity 1s linear;
-
-    &:hover {
-      color: $primary;
+    background-color: var(--bs-btn-hover-bg) !important;
+    svg{
+      font-size: 24px;
+      color: var(--bs-white);
     }
-
-    &.disabled {
-      color: $input-disabled-color;
-      background-color: $input-disabled-bg;
-      border-color: $input-disabled-border-color;
-      cursor: default;
+    span{
+      position: absolute;
+      color: var(--bs-white);
+      left: 42px;
+      width: 10ch;
+      font-weight: 200;
     }
-  }
-
-  &:hover, &:active, &:focus {
-    border-color: $primary !important;
-
-  }
-
-  &.open {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    border-bottom-width: 0;
-    color: $gray-700 !important;
-
-    .options {
-      max-height: 300rem;
-      opacity: 1;
-      display: block;
+    .spacer{
+      flex: 1;
     }
-
-    svg {
-      top: 0.75rem
+    &:hover{
+      max-width: 500px;
+      width: 16ch;
     }
   }
-}
 
-.btn-secondary {
-  background-color: transparent;
-  border-color: $primary;
-}
+  html, body {
+    max-width: 100vw;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 
-.header {
-  position: fixed;
-  top: 0;
-  height: 7rem;
-  width: 100%;
-  max-width: 100vw;
-  padding: 0 2rem;
-  border-bottom: 1px solid $gray-900;
-  background-color: $black;
-  z-index: 100000;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  span, p, a, button {
+    font-family: "Lexend", sans-serif;
+    font-weight: 200;
+    color: var(--bs-white);
+  }
 
-  .logo {
-    display: inline-block;
-    margin: 0.5rem;
+  abbr {
+    font-family: "Lexend", sans-serif;
+    font-weight: 200;
+    color: var(--bs-white);
+  }
+
+  abbr[title] {
+    text-decoration: none;
+    cursor: default;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Lexend", sans-serif;
+    font-weight: 600;
+    color: var(--bs-white);
+  }
+
+  bold, strong, span.bold, a.bold {
+    font-family: "Lexend", sans-serif;
+    font-weight: 400;
   }
 
   a {
-    display: flex;
-    cursor: pointer;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.8;
-
-    &:hover {
-      opacity: 1;
-    }
-
-    svg {
-      margin-right: 0.5rem;
-      font-size: 1.5em;
-      color: $gray-600;
-    }
+    text-decoration: none;
   }
-
-  .navbar {
-    flex: 1;
-
-    .container-fluid {
-      justify-content: space-around;
-    }
-  }
-
-  .navbar-toggler {
-    svg {
-      width: 25px;
-    }
-  }
-}
-
-.sidebar {
-  background-color: $gray-900;
-  flex-direction: column;
-  width: 300px;
-  position: fixed;
-  top: 7rem;
-  left: calc(100vw - 300px);
-  transform: translateX(300px);
-  transition: transform 0.25s linear;
-  max-height: calc(100vh - 7rem);
-  overflow-y: scroll;
 
   /* width */
-  &::-webkit-scrollbar {
-    width: 2px;
+  ::-webkit-scrollbar {
+    width: 5px;
   }
 
   /* Track */
-  &::-webkit-scrollbar-track {
-    background: $gray-900;
+  ::-webkit-scrollbar-track {
+    background: var(--bs-black);
   }
 
   /* Handle */
-  &::-webkit-scrollbar-thumb {
-    background: $primary;
+  ::-webkit-scrollbar-thumb {
+    background: var(--bs-primary);
   }
 
   /* Handle on hover */
-  &::-webkit-scrollbar-thumb:hover {
-    background: $primary;
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--bs-primary);
   }
 
-  &.show {
-    transform: translateX(0);
+
+  .text-right {
+    text-align: right;
   }
 
-  .navbar-vertical {
-    .container-fluid {
-      flex-direction: column;
-      align-items: stretch;
+  .main {
+    padding: 2rem;
+  }
 
-      a {
-        margin: 1rem;
-        padding: 0;
-        border: none;
+  button {
+    border-radius: var(--bs-btn-border-radius);
+  }
+
+  input.form-control {
+    &.changed {
+      border-color: var(--bs-yellow);
+    }
+  }
+
+  .alert-danger {
+    color: var(--bs-danger);
+    border-color: var(--bs-danger);
+
+    & > * {
+      color: var(--bs-danger);
+      border-color: var(--bs-danger);
+    }
+  }
+
+  .logo, .logo-vertical {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    margin: 2rem;
+
+    img {
+      width: 200px;
+      max-width: 50vw;
+    }
+
+    &.beta {
+      background-color: var(--bs-primary);
+    }
+  }
+
+  .spacer {
+    margin: 1rem 0;
+  }
+
+  .first-open {
+    .fav-buttons {
+      display: grid;
+      grid-template-columns: 20% 20% 20% 20% 20%;
+      max-width: 768px;
+
+      .fav-button {
+        margin: 0.125rem;
+        aspect-ratio: 1;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 2rem;
-        cursor: pointer;
 
-        svg {
-          margin-right: 0.5rem;
-          font-size: 1.5rem;
-          color: $gray-600;
-          flex: 1;
+        img {
+          width: 50%;
         }
 
-        span {
-          flex: 6;
-          font-size: 1rem;
-          text-align: left;
-        }
-
-        small {
-          font-size: 0.75rem;
-          flex: 2;
+        &.selected {
+          background-color: var(--bs-form-file-button-hover-bg);
         }
       }
     }
   }
-}
 
-.content {
-  width: 100%;
-  margin-top: 7rem;
-}
-
-.favorite-icon {
-  background-color: transparent;
-  border: none;
-
-  &:active, &:focus {
-    outline: none;
-  }
-
-  &.float-right {
-    float: right;
-  }
-}
-
-@keyframes leagueMoveIn {
-  from {
-    max-height: 0;
-  }
-  to {
-    max-height: 200px;
-  }
-}
-
-.home {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-around;
-  flex-direction: row;
-  width: 100vw;
-  max-width: 1920px;
-  margin: 0 auto;
-
-  & > * {
-    margin: 1rem;
-    border: solid thin $gray-900;
-    border-radius: 1rem;
-  }
-
-  .leagues-small {
-    flex: 0 1 20%;
-
-    .search-leagues {
-      padding: 0.5rem 1rem;
-      display: flex;
-      border-bottom: solid thin $gray-900;
-      align-items: center;
-      min-height: 60px;
-      max-height: 60px;
-
-      .input-group {
-        input {
-          padding: 0.5rem;
-          background-color: transparent;
-          border: none;
-          color: $white;
-
-          &:active, &:focus {
-            outline: none;
-          }
-        }
-
-        .input-group-addon {
-          display: none;
-          visibility: hidden;
-          z-index: 100;
-          color: $input-color;
-          border: none;
-          background-color: transparent;
-        }
-      }
-    }
-
-    nav {
-      padding: 1rem;
-
-      a {
-        margin: 0.125rem 0;
-        padding: 0.125rem 0;
-        display: list-item;
-        list-style: none;
-
-        &.new {
-          max-height: 0;
-          animation: leagueMoveIn 0.5s ease-out;
-          animation-fill-mode: forwards;
-          overflow: hidden;
-        }
-
-        &.active {
-          text-decoration: underline;
-        }
-      }
-
-      div.nav-link {
-        font-weight: bold;
-        margin-top: 1rem;
-      }
-    }
-  }
-
-  .league-matches-container {
-    flex: 0 1 50%;
+  .picker {
+    background: var(--bs-input-bg);
+    color: var(--bs-input-color);
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    width: 100%;
+    border: 1px solid var(--bs-input-border-color);
     position: relative;
 
-    .matchdays-container {
-      min-height: 60px;
-      max-height: 60px;
+    svg {
+      position: absolute;
+      right: 1rem;
+      top: 0.65rem
+    }
+
+    .options {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      border: 1px solid var(--bs-input-border-color);
+      border-top-width: 0;
+      opacity: 0;
+      border-image-outset: 1;
+      border-bottom-left-radius: 2rem;
+      border-bottom-right-radius: 2rem;
+      margin: 0 -1px;
+      max-height: 0;
+      background-color: var(--bs-black);
+      display: none;
+      z-index: 100;
+    }
+
+    .option {
       width: 100%;
-      border-bottom: solid thin $gray-900;
-      position: relative;
+      overflow: hidden;
+      padding: 0.5rem 1rem;
+      color: var(--bs-input-color);
+      background-color: transparent;
+      border-color: transparent;
+      border-top: 1px dotted var(--bs-input-border-color);
+      border-radius: 0;
+      transition: height, opacity 1s linear;
 
-      &:after {
-        position: absolute;
-        border-radius: 1rem;
-        inset: 0;
-        content: " ";
-        background-image: linear-gradient(to right, transparent 10%, $black 10%, transparent 20%, transparent 80%, $black 90%, transparent 90%);
-        pointer-events: none;
+      &:hover {
+        color: var(--bs-primary);
       }
 
-      .today {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 10%;
-        height: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow-x: hidden;
-        user-select: none;
+      &.disabled {
+        color: var(--bs-input-disabled-color);
+        background-color: var(--bs-input-disabled-bg);
+        border-color: var(--bs-input-disabled-border-color);
+        cursor: default;
+      }
+    }
+
+    &:hover, &:active, &:focus {
+      border-color: var(--bs-primary)!important;
+
+    }
+
+    &.open {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      border-bottom-width: 0;
+      color: var(--bs-gray-700)!important;
+
+      .options {
+        max-height: 300rem;
+        opacity: 1;
+        display: block;
       }
 
-      .matchdays {
-        position: absolute;
-        left: 10%;
-        top: 0;
-        right: 10%;
-        display: flex;
-        flex-direction: row;
-        overflow-x: hidden;
-        user-select: none;
+      svg {
+        top: 0.75rem
+      }
+    }
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    border-color: var(--bs-primary);
+  }
+
+  .header {
+    position: fixed;
+    top: 0;
+    height: 7rem;
+    width: 100%;
+    max-width: 100vw;
+    padding: 0 2rem;
+    border-bottom: 1px solid var(--bs-gray-900);
+    background-color: var(--bs-header);
+    z-index: 100000;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    .logo {
+      display: inline-block;
+      margin: 0.5rem;
+    }
+
+    a {
+      display: flex;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.8;
+      span {
+        font-weight: 400;
+        color: var(--bs-gray-300);
+      }
+      &:hover {
+        opacity: 1;
       }
 
-      .matchday {
-        background-color: transparent;
-        border: none;
-        margin: 0 1rem;
-        text-align: center;
+      svg {
+        margin-right: 0.5rem;
+        font-size: 1.5em;
+        color: var(--bs-gray-300);
       }
+    }
 
-      .clava-calendar-container {
-        position: absolute;
-        right: 0;
-        top: 0;
-        left: 90%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    .navbar {
+      flex: 1;
 
-        button.label {
-          background: none;
+      .container-fluid {
+        justify-content: space-around;
+      }
+    }
+
+    .navbar-toggler {
+      svg {
+        width: 25px;
+      }
+    }
+  }
+
+  .sidebar {
+    background-color: var(--bs-gray-900);
+    flex-direction: column;
+    width: 300px;
+    position: fixed;
+    top: 7rem;
+    left: calc(100vw - 300px);
+    transform: translateX(300px);
+    transition: transform 0.25s linear;
+    max-height: calc(100vh - 7rem);
+    overflow-y: scroll;
+
+    /* width */
+    &::-webkit-scrollbar {
+      width: 2px;
+    }
+
+    /* Track */
+    &::-webkit-scrollbar-track {
+      background: var(--bs-gray-900);
+    }
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+      background: var(--bs-primary);
+    }
+
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover {
+      background: var(--bs-primary);
+    }
+
+    &.show {
+      transform: translateX(0);
+    }
+
+    .navbar-vertical {
+      .container-fluid {
+        flex-direction: column;
+        align-items: stretch;
+
+        a {
+          margin: 1rem;
+          padding: 0;
           border: none;
-          color: $white;
-
-          &:active {
-            outline: none;
-          }
-        }
-
-        .react-calendar-container {
-          position: absolute;
-          top: 0;
-          right: 0;
-          background-color: $primary;
-          border-radius: 1rem;
-          padding: 1rem;
-          z-index: 1000;
-
-          .react-calendar {
-            .react-calendar__navigation {
-              display: flex;
-            }
-
-            .react-calendar__month-view__weekdays__weekday,
-            .react-calendar__tile {
-              padding: 0.25rem;
-              position: relative;
-
-              &.react-calendar__tile--now {
-                :after {
-                  content: " ";
-                  position: absolute;
-                  top: 0.25rem;
-                  right: 0.35rem;
-                  width: 0.5rem;
-                  height: 0.5rem;
-                  background-color: $live;
-                  border-radius: 100%;
-                }
-              }
-
-              &.react-calendar__tile--active {
-                background-color: $black;
-                border-radius: 100%;
-
-                abbr {
-                  color: $primary;
-                  font-weight: 400;
-                }
-              }
-
-              &.react-calendar__month-view__days__day--neighboringMonth {
-                opacity: 0;
-                pointer-events: none;
-                cursor: default;
-              }
-
-              .disabled {
-                position: absolute;
-                inset: 0;
-                cursor: default;
-                background-color: $black-2;
-                border-radius: 100%;
-              }
-
-              .enabled {
-                position: absolute;
-                inset: 0;
-                background-color: $white-2;
-                border-radius: 100%;
-              }
-            }
-
-            button {
-              background: none;
-              border: none;
-              color: $white;
-
-              &:active {
-                outline: none;
-              }
-            }
-          }
-        }
-      }
-    }
-
-    .league-matches {
-      width: 100%;
-
-
-      .league-match-section {
-        margin: 0.5rem 0.5rem 1rem 0.5rem;
-
-        .league-match-title {
           display: flex;
-          flex-direction: row;
-          justify-content: space-between;
+          align-items: center;
+          justify-content: center;
+          height: 2rem;
+          cursor: pointer;
 
-          &.link {
-            cursor: pointer;
-          }
-        }
-
-        .league-match-item {
-          margin: 0.25rem 0;
-          padding: 0.5rem 0.25rem;
-
-          .match-small {
-            border-radius: 1rem;
-            background-color: $gray-950;
-            padding: 0.75rem;
-            display: block;
-            span {
-              font-size: 125%;
-            }
-            .match-status, .fav-icon {
-              display: flex;
-              align-items: center;
-              justify-content: center;
-
-              .live {
-                color: $live;
-              }
-            }
+          svg {
+            margin-right: 0.5rem;
+            font-size: 1.5rem;
+            color: var(--bs-gray-600);
+            flex: 1;
           }
 
-          .match-big {
-            border-radius: 1rem;
-            background-color: $gray-950;
-            padding: 0.25rem;
-            display: block;
-            position: relative;
+          span {
+            flex: 6;
+            font-size: 1rem;
+            text-align: left;
+          }
 
-            .close-match {
-              position: absolute;
-              right: 0.75rem;
-              top: 0.25rem;
-            }
+          small {
+            font-size: 0.75rem;
+            flex: 2;
           }
         }
       }
     }
+  }
 
-    &.small {
+  .favorite-icon {
+    background-color: transparent;
+    border: none;
+
+    &:active, &:focus {
+      outline: none;
+    }
+
+    &.float-right {
+      float: right;
+    }
+  }
+
+  @keyframes leagueMoveIn {
+    from {
+      max-height: 0;
+    }
+    to {
+      max-height: 200px;
+    }
+  }
+
+  .home {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    flex-direction: row;
+    width: 100vw;
+    max-width: 1920px;
+    margin: 0 auto;
+
+    & > * {
+      margin: 1rem;
+      border: solid thin var(--bs-gray-900);
+      border-radius: 1rem;
+    }
+
+    .leagues-small {
       flex: 0 1 20%;
 
-      .matchdays-container {
-        .today, .clava-calendar-container {
-          display: none;
-          visibility: hidden;
+      .search-leagues {
+        padding: 0.5rem 1rem;
+        display: flex;
+        border-bottom: solid thin var(--bs-gray-900);
+        align-items: center;
+        min-height: 60px;
+        max-height: 60px;
+
+        .input-group {
+          input {
+            padding: 0.5rem;
+            background-color: transparent;
+            border: none;
+            color: var(--bs-white);
+
+            &:active, &:focus {
+              outline: none;
+            }
+          }
+
+          .input-group-addon {
+            display: none;
+            visibility: hidden;
+            z-index: 100;
+            color: var(--bs-input-color);
+            border: none;
+            background-color: transparent;
+          }
         }
+      }
+
+      nav {
+        padding: 1rem;
+
+        a {
+          margin: 0.125rem 0;
+          padding: 0.125rem 0;
+          display: list-item;
+          list-style: none;
+
+          &.new {
+            max-height: 0;
+            animation: leagueMoveIn 0.5s ease-out;
+            animation-fill-mode: forwards;
+            overflow: hidden;
+          }
+
+          &.active {
+            text-decoration: underline;
+          }
+        }
+
+        div.nav-link {
+          font-weight: bold;
+          margin-top: 1rem;
+        }
+      }
+    }
+
+    .league-matches-container {
+      flex: 0 1 50%;
+      position: relative;
+
+      .matchdays-container {
+        min-height: 60px;
+        max-height: 60px;
+        width: 100%;
+        border-bottom: solid thin var(--bs-gray-900);
+        position: relative;
 
         &:after {
           position: absolute;
           border-radius: 1rem;
           inset: 0;
           content: " ";
-          background-image: linear-gradient(to right, transparent 2%, $black 2%, transparent 12%, transparent 88%, $black 98%, transparent 98%);
+          background-image: linear-gradient(to right, transparent 10%, var(--bs-black) 10%, transparent 20%, transparent 80%, var(--bs-black) 90%, transparent 90%);
           pointer-events: none;
         }
 
+        .today {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 10%;
+          height: 60px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow-x: hidden;
+          user-select: none;
+        }
+
         .matchdays {
-          left: 2%;
-          right: 2%;
+          position: absolute;
+          left: 10%;
+          top: 0;
+          right: 10%;
+          display: flex;
+          flex-direction: row;
+          overflow-x: hidden;
+          user-select: none;
+        }
+
+        .matchday {
+          background-color: transparent;
+          border: none;
+          margin: 0 1rem;
+          text-align: center;
+        }
+
+        .clava-calendar-container {
+          position: absolute;
+          right: 0;
+          top: 0;
+          left: 90%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          button.label {
+            background: none;
+            border: none;
+            color: var(--bs-white);
+
+            &:active {
+              outline: none;
+            }
+          }
+
+          .react-calendar-container {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: var(--bs-primary);
+            border-radius: 1rem;
+            padding: 1rem;
+            z-index: 1000;
+
+            .react-calendar {
+              .react-calendar__navigation {
+                display: flex;
+              }
+
+              .react-calendar__month-view__weekdays__weekday,
+              .react-calendar__tile {
+                padding: 0.25rem;
+                position: relative;
+
+                &.react-calendar__tile--now {
+                  :after {
+                    content: " ";
+                    position: absolute;
+                    top: 0.25rem;
+                    right: 0.35rem;
+                    width: 0.5rem;
+                    height: 0.5rem;
+                    background-color: var(--bs-live);
+                    border-radius: 100%;
+                  }
+                }
+
+                &.react-calendar__tile--active {
+                  background-color: var(--bs-black);
+                  border-radius: 100%;
+
+                  abbr {
+                    color: var(--bs-primary);
+                    font-weight: 400;
+                  }
+                }
+
+                &.react-calendar__month-view__days__day--neighboringMonth {
+                  opacity: 0;
+                  pointer-events: none;
+                  cursor: default;
+                }
+
+                .disabled {
+                  position: absolute;
+                  inset: 0;
+                  cursor: default;
+                  background-color: var(--bs-black-2);
+                  border-radius: 100%;
+                }
+
+                .enabled {
+                  position: absolute;
+                  inset: 0;
+                  background-color: var(--bs-white-2);
+                  border-radius: 100%;
+                }
+              }
+
+              button {
+                background: none;
+                border: none;
+                color: var(--bs-white);
+
+                &:active {
+                  outline: none;
+                }
+              }
+            }
+          }
         }
       }
 
       .league-matches {
+        width: 100%;
+
+
         .league-match-section {
+          margin: 0.5rem 0.5rem 1rem 0.5rem;
+
+          .league-match-title {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+
+            &.link {
+              cursor: pointer;
+            }
+          }
+
           .league-match-item {
+            margin: 0.25rem 0;
+            padding: 0.5rem 0.25rem;
+
             .match-small {
-              border-radius: 0.5rem;
-              > .row {
-                flex-direction: column;
+              border-radius: 1rem;
+              background-color: var(--bs-gray-950);
+              padding: 0.75rem;
+              display: block;
+
+              span {
+                font-size: 125%;
+              }
+
+              .match-status, .fav-icon {
+                display: flex;
                 align-items: center;
+                justify-content: center;
 
-                > * {
-                  width: 90%;
+                .live {
+                  color: var(--bs-live);
+                }
+              }
+            }
 
-                  .team-name {
-                    > * {
-                      &:nth-child(1) {
-                        width: 100%;
+            .match-big {
+              border-radius: 1rem;
+              background-color: var(--bs-gray-950);
+              padding: 0.25rem;
+              display: block;
+              position: relative;
+
+              .close-match {
+                position: absolute;
+                right: 0.75rem;
+                top: 0.25rem;
+              }
+            }
+          }
+        }
+      }
+
+      &.small {
+        flex: 0 1 20%;
+
+        .matchdays-container {
+          .today, .clava-calendar-container {
+            display: none;
+            visibility: hidden;
+          }
+
+          &:after {
+            position: absolute;
+            border-radius: 1rem;
+            inset: 0;
+            content: " ";
+            background-image: linear-gradient(to right, transparent 2%, var(--bs-black) 2%, transparent 12%, transparent 88%, var(--bs-black) 98%, transparent 98%);
+            pointer-events: none;
+          }
+
+          .matchdays {
+            left: 2%;
+            right: 2%;
+          }
+        }
+
+        .league-matches {
+          .league-match-section {
+            .league-match-item {
+              .match-small {
+                border-radius: 0.5rem;
+
+                > .row {
+                  flex-direction: column;
+                  align-items: center;
+
+                  > * {
+                    width: 90%;
+
+                    .team-name {
+                      > * {
+                        &:nth-child(1) {
+                          width: 100%;
+                        }
+
+                        &:nth-child(2) {
+                          width: 80%
+                        }
+
+                        &:nth-child(3) {
+                          width: 20%;
+                        }
+
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+
+                        img {
+                          width: 48px;
+                        }
                       }
 
-                      &:nth-child(2) {
-                        width: 80%
-                      }
-
-                      &:nth-child(3) {
-                        width: 20%;
-                      }
-
-                      display: flex;
-                      align-items: center;
-                      justify-content: center;
-
-                      img {
-                        width: 48px;
-                      }
                     }
-
                   }
                 }
               }
@@ -722,737 +780,462 @@ input.form-control {
         }
       }
     }
-  }
 
-  .news {
-    flex: 0 1 60%;
+    .news {
+      flex: 0 1 60%;
 
-    .news-header {
-      border-bottom: solid thin $gray-900;
-      padding: 1rem 0.5rem;
-      text-align: center;
-      min-height: 60px;
-      max-height: 60px;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-
-      a {
-        margin: 0 1rem;
-
-        h5 {
-          transition: color ease-in-out 0.25s;
-        }
-      }
-    }
-
-    .news-list {
-      padding: 1rem;
-
-      .news-list-elem {
-        margin-bottom: 2rem;
-        position: relative;
-        overflow: hidden;
+      .news-header {
+        border-bottom: solid thin var(--bs-gray-900);
+        padding: 1rem 0.5rem;
+        text-align: center;
+        min-height: 60px;
+        max-height: 60px;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
         justify-content: center;
 
+        a {
+          margin: 0 1rem;
 
-        &.transfers {
-          background-color: $gray-900;
-          padding: 0.5rem;
-        }
-
-        img {
-          width: #{"max(80%, 500px)"};
-          top: 0;
-        }
-
-        .content-news {
-          padding: 0.5rem;
-        }
-
-        .backdrop {
-          padding: 2rem 0.5rem 0 0.5rem;
-          position: absolute;
-          bottom: 0;
-          width: #{"max(80%, 500px)"};
-          background-image: linear-gradient(to top, $black-8, transparent);
-        }
-
-        svg.video-play {
-          position: absolute;
-          left: 50%;
-          top: 50%;
-          transform: translate(-50%, -50%) scale(1.5);
-        }
-
-        .transfer {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: space-between;
-          width: 100%;
-
-          div {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-          }
-
-          img {
-            width: 60px;
-            margin: 0 1rem;
+          h5 {
+            transition: color ease-in-out 0.25s;
           }
         }
       }
-    }
-
-    &.small {
-      flex: 0 1 30%;
-      margin-bottom: 1rem;
 
       .news-list {
-        padding: 0.5rem;
+        padding: 1rem;
 
         .news-list-elem {
-          border-radius: 1rem;
+          margin-bottom: 2rem;
+          position: relative;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
 
-          .backdrop {
+
+          &.transfers {
+            background-color: var(--bs-gray-900);
             padding: 0.5rem;
           }
 
-          img, .backdrop {
-            width: 100%;
+          img {
+            width: #{"max(80%, 500px)"};
+            top: 0;
           }
+
+          .content-news {
+            padding: 0.5rem;
+          }
+
+          .backdrop {
+            padding: 2rem 0.5rem 0 0.5rem;
+            position: absolute;
+            bottom: 0;
+            width: #{"max(80%, 500px)"};
+            background-image: linear-gradient(to top, var(--bs-black-8), transparent);
+          }
+
+          svg.video-play {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) scale(1.5);
+          }
+
+          .transfer {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+
+            div {
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+            }
+
+            img {
+              width: 60px;
+              margin: 0 1rem;
+            }
+          }
+        }
+      }
+
+      &.small {
+        flex: 0 1 30%;
+        margin-bottom: 1rem;
+
+        .news-list {
+          padding: 0.5rem;
+
+          .news-list-elem {
+            border-radius: 1rem;
+
+            .backdrop {
+              padding: 0.5rem;
+            }
+
+            img, .backdrop {
+              width: 100%;
+            }
+
+            svg {
+              transform: translate(-50%, -50%);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .clava-ad {
+    img {
+      width: 100%;
+    }
+  }
+
+
+  .hidden {
+    visibility: hidden;
+    display: none;
+  }
+
+  .match-event {
+    border-bottom: 1px solid var(--bs-gray-800);
+
+    .standing {
+      display: block;
+      align-self: center;
+      font-size: 75%;
+    }
+
+    .player, .assist {
+      width: 100%;
+      display: block;
+    }
+
+    .event-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      .card-event {
+        display: block;
+        width: 0.75rem;
+        height: 1rem;
+        border-radius: 0.25rem;
+        position: relative;
+        border: 1px solid var(--bs-black);
+
+        &.red {
+          background-color: var(--bs-red);
+        }
+
+        &.yellow {
+          background-color: var(--bs-yellow);
+        }
+
+        &.yellow-red {
+          background-color: var(--bs-yellow);
+
+          &:after {
+            position: absolute;
+            width: 0.75rem;
+            height: 1rem;
+            top: 0.25rem;
+            border: 1px solid var(--bs-black);
+            left: 0.25rem;
+            content: " ";
+            background-color: var(--bs-red);
+            border-radius: 0.25rem;
+          }
+        }
+      }
+    }
+  }
+
+
+  .lineup-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .field-container {
+
+      position: relative;
+      background-image: url("../assets/images/Feld.png");
+      background-size: cover;
+      width: #{"min(100%, 700px)"};
+      aspect-ratio: 0.6818181818;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .team-thumb {
+        position: absolute;
+        opacity: 0.3;
+        left: 30%;
+        top: 13%;
+
+        &:nth-child(2) {
+          top: auto;
+          bottom: 13%;
+        }
+      }
+
+      .no-lineup {
+        display: block;
+        position: absolute;
+        padding: 1rem;
+        border-radius: 0.5rem;
+
+        &.team1 {
+          top: 30%;
+          background-color: var(--bs-black);
+        }
+
+        &.team2 {
+          top: auto; /* calc(70% - 2.5rem);*/
+          bottom: 30%;
+          background-color: var(--bs-primary);
+        }
+      }
+
+      .player-in-field {
+        position: absolute;
+        transform: translateX(-50%) translateY(-50%);
+        width: 10%;
+
+        &.rotated {
+          transform: translateX(-50%) translateY(50%);
+        }
+
+        .jersey {
+          position: relative;
+        }
+
+        .player-name {
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 1rem;
+
+          span {
+            position: absolute;
+            width: max-content;
+            font-weight: 400;
+          }
+        }
+
+        .goal, .card-event, .change {
+          position: absolute;
+        }
+
+        .goal {
+          right: 0;
+          bottom: 1rem;
 
           svg {
-            transform: translate(-50%, -50%);
+            background-color: var(--bs-white);
+            border-radius: 100%;
           }
         }
-      }
-    }
-  }
-}
 
-.clava-ad {
-  img {
-    width: 100%;
-  }
-}
-
-
-.hidden {
-  visibility: hidden;
-  display: none;
-}
-
-.match-event {
-  border-bottom: 1px solid $gray-800;
-
-  .standing {
-    display: block;
-    align-self: center;
-    font-size: 75%;
-  }
-
-  .player, .assist {
-    width: 100%;
-    display: block;
-  }
-
-  .event-icon {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    .card-event {
-      display: block;
-      width: 0.75rem;
-      height: 1rem;
-      border-radius: 0.25rem;
-      position: relative;
-      border: 1px solid $black;
-
-      &.red {
-        background-color: $red;
-      }
-
-      &.yellow {
-        background-color: $yellow;
-      }
-
-      &.yellow-red {
-        background-color: $yellow;
-
-        &:after {
-          position: absolute;
-          width: 0.75rem;
-          height: 1rem;
-          top: 0.25rem;
-          border: 1px solid $black;
-          left: 0.25rem;
-          content: " ";
-          background-color: $red;
-          border-radius: 0.25rem;
+        .card-event {
+          left: 0;
+          bottom: 1rem;
         }
-      }
-    }
-  }
-}
 
-
-.lineup-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  .field-container {
-
-    position: relative;
-    background-image: url("../assets/images/Feld.png");
-    background-size: cover;
-    width: #{"min(100%, 700px)"};
-    aspect-ratio: 0.6818181818;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    .team-thumb {
-      position: absolute;
-      opacity: 0.3;
-      left: 30%;
-      top: 13%;
-
-      &:nth-child(2) {
-        top: auto;
-        bottom: 13%;
-      }
-    }
-
-    .no-lineup {
-      display: block;
-      position: absolute;
-      padding: 1rem;
-      border-radius: 0.5rem;
-
-      &.team1 {
-        top: 30%;
-        background-color: $black;
-      }
-
-      &.team2 {
-        top: auto; /* calc(70% - 2.5rem);*/
-        bottom: 30%;
-        background-color: $primary;
-      }
-    }
-
-    .player-in-field {
-      position: absolute;
-      transform: translateX(-50%) translateY(-50%);
-      width: 10%;
-
-      &.rotated {
-        transform: translateX(-50%) translateY(50%);
-      }
-
-      .jersey {
-        position: relative;
-      }
-
-      .player-name {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 1rem;
-
-        span {
-          position: absolute;
-          width: max-content;
-          font-weight: 400;
-        }
-      }
-
-      .goal, .card-event, .change {
-        position: absolute;
-      }
-
-      .goal {
-        right: 0;
-        bottom: 1rem;
-
-        svg {
-          background-color: #fff;
-          border-radius: 100%;
+        .change {
+          right: 0;
+          top: 0;
         }
       }
 
       .card-event {
-        left: 0;
-        bottom: 1rem;
-      }
+        display: block;
+        width: 0.75rem;
+        height: 1rem;
+        border-radius: 0.25rem;
+        position: relative;
+        border: 1px solid var(--bs-black);
 
-      .change {
-        right: 0;
-        top: 0;
-      }
-    }
-
-    .card-event {
-      display: block;
-      width: 0.75rem;
-      height: 1rem;
-      border-radius: 0.25rem;
-      position: relative;
-      border: 1px solid $black;
-
-      &.red {
-        background-color: $red;
-      }
-
-      &.yellow {
-        background-color: $yellow;
-      }
-
-      &.yellow-red {
-        background-color: $yellow;
-
-        &:after {
-          position: absolute;
-          width: 0.75rem;
-          height: 1rem;
-          top: 0.25rem;
-          border: 1px solid $black;
-          left: 0.25rem;
-          content: " ";
-          background-color: $red;
-          border-radius: 0.25rem;
+        &.red {
+          background-color: var(--bs-red);
         }
-      }
-    }
-  }
-}
 
-
-.clava-switch {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-
-  button.clava-switch-elem {
-    background-color: $black;
-    border: 1px solid $primary;
-    border-left-width: 0;
-    margin: 0;
-    outline: none !important;
-    transition: background-color ease-in-out 0.25s;
-
-    &:first-child {
-      border-bottom-left-radius: 0.5rem;
-      border-top-left-radius: 0.5rem;
-      border-left-width: 1px;
-    }
-
-    &:last-child {
-      border-bottom-right-radius: 0.5rem;
-      border-top-right-radius: 0.5rem;
-    }
-
-    &.selected {
-      background-color: $primary;
-    }
-
-    span {
-      font-weight: 400;
-    }
-  }
-}
-
-.table-container {
-  width: 100%;
-
-  .clava-table {
-    width: 100%;
-    border: 1px solid $gray-800;
-    border-radius: 0.25rem;
-    margin: 1rem 0;
-
-    table {
-      width: 100%;
-      border-spacing: 0;
-      border-collapse: collapse;
-
-      thead {
-        tr {
-          border-bottom: 1px solid $gray-800;
-
-          th {
-            button {
-              background: transparent;
-              width: 100%;
-              height: 100%;
-              border: none;
-              outline: none;
-              position: relative;
-
-              span {
-                font-weight: 400;
-              }
-
-              &:after {
-                content: "";
-                position: absolute;
-                font-weight: 300;
-                font-size: 85%;
-                color: $gray-600;
-                right: 0;
-                top: 0.25rem;
-              }
-
-              &.sort-asc {
-                &:after {
-                  content: "⤓";
-                  color: $white;
-                }
-              }
-
-              &.sort-desc {
-                &:after {
-                  content: "⤒";
-                  color: $white;
-                }
-              }
-
-
-            }
-
-            &:nth-child(2) {
-              span {
-                text-align: left;
-              }
-            }
-          }
+        &.yellow {
+          background-color: var(--bs-yellow);
         }
-      }
 
-      tbody {
-        tr {
-          border-bottom: 1px solid $gray-800;
+        &.yellow-red {
+          background-color: var(--bs-yellow);
 
-          &:last-child {
-            border-bottom: none;
-          }
-
-          td {
-            padding: 0.25rem 0;
-
-            &:nth-child(2) {
-              text-align: left;
-
-              img {
-                margin-right: 0.25rem;
-              }
-            }
+          &:after {
+            position: absolute;
+            width: 0.75rem;
+            height: 1rem;
+            top: 0.25rem;
+            border: 1px solid var(--bs-black);
+            left: 0.25rem;
+            content: " ";
+            background-color: var(--bs-red);
+            border-radius: 0.25rem;
           }
         }
       }
     }
   }
-}
 
 
-.container {
-  padding-top: 1rem;
-}
-
-.auth {
-  border: 1px solid $gray-900;
-  border-radius: 1rem;
-
-  .auth-header {
-    border-bottom: solid thin $gray-900;
-    padding: 1rem;
-    text-align: center;
-    min-height: 57px;
-    max-height: 57px;
+  .clava-switch {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
 
-    span {
-      margin-left: 1rem;
+    button.clava-switch-elem {
+      background-color: var(--bs-black);
+      border: 1px solid var(--bs-primary);
+      border-left-width: 0;
+      margin: 0;
+      outline: none !important;
+      transition: background-color ease-in-out 0.25s;
+
+      &:first-child {
+        border-bottom-left-radius: 0.5rem;
+        border-top-left-radius: 0.5rem;
+        border-left-width: 1px;
+      }
+
+      &:last-child {
+        border-bottom-right-radius: 0.5rem;
+        border-top-right-radius: 0.5rem;
+      }
+
+      &.selected {
+        background-color: var(--bs-primary);
+      }
+
+      span {
+        font-weight: 400;
+      }
     }
   }
 
-  .form {
-    padding: 1rem;
+  .table-container {
+    width: 100%;
 
-    .code-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    .clava-table {
       width: 100%;
+      border: 1px solid var(--bs-gray-800);
+      border-radius: 0.25rem;
+      margin: 1rem 0;
 
-      .code {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-around;
-        max-width: 300px;
+      table {
         width: 100%;
+        border-spacing: 0;
+        border-collapse: collapse;
 
-        input {
-          aspect-ratio: 1;
-          max-width: 40px;
-          background-color: $primary;
-          color: $white;
-          border-radius: 0.5rem;
-          border: none;
-          text-align: center;
+        thead {
+          tr {
+            border-bottom: 1px solid var(--bs-gray-800);
+
+            th {
+              button {
+                background: transparent;
+                width: 100%;
+                height: 100%;
+                border: none;
+                outline: none;
+                position: relative;
+
+                span {
+                  font-weight: 400;
+                }
+
+                &:after {
+                  content: "";
+                  position: absolute;
+                  font-weight: 300;
+                  font-size: 85%;
+                  color: var(--bs-gray-600);
+                  right: 0;
+                  top: 0.25rem;
+                }
+
+                &.sort-asc {
+                  &:after {
+                    content: "⤓";
+                    color: var(--bs-white);
+                  }
+                }
+
+                &.sort-desc {
+                  &:after {
+                    content: "⤒";
+                    color: var(--bs-white);
+                  }
+                }
+
+
+              }
+
+              &:nth-child(2) {
+                span {
+                  text-align: left;
+                }
+              }
+            }
+          }
+        }
+
+        tbody {
+          tr {
+            border-bottom: 1px solid var(--bs-gray-800);
+
+            &:last-child {
+              border-bottom: none;
+            }
+
+            td {
+              padding: 0.25rem 0;
+
+              &:nth-child(2) {
+                text-align: left;
+
+                img {
+                  margin-right: 0.25rem;
+                }
+              }
+            }
+          }
         }
       }
     }
   }
-}
 
-.profile {
 
-  border: 1px solid $gray-900;
-  border-radius: 1rem;
-
-  .profile-header {
-    border-bottom: solid thin $gray-900;
-    padding: 1rem;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    svg {
-      margin: 1rem 0;
-    }
+  .container {
+    padding-top: 1rem;
   }
 
-  .profile-content {
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
+  .auth {
+    border: 1px solid var(--bs-gray-900);
+    border-radius: 1rem;
 
-}
-
-.default-modal {
-  top: 7rem;
-
-  .default-modal-content {
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    box-shadow: 0 0 4px $primary;
-
-    .close {
-      position: absolute;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      right: 0;
-      top: 0;
-      padding: 0.5rem 0.6rem;
-      aspect-ratio: 1;
-      background-color: transparent;
-      border: none;
-      box-shadow: -1px 1px 3px $primary;
-      outline: none;
-      color: $white;
-    }
-  }
-}
-
-@keyframes rotateRefresh {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.input-group {
-
-  .input-group-addon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    z-index: 100;
-    color: $input-color;
-    border: 1px solid $input-border-color;
-    aspect-ratio: 1;
-    background-color: $gray-900;
-
-    &.transparent-pointer {
-      pointer-events: none;
-      cursor: pointer;
-
-      &:nth-child(3) {
-        right: 50%;
-      }
-    }
-
-    &.active {
-      background-color: $primary;
-    }
-
-    &.refreshing {
-      display: none;
-    }
-
-    &.disabled {
-      color: $input-disabled-color;
-      border-color: $input-disabled-border-color;
-      cursor: default;
-    }
-  }
-
-  &.only-focus {
-    input {
-      border: none;
-      text-align: center;
-
-    }
-
-    .input-group-addon {
-      display: none;
-    }
-
-    &:focus-within {
-      input {
-        border: initial;
-        text-align: left;
-      }
-
-      .input-group-addon {
-        display: flex;
-      }
-    }
-  }
-
-  &.searching {
-    .input-group-addon.refreshing {
-      display: flex;
-
-      svg {
-        animation: rotateRefresh linear 2s infinite;
-      }
-    }
-  }
-
-}
-
-.file-preview {
-  position: relative;
-  width: 100%;
-
-  img.img-preview, svg {
-    width: 100%;
-    font-size: 300%;
-  }
-
-  .file-progress {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    background-color: $primary-4;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-}
-
-.reset-form {
-  margin-top: 0.5rem;
-  float: right;
-}
-
-.search-addon {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: flex-start;
-
-  button {
-    background: none;
-    border: solid thin $gray-900;
-    margin: 0.125rem 0;
-    outline: none;
-    text-align: left;
-
-    &:hover {
-      background: $primary-1;
-    }
-
-    .id {
-      display: inline-block;
-      min-width: 50px;
-    }
-  }
-}
-
-.adminpanel {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  justify-content: flex-start;
-  border: 1px solid $gray-900;
-  border-radius: 1rem;
-
-  .adminpanel-sidebar {
-    flex: 0 1 20%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    padding: 1rem 1rem 1rem 1rem;
-    border-top: solid thin $gray-900;
-    margin-top: 56px;
-
-    & > * {
-      display: block;
-      padding: 0.5rem;
-
-      &.selected {
-        color: $primary;
-      }
-    }
-  }
-
-  .adminpanel-main {
-    flex: 0 1 80%;
-    border-left: solid thin $gray-900;
-    max-width: 80%;
-
-    .adminpanel-header {
-
-      border-bottom: solid thin $gray-900;
+    .auth-header {
+      border-bottom: solid thin var(--bs-gray-900);
       padding: 1rem;
       text-align: center;
       min-height: 57px;
@@ -1467,276 +1250,553 @@ input.form-control {
       }
     }
 
-    .adminpanel-content {
+    .form {
       padding: 1rem;
 
-      .form {
-        transition: max-height ease-in-out 0.5s;
-        padding: 0.5rem;
-        border: solid thin $gray-900;
-        border-radius: 0.5rem;
-        overflow: hidden;
-        margin-bottom: 1rem;
+      .code-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
 
-        &.close {
-          max-height: calc(29px + 0.5rem);
-        }
-
-        &.open {
-          max-height: 100%;
-        }
-
-        &.disabled {
-          opacity: 0.6;
-        }
-
-        .form-toggler {
-          background: none;
-          border: none;
-          outline: none;
+        .code {
           display: flex;
           flex-direction: row;
-          align-items: stretch;
-          justify-content: space-between;
+          align-items: center;
+          justify-content: space-around;
+          max-width: 300px;
           width: 100%;
 
-          svg {
-            color: $white;
+          input {
+            aspect-ratio: 1;
+            max-width: 40px;
+            background-color: var(--bs-primary);
+            color: var(--bs-white);
+            border-radius: 0.5rem;
+            border: none;
+            text-align: center;
           }
         }
-
-        .options {
-          display: flex;
-          flex-direction: row;
-          justify-content: space-evenly;
-        }
-      }
-
-      .bulk-game {
-        margin-bottom: 1rem;
-        padding-bottom: 1rem;
-        border-bottom: 1px solid $gray-900;
       }
     }
   }
-}
 
-.badges {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
+  .profile {
 
-  button.badge-small {
-    background-color: transparent;
+    border: 1px solid var(--bs-gray-900);
+    border-radius: 1rem;
 
-    &.selected {
-      background-color: $primary-4;
+    .profile-header {
+      border-bottom: solid thin var(--bs-gray-900);
+      padding: 1rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      svg {
+        margin: 1rem 0;
+      }
+    }
+
+    .profile-content {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+  }
+
+  .default-modal {
+    top: 7rem;
+
+    .default-modal-content {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 0 4px var(--bs-primary);
+
+      .close {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        right: 0;
+        top: 0;
+        padding: 0.5rem 0.6rem;
+        aspect-ratio: 1;
+        background-color: transparent;
+        border: none;
+        box-shadow: -1px 1px 3px var(--bs-primary);
+        outline: none;
+        color: var(--bs-white);
+      }
     }
   }
-}
 
-@media (max-width: 768px) {
+  @keyframes rotateRefresh {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
 
-  .first-open {
-    &:before {
-      content: ' ';
+  .input-group {
+
+    .input-group-addon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       position: absolute;
       top: 0;
-      right: 0;
-      width: 20%;
-      height: 7%;
-      border-bottom: 3rem solid transparent;
-      border-left: 10rem solid transparent;
-      border-top: 3rem solid $primary;
-      border-right: 10rem solid $primary;
-    }
-
-    .position-absolute {
-      position: relative !important;
-    }
-
-    .fav-buttons {
-      grid-template-columns: 20% 20% 20% 20% 20%;
-    }
-  }
-}
-
-@media (min-width: 768px) {
-  .first-open {
-    &:before {
-      content: ' ';
-      position: absolute;
       bottom: 0;
+      right: 0;
+      z-index: 100;
+      color: var(--bs-input-color);
+      border: 1px solid var(--bs-input-border-color);
+      aspect-ratio: 1;
+      background-color: var(--bs-gray-900);
+
+      &.transparent-pointer {
+        pointer-events: none;
+        cursor: pointer;
+
+        &:nth-child(3) {
+          right: 50%;
+        }
+      }
+
+      &.active {
+        background-color: var(--bs-primary);
+      }
+
+      &.refreshing {
+        display: none;
+      }
+
+      &.disabled {
+        color: var(--bs-input-disabled-color);
+        border-color: var(--bs-input-disabled-border-color);
+        cursor: default;
+      }
+    }
+
+    &.only-focus {
+      input {
+        border: none;
+        text-align: center;
+
+      }
+
+      .input-group-addon {
+        display: none;
+      }
+
+      &:focus-within {
+        input {
+          border: initial;
+          text-align: left;
+        }
+
+        .input-group-addon {
+          display: flex;
+        }
+      }
+    }
+
+    &.searching {
+      .input-group-addon.refreshing {
+        display: flex;
+
+        svg {
+          animation: rotateRefresh linear 2s infinite;
+        }
+      }
+    }
+
+  }
+
+  .file-preview {
+    position: relative;
+    width: 100%;
+
+    img.img-preview, svg {
+      width: 100%;
+      font-size: 300%;
+    }
+
+    .file-progress {
+      position: absolute;
+      top: 0;
       left: 0;
-      width: 20%;
-      height: 7%;
-      border-bottom: 7rem solid $primary;
-      border-left: 20rem solid $primary;
-      border-top: 7rem solid transparent;
-      border-right: 20rem solid transparent;
+      bottom: 0;
+      background-color: var(--bs-primary-4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
-}
 
-@media (max-width: 950px) {
-
-  .news.small, .league-matches-container.small {
-    display: none;
-    visibility: hidden;
+  .reset-form {
+    margin-top: 0.5rem;
+    float: right;
   }
-}
 
-@media (max-width: 767px) {
-  .hidden-xs {
-    display: none;
-    visibility: hidden;
-  }
-  .home {
+  .search-addon {
+    display: flex;
     flex-direction: column;
+    align-items: stretch;
     justify-content: flex-start;
 
-    & > * {
-      width: calc(100vw - 2rem);
+    button {
+      background: none;
+      border: solid thin var(--bs-gray-900);
+      margin: 0.125rem 0;
+      outline: none;
+      text-align: left;
 
-      &.leagues-small {
-        max-height: 60px;
-        overflow: hidden;
-
-        .search-leagues {
-          border-bottom: none;
-
-          .input-group {
-            .input-group-addon {
-              display: initial;
-              visibility: visible;
-            }
-          }
-        }
-
-        &.open {
-          max-height: 100000px;
-
-          .search-leagues {
-            border-bottom: solid thin $gray-900;
-          }
-        }
+      &:hover {
+        background: var(--bs-primary-1);
       }
-    }
-  }
-}
 
-@media (max-width: 500px) {
-  .first-open {
-    .fav-buttons {
-      grid-template-columns: 25% 25% 25% 25%;
-    }
-  }
-  .clava-table {
-    table {
-      thead, tbody {
-        tr {
-          th, td {
-            &:nth-child(7), &:nth-child(8), &:nth-child(9) {
-              display: none;
-              visibility: hidden;
-            }
-          }
-        }
-      }
-    }
-  }
-  .home {
-    .league-matches-container {
-      .matchdays-container {
-        .today {
-          display: none;
-          visibility: hidden;
-        }
-
-        &:after {
-          position: absolute;
-          border-radius: 1rem;
-          inset: 0;
-          content: " ";
-          background-image: linear-gradient(to right, transparent 2%, $black 2%, transparent 12%, transparent 80%, $black 90%, transparent 90%);
-          pointer-events: none;
-        }
-
-        .matchdays {
-          left: 2%;
-        }
-      }
-    }
-  }
-}
-
-@media (max-width: 400px) {
-  .first-open {
-    .fav-buttons {
-      grid-template-columns: 33.33% 33.33% 33.33%;
-    }
-  }
-  .clava-table {
-    table {
-      thead, tbody {
-        tr {
-          th, td {
-            &:nth-child(4), &:nth-child(5), &:nth-child(6) {
-              display: none;
-              visibility: hidden;
-            }
-          }
-        }
+      .id {
+        display: inline-block;
+        min-width: 50px;
       }
     }
   }
 
-  .league-matches {
-    .league-match-item {
-      padding: 0;
-    }
-  }
-}
+  .adminpanel {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: flex-start;
+    border: 1px solid var(--bs-gray-900);
+    border-radius: 1rem;
 
-@media (min-width: 768px) {
-  .hidden-xl {
-    display: none;
-    visibility: hidden;
-  }
+    .adminpanel-sidebar {
+      flex: 0 1 20%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      padding: 1rem 1rem 1rem 1rem;
+      border-top: solid thin var(--bs-gray-900);
+      margin-top: 56px;
 
-  .lineup-container {
-    max-height: 70%;
-    .field-container {
-      width: #{"min(68%, 700px)"};
-      transform: rotate(90deg);
-
-      .team-thumb {
-        transform: rotate(-90deg);
-      }
-
-      .no-lineup {
-        transform: rotate(-90deg);
+      & > * {
+        display: block;
         padding: 0.5rem;
 
-        &.team1 {
-          top: 20%;
-        }
-
-        &.team2 {
-          bottom: 20%;
-        }
-      }
-
-      .player-in-field {
-        transform: translateX(-50%) translateY(-50%) rotate(-90deg);
-        .player-name{
-            font-size: 75%;
+        &.selected {
+          color: var(--bs-primary);
         }
       }
     }
 
+    .adminpanel-main {
+      flex: 0 1 80%;
+      border-left: solid thin var(--bs-gray-900);
+      max-width: 80%;
 
+      .adminpanel-header {
+
+        border-bottom: solid thin var(--bs-gray-900);
+        padding: 1rem;
+        text-align: center;
+        min-height: 57px;
+        max-height: 57px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+
+        span {
+          margin-left: 1rem;
+        }
+      }
+
+      .adminpanel-content {
+        padding: 1rem;
+
+        .form {
+          transition: max-height ease-in-out 0.5s;
+          padding: 0.5rem;
+          border: solid thin var(--bs-gray-900);
+          border-radius: 0.5rem;
+          overflow: hidden;
+          margin-bottom: 1rem;
+
+          &.close {
+            max-height: calc(29px + 0.5rem);
+          }
+
+          &.open {
+            max-height: 100%;
+          }
+
+          &.disabled {
+            opacity: 0.6;
+          }
+
+          .form-toggler {
+            background: none;
+            border: none;
+            outline: none;
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+            justify-content: space-between;
+            width: 100%;
+
+            svg {
+              color: var(--bs-white);
+            }
+          }
+
+          .options {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+          }
+        }
+
+        .bulk-game {
+          margin-bottom: 1rem;
+          padding-bottom: 1rem;
+          border-bottom: 1px solid var(--bs-gray-900);
+        }
+      }
+    }
+  }
+
+  .badges {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    button.badge-small {
+      background-color: transparent;
+
+      &.selected {
+        background-color: var(--bs-primary-4);
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+
+    .first-open {
+      &:before {
+        content: ' ';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 20%;
+        height: 7%;
+        border-bottom: 3rem solid transparent;
+        border-left: 10rem solid transparent;
+        border-top: 3rem solid var(--bs-primary);
+        border-right: 10rem solid var(--bs-primary);
+      }
+
+      .position-absolute {
+        position: relative !important;
+      }
+
+      .fav-buttons {
+        grid-template-columns: 20% 20% 20% 20% 20%;
+      }
+    }
+  }
+
+  @media (min-width: 768px) {
+    .first-open {
+      &:before {
+        content: ' ';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 20%;
+        height: 7%;
+        border-bottom: 7rem solid var(--bs-primary);
+        border-left: 20rem solid var(--bs-primary);
+        border-top: 7rem solid transparent;
+        border-right: 20rem solid transparent;
+      }
+    }
+  }
+
+  @media (max-width: 950px) {
+
+    .news.small, .league-matches-container.small {
+      display: none;
+      visibility: hidden;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .hidden-xs {
+      display: none;
+      visibility: hidden;
+    }
+    .home {
+      flex-direction: column;
+      justify-content: flex-start;
+
+      & > * {
+        width: calc(100vw - 2rem);
+
+        &.leagues-small {
+          max-height: 60px;
+          overflow: hidden;
+
+          .search-leagues {
+            border-bottom: none;
+
+            .input-group {
+              .input-group-addon {
+                display: initial;
+                visibility: visible;
+              }
+            }
+          }
+
+          &.open {
+            max-height: 100000px;
+
+            .search-leagues {
+              border-bottom: solid thin var(--bs-gray-900);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 500px) {
+    .first-open {
+      .fav-buttons {
+        grid-template-columns: 25% 25% 25% 25%;
+      }
+    }
+    .clava-table {
+      table {
+        thead, tbody {
+          tr {
+            th, td {
+              &:nth-child(7), &:nth-child(8), &:nth-child(9) {
+                display: none;
+                visibility: hidden;
+              }
+            }
+          }
+        }
+      }
+    }
+    .home {
+      .league-matches-container {
+        .matchdays-container {
+          .today {
+            display: none;
+            visibility: hidden;
+          }
+
+          &:after {
+            position: absolute;
+            border-radius: 1rem;
+            inset: 0;
+            content: " ";
+            background-image: linear-gradient(to right, transparent 2%, var(--bs-black) 2%, transparent 12%, transparent 80%, var(--bs-black) 90%, transparent 90%);
+            pointer-events: none;
+          }
+
+          .matchdays {
+            left: 2%;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 400px) {
+    .first-open {
+      .fav-buttons {
+        grid-template-columns: 33.33% 33.33% 33.33%;
+      }
+    }
+    .clava-table {
+      table {
+        thead, tbody {
+          tr {
+            th, td {
+              &:nth-child(4), &:nth-child(5), &:nth-child(6) {
+                display: none;
+                visibility: hidden;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .league-matches {
+      .league-match-item {
+        padding: 0;
+      }
+    }
+  }
+
+  @media (min-width: 768px) {
+    .hidden-xl {
+      display: none;
+      visibility: hidden;
+    }
+
+    .lineup-container {
+      max-height: 70%;
+
+      .field-container {
+        width: #{"min(68%, 700px)"};
+        transform: rotate(90deg);
+
+        .team-thumb {
+          transform: rotate(-90deg);
+        }
+
+        .no-lineup {
+          transform: rotate(-90deg);
+          padding: 0.5rem;
+
+          &.team1 {
+            top: 20%;
+          }
+
+          &.team2 {
+            bottom: 20%;
+          }
+        }
+
+        .player-in-field {
+          transform: translateX(-50%) translateY(-50%) rotate(-90deg);
+
+          .player-name {
+            font-size: 75%;
+          }
+        }
+      }
+
+
+    }
   }
 
 }

@@ -2292,6 +2292,16 @@ const generalKeywords = {
     it: "Scarica l'app Clava-Sports",
     en: 'Download Clava-Sports APP',
   },
+  themedark: {
+    de: 'Light Mode',
+    it: 'Light mode',
+    en: 'Light mode',
+  },
+  themelight: {
+    de: 'Dark Mode',
+    it: 'Dark mode',
+    en: 'Dark mode',
+  },
   emptyString: {
     de: '',
     it: '',

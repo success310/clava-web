@@ -4,7 +4,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { fb, initFb } from './config/firebase';
 import { AS_THEME } from './config/constants';
 import { ClavaRootContext } from './config/contexts';
-
 import './scss/style.scss';
 import { ClavaRootContextType } from './config/types';
 import Main from './views/navigation/Main';
@@ -15,10 +14,14 @@ import 'intl/locale-data/jsonp/de-DE';
 import 'intl/locale-data/jsonp/en-US';
 import 'intl/locale-data/jsonp/it-IT';
 
+const t = window.localStorage.getItem(AS_THEME);
+
 const App: React.FC = () => {
-  const theme = window.localStorage.getItem(AS_THEME);
+  const [theme, setTheme] = useState<'dark' | 'light'>(
+    t === 'dark' || t === 'light' ? t : 'dark',
+  );
   const [rootContext, setRootContext] = useState<ClavaRootContextType>({
-    theme: theme === 'dark' || theme === 'light' ? theme : 'dark',
+    theme,
     fbToken: '',
     initialized: true,
   });
@@ -26,7 +29,7 @@ const App: React.FC = () => {
     initFb().then(() => {
       const fbToken = fb().getFirebaseToken();
       setRootContext({
-        theme: theme === 'dark' || theme === 'light' ? theme : 'dark',
+        theme,
         fbToken,
         initialized: true,
       });
@@ -37,7 +40,7 @@ const App: React.FC = () => {
       <ClavaRootContext.Provider value={rootContext}>
         <Provider store={store}>
           <BrowserRouter>
-            <Main />
+            <Main setTheme={setTheme} />
           </BrowserRouter>
         </Provider>
       </ClavaRootContext.Provider>
