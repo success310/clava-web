@@ -36,7 +36,6 @@ const News: React.FC<ConnectedProps<typeof connector>> = ({
     (page: number) => {
       if (pageNews.current !== page) {
         pageNews.current = page;
-        console.log(`fetch ${feedType} ${page} ${NEWS_LIMIT}`);
         getNews(
           user.areaOfInterest.id,
           small

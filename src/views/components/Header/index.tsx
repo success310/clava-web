@@ -4,8 +4,7 @@ import { NavLink } from 'react-router-dom';
 import {
   faArrowRightToLine,
   faBars,
-  faHouse,
-  faNewspaper,
+  faMobileAndroid,
   faUser,
   faUserNinja,
   faUserTie,
@@ -40,14 +39,19 @@ const Header: React.FC<ConnectedProps<typeof connector>> = ({
           <Logo onPress={undefined} />
         </NavLink>
         <Navbar className="hidden-xs">
-          <NavLink to="/home">
+          {/* <NavLink to="/home">
             <FontAwesomeIcon icon={faHouse} />
             {translate('home', l)}
           </NavLink>
           <NavLink to="/feed/news">
             <FontAwesomeIcon icon={faNewspaper} />
-            {translate('news', l)}
+            {translate('news',  l)}
           </NavLink>
+          */}
+          <a href="https://app.clava.link">
+            <FontAwesomeIcon icon={faMobileAndroid} />
+            <span>{` ${translate('watchApp', l)}`}</span>
+          </a>
           <NavLink to={!user || user.anonymous ? '/login' : '/profile'}>
             <FontAwesomeIcon
               icon={

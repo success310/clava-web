@@ -2287,8 +2287,13 @@ const generalKeywords = {
     it: 'ID Unica',
     en: 'Unique ID',
   },
+  watchApp: {
+    de: 'Vieles mehr in der Clava-Sports APP',
+    it: "Scarica l'app Clava-Sports",
+    en: 'Download Clava-Sports APP',
+  },
   emptyString: {
-    de: ' ',
+    de: '',
     it: '',
     en: '',
   },
