@@ -123,7 +123,19 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
 
   if (firstOpen) {
     return (
-      <FirstOpen language={clavaContext.l} finalCallback={onFirstOpenFinish} />
+      <div className={`root ${theme}`}>
+        <FirstOpen
+          language={clavaContext.l}
+          finalCallback={onFirstOpenFinish}
+        />
+        <Button className="theme-switcher" role="button" onClick={toggleTheme}>
+          <FontAwesomeIcon icon={faPalette} />
+          <span>
+            {translate(`theme${theme}` as TranslatorKeys, clavaContext.l)}
+          </span>
+          <div className="spacer" />
+        </Button>
+      </div>
     );
   }
   if (!user) return <Loading />;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { fb, initFb } from './config/firebase';
@@ -15,11 +15,18 @@ import 'intl/locale-data/jsonp/en-US';
 import 'intl/locale-data/jsonp/it-IT';
 
 const t = window.localStorage.getItem(AS_THEME);
+const rootClasses = document.body.className;
+document.body.className = `${rootClasses} ${t}`;
 
 const App: React.FC = () => {
   const [theme, setTheme] = useState<'dark' | 'light'>(
     t === 'dark' || t === 'light' ? t : 'dark',
   );
+  const setThemeCont = useCallback((newTheme: 'dark' | 'light') => {
+    window.localStorage.setItem(AS_THEME, newTheme);
+    document.body.className = `${rootClasses} ${newTheme}`;
+    setTheme(newTheme);
+  }, []);
   const [rootContext, setRootContext] = useState<ClavaRootContextType>({
     theme,
     fbToken: '',
@@ -40,7 +47,7 @@ const App: React.FC = () => {
       <ClavaRootContext.Provider value={rootContext}>
         <Provider store={store}>
           <BrowserRouter>
-            <Main setTheme={setTheme} />
+            <Main setTheme={setThemeCont} />
           </BrowserRouter>
         </Provider>
       </ClavaRootContext.Provider>

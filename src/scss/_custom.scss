@@ -1,4 +1,4 @@
-.root {
+body {
   transition: background-color,color 1s linear;
 
   &.light {
@@ -15,7 +15,26 @@
     --bs-gray-900: #dee2e6;
     --bs-gray-950: #c7c7c7;
     --bs-body-bg: #fff;
+    --bs-body-color: #000;
     --bs-header: #eee;
+    --bs-modal-content-bg: #dee2e6;
+    --bs-input-placeholder-color: #adb5bd;
+    --bs-input-group-addon-bg: #dee2e6;
+    --bs-input-disabled-bg: #dee2e6;
+    --bs-input-color: #000;
+    --bs-table-bg-hover: #495057;
+    --bs-table-bg-accent: #dee2e6;
+    --bs-dropdown-divider-bg: #fff;
+    --bs-breadcrumb-bg: #fff;
+    --bs-nav-link-color: #000;
+    .first-open {
+
+      .aoi-buttons{
+        img{
+          mix-blend-mode: difference;
+        }
+      }
+    }
   }
   .content {
     width: 100%;
@@ -167,6 +186,11 @@
   }
 
   .first-open {
+
+    .aoi-buttons{
+
+    }
+
     .fav-buttons {
       display: grid;
       grid-template-columns: 20% 20% 20% 20% 20%;
@@ -1725,6 +1749,11 @@
           }
         }
       }
+      .match-small{
+        span {
+          font-size: 100%;
+        }
+      }
     }
   }
 
@@ -1796,6 +1825,15 @@
       }
 
 
+    }
+  }
+
+  @media (hover: none) {
+    .theme-switcher{
+      &:focus {
+        max-width: 500px;
+        width: 16ch;
+      }
     }
   }
 

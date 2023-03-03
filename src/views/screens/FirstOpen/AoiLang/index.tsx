@@ -142,7 +142,7 @@ const AoiLang: React.FC<FirstOpenAoiLangProps> = ({
         <Col
           xs={12}
           md={6}
-          className="align-items-center justify-content-center mt-3 mt-sm-0">
+          className="align-items-center justify-content-center mt-3 mt-sm-0 aoi-buttons">
           <Row>
             <h5 className="text-center">
               {translate('chooseProvince', realLang)}
