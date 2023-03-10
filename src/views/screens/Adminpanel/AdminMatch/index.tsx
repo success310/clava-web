@@ -50,7 +50,7 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
     } else if (match && isDownloading.current) {
       isDownloading.current = false;
       setSelectedMatch(match);
-    } else if (!match && isDownloading.current && adminMethod === 'delete') {
+    } else if (!match && isDownloading.current && method === 'delete') {
       isDownloading.current = false;
       setMethod('search');
       setSelectedMatch(undefined);

@@ -164,6 +164,10 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
               path="/league/:leagueId/:date/match/:matchId"
               element={<Home />}
             />
+            <Route
+              path="/league/:leagueId/:date/match/:matchId/:view"
+              element={<Home />}
+            />
             <Route path="/feed/:feedType" element={<Home />} />
             <Route path="/feed/:feedType/:feedId" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
