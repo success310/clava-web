@@ -1,11 +1,15 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Ad } from '../models/Ad';
+import type { BulkSearchResult } from '../models/BulkSearchResult';
 import type { LeagueList } from '../models/LeagueList';
 import type { LocationList } from '../models/LocationList';
 import type { MatchListElementList } from '../models/MatchListElementList';
 import type { PlayerSearchElementList } from '../models/PlayerSearchElementList';
+import type { SearchRequest } from '../models/SearchRequest';
 import type { SearchResult } from '../models/SearchResult';
+import type { SearchTypeEnum } from '../models/SearchTypeEnum';
 import type { TeamListElementList } from '../models/TeamListElementList';
 import type { UserEssential } from '../models/UserEssential';
 
@@ -215,6 +219,60 @@ offset: number,
                 'length': length,
                 'offset': offset,
             },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Search Ad
+     * @param query 
+     * @param length 
+     * @param offset 
+     * @returns Ad Successful Response
+     * @throws ApiError
+     */
+    public static searchAdSearchAdQueryGet(
+query: string,
+length: number,
+offset: number,
+): CancelablePromise<Ad> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/search/ad/{query}',
+            path: {
+                'query': query,
+            },
+            query: {
+                'length': length,
+                'offset': offset,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Bulk Search
+     * @param searchType 
+     * @param requestBody 
+     * @returns BulkSearchResult Successful Response
+     * @throws ApiError
+     */
+    public static bulkSearchSearchBulkPost(
+searchType: SearchTypeEnum,
+requestBody: Array<SearchRequest>,
+): CancelablePromise<Array<BulkSearchResult>> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/search/bulk',
+            query: {
+                'search_type': searchType,
+            },
+            body: requestBody,
+            mediaType: 'application/json',
             errors: {
                 422: `Validation Error`,
             },

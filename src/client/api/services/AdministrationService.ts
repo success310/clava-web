@@ -350,6 +350,77 @@ key?: string,
     }
 
     /**
+     * Generate Team Of The Week For League
+     * @param leagueId 
+     * @param matchDay 
+     * @param key 
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static generateTeamOfTheWeekForLeagueAdminGenerateTeamOfTheWeekForLeagueLeagueIdMatchDayPost(
+leagueId: number,
+matchDay: number,
+key?: string,
+): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/admin/generate_team_of_the_week_for_league/{league_id}/{match_day}',
+            path: {
+                'league_id': leagueId,
+                'match_day': matchDay,
+            },
+            query: {
+                'key': key,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Generate Team Of The Week For League
+     * @param key 
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static generateTeamOfTheWeekForLeagueAdminGenerateAllCurrentTeamOfTheWeekPost(
+key?: string,
+): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/admin/generate_all_current_team_of_the_week',
+            query: {
+                'key': key,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Update News
+     * @param key 
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static updateNewsAdminUpdateNewsPost(
+key?: string,
+): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/admin/update_news',
+            query: {
+                'key': key,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
      * Do Work
      * @param key 
      * @returns any Successful Response

@@ -60,8 +60,10 @@ import {
   PlayerPatch,
   PlayerService,
   ScopeEnum,
+  SearchRequest,
   SearchResult,
   SearchService,
+  SearchTypeEnum,
   SponsorCreate,
   SponsorPatch,
   SponsorService,
@@ -1258,6 +1260,10 @@ class Client {
 
   removeBadge(badge: UserBadgeCreateDelete) {
     return BadgeService.removeUserBadgeBadgeRemoveDelete(badge);
+  }
+
+  bulkSearch(searchType: SearchTypeEnum, searchBody: SearchRequest[]) {
+    return SearchService.bulkSearchSearchBulkPost(searchType, searchBody);
   }
 
   private filterAoi(

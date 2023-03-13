@@ -50,6 +50,22 @@ export const $League = {
     type: 'boolean',
     isRequired: true,
 },
+        hasFeed: {
+    type: 'boolean',
+    isRequired: true,
+},
+        hasScorers: {
+    type: 'boolean',
+    isRequired: true,
+},
+        hasSquad: {
+    type: 'boolean',
+    isRequired: true,
+},
+        hasBetting: {
+    type: 'boolean',
+    isRequired: true,
+},
         matchDurationMinutes: {
     type: 'number',
     isRequired: true,

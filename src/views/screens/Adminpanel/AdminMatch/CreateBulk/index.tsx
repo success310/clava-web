@@ -3,6 +3,7 @@ import React, {
   ChangeEventHandler,
   useCallback,
   useContext,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -19,12 +20,10 @@ import * as Sentry from '@sentry/react';
 import SearchInput from '../../SearchInput';
 import TextInput from '../../TextInput';
 import {
-  League,
-  LeagueListElement,
-  Location,
   MatchCreate,
-  Team,
-  TeamListElement,
+  SearchRequest,
+  SearchTypeEnum,
+  Translation,
 } from '../../../../../client/api';
 import { connector } from './redux';
 import DateInput from '../../DateInput';
@@ -43,170 +42,21 @@ type ParseError = {
 };
 type MatchCreateCont = {
   matchDay: number;
-  team1: TeamListElement | undefined;
+  team1: { id: number; name: Translation } | undefined;
   team1String: string;
-  league: LeagueListElement | undefined;
+  league: { id: number; name: Translation } | undefined;
   leagueString: string;
-  team2: TeamListElement | undefined;
+  team2: { id: number; name: Translation } | undefined;
   team2String: string;
   date: Date | undefined;
-  location: Location | undefined;
+  location: { id: number; name: Translation } | undefined;
   locationString: string;
-};
-
-type SingleElemOfMatch<T extends keyof MatchCreateCont> = {
-  key: T;
-  value: MatchCreateCont[T];
 };
 
 type Parsed = {
   errors: ParseError[];
   matches: MatchCreateCont[];
 };
-
-type SearchResult =
-  | {
-      type: 'team';
-      result: TeamListElement[] | Team[];
-    }
-  | { type: 'league'; result: LeagueListElement | League }
-  | { type: 'location'; result: Location[] };
-
-const foundResults: Record<string, SearchResult> = {};
-
-const idRegex = /[0-9]{1,5}$/;
-
-function determineLeague(
-  leagueString: string,
-): Promise<LeagueListElement | League> {
-  return new Promise<LeagueListElement | League>((resolve, reject) => {
-    if (idRegex.test(leagueString)) {
-      if (`league_id_${leagueString}` in foundResults) {
-        const res = foundResults[`league_id_${leagueString}`];
-        if (res.type === 'league') resolve(res.result);
-      }
-      client()
-        .getLeague(parseInt(leagueString, 10))
-        .then((l) => {
-          foundResults[`league_id_${leagueString}`] = {
-            type: 'league',
-            result: l,
-          };
-          resolve(l);
-        });
-    } else {
-      if (leagueString in foundResults) {
-        const res = foundResults[leagueString];
-        if (res.type === 'league') resolve(res.result);
-      }
-
-      client()
-        .searchLeagues(leagueString, 0, 10)
-        .then((l) => {
-          if (l.length !== 0) {
-            foundResults[leagueString] = { type: 'league', result: l[0] };
-            resolve(l[0]);
-          } else reject();
-        }, reject);
-    }
-  });
-}
-
-function determineTeam(
-  teamString: string,
-  leagueId: IDType,
-): Promise<TeamListElement[] | Team[]> {
-  return new Promise<TeamListElement[] | Team[]>((resolve, reject) => {
-    if (idRegex.test(teamString)) {
-      if (`team_id_${teamString}` in foundResults) {
-        const res = foundResults[`team_id_${teamString}`];
-        if (res.type === 'team') resolve(res.result);
-      }
-      client()
-        .getTeam(parseInt(teamString, 10))
-        .then((l) => {
-          foundResults[`team_id_${teamString}`] = {
-            type: 'team',
-            result: [l],
-          };
-          resolve([l]);
-        });
-    } else {
-      if (teamString in foundResults) {
-        const res = foundResults[`${teamString}_${leagueId}`];
-        if (res.type === 'team') resolve(res.result);
-      }
-      client()
-        .searchTeams(teamString, 0, 10, leagueId)
-        .then((l) => {
-          foundResults[`${teamString}_${leagueId}`] = {
-            type: 'team',
-            result: l,
-          };
-          resolve(l);
-        }, reject);
-    }
-  });
-}
-
-function determineLocation(
-  locationString: string | undefined,
-): Promise<Location[]> {
-  if (locationString) {
-    if (locationString in foundResults) {
-      const res = foundResults[locationString];
-      if (res.type === 'location')
-        return new Promise<Location[]>((r) => {
-          r(res.result);
-        });
-    }
-    return client().searchLocations(locationString, 0, 10);
-  }
-  return new Promise<Location[]>((r) => {
-    r([]);
-  });
-}
-
-function createMatch(
-  matchday: number,
-  date: Date | undefined,
-  leagueString: string,
-  team1String: string,
-  team2String: string,
-  errors: ParseError[],
-  file: string,
-  line: number,
-  locationString?: string,
-): Promise<MatchCreateCont> {
-  return new Promise<MatchCreateCont>((resolve, reject) => {
-    determineLeague(leagueString).then(
-      (league) => {
-        determineTeam(team1String, league.id).then((team1s) => {
-          determineTeam(team2String, league.id).then((team2s) => {
-            determineLocation(locationString).then((locations) => {
-              const match = {
-                matchDay: matchday,
-                team1: team1s.length ? team1s[0] : undefined,
-                team2: team2s.length ? team2s[0] : undefined,
-                league,
-                location: locations.length ? locations[0] : undefined,
-                date,
-                team1String,
-                team2String,
-                leagueString,
-                locationString: locationString ?? '',
-              };
-              resolve(match);
-            });
-          });
-        });
-      },
-      () => {
-        errors.push({ file, line, message: 'leagueNotFound' });
-      },
-    );
-  });
-}
 
 function parseCsv(file: File): Promise<Parsed> {
   return new Promise<Parsed>((resolve) => {
@@ -215,7 +65,13 @@ function parseCsv(file: File): Promise<Parsed> {
       complete: (result) => {
         const matches: MatchCreateCont[] = [];
         const errors: ParseError[] = [];
-        const promises: Promise<MatchCreateCont>[] = [];
+        const matchdays: number[] = [];
+        const dates: Date[] = [];
+        const leagueStrings: string[] = [];
+        const team1Strings: string[] = [];
+        const team2Strings: string[] = [];
+        const locationStrings: (string | undefined)[] = [];
+        const invalids: number[] = [];
         result.data.forEach((line, index) => {
           if (Array.isArray(line) && line.length > 5) {
             const matchday = parseInt(line[0], 10);
@@ -233,6 +89,7 @@ function parseCsv(file: File): Promise<Parsed> {
                   message: 'noMatchday',
                 });
               }
+              invalids.push(index);
               return;
             }
             const dateParts = line[1].replaceAll('.', '-').split('-');
@@ -258,42 +115,26 @@ function parseCsv(file: File): Promise<Parsed> {
             const leagueString = line[3];
             const team1String = line[4];
             const team2String = line[5];
+            leagueStrings.push(leagueString);
+            team1Strings.push(team1String);
+            team2Strings.push(team2String);
+            matchdays.push(matchday);
+            dates.push(date);
             if (line.length > 6) {
               const locationString = line[6];
-              promises.push(
-                createMatch(
-                  matchday,
-                  date,
-                  leagueString,
-                  team1String,
-                  team2String,
-                  errors,
-                  file.name,
-                  index + 1,
-                  locationString,
-                ),
-              );
+              locationStrings.push(locationString);
             } else {
-              promises.push(
-                createMatch(
-                  matchday,
-                  date,
-                  leagueString,
-                  team1String,
-                  team2String,
-                  errors,
-                  file.name,
-                  index + 1,
-                ),
-              );
+              locationStrings.push(undefined);
             }
           } else if (index !== 0) {
+            invalids.push(index);
             errors.push({
               file: file.name,
               line: index + 1,
               message: 'wrongLine',
             });
           } else {
+            invalids.push(index);
             errors.push({
               file: file.name,
               line: index + 1,
@@ -301,12 +142,83 @@ function parseCsv(file: File): Promise<Parsed> {
             });
           }
         });
-        Promise.all(promises).then((results) => {
-          results.forEach((r) => {
-            matches.push(r);
+
+        const team1Queries: SearchRequest[] = team1Strings.map((query) => ({
+          query,
+        }));
+        const team2Queries: SearchRequest[] = team2Strings.map((query) => ({
+          query,
+        }));
+        client()
+          .bulkSearch(
+            SearchTypeEnum.LEAGUE,
+            leagueStrings.map((query) => ({ query })),
+          )
+          .then((leagues) => {
+            leagueStrings.forEach((q, index) => {
+              const foundLeague = leagues.find((lea) => lea.query === q);
+              if (foundLeague && foundLeague.result) {
+                team1Queries[index].leagueId = foundLeague.result.id;
+                team2Queries[index].leagueId = foundLeague.result.id;
+              } else {
+                errors.push({
+                  file: file.name,
+                  line: index,
+                  message: 'leagueNotFound',
+                });
+              }
+            });
+            client()
+              .bulkSearch(SearchTypeEnum.TEAM, team1Queries)
+              .then((team1s) => {
+                client()
+                  .bulkSearch(SearchTypeEnum.TEAM, team2Queries)
+                  .then((team2s) => {
+                    client()
+                      .bulkSearch(
+                        SearchTypeEnum.LOCATION,
+                        (locationStrings.filter((f) => !!f) as string[]).map(
+                          (query: string) => ({ query }),
+                        ),
+                      )
+                      .then((locations) => {
+                        leagueStrings.forEach((leagueString, index) => {
+                          if (invalids.indexOf(index) !== -1) return;
+                          const league = leagues.find(
+                            (l) => l.query === leagueString,
+                          );
+                          const date = dates[index];
+                          const team1String = team1Strings[index];
+                          const team2String = team2Strings[index];
+                          const locationString = locationStrings[index];
+                          const matchDay = matchdays[index];
+                          const team1 = team1s.find(
+                            (t) => t.query === team1String,
+                          );
+                          const team2 = team2s.find(
+                            (t) => t.query === team2String,
+                          );
+                          const location = locations.find(
+                            (t) => t.query === team2String,
+                          );
+                          matches.push({
+                            matchDay,
+                            date,
+                            team1String,
+                            team2String,
+                            leagueString,
+                            locationString: locationString ?? '',
+                            team1: team1?.result,
+                            team2: team2?.result,
+                            league: league?.result,
+                            location: location?.result,
+                          });
+                        });
+                        resolve({ errors, matches });
+                      });
+                  });
+              });
           });
-          resolve({ errors, matches });
-        });
       },
     });
   });
@@ -384,16 +296,16 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
   const [queryTeam2, setQueryTeam2] = useState<string[]>(['']);
   const [queryLocation, setQueryLocation] = useState<string[]>(['']);
   const [selectedLocations, setSelectedLocation] = useState<
-    (Location | undefined)[]
+    ({ id: IDType; name: Translation } | undefined)[]
   >([]);
   const [selectedLeagues, setSelectedLeague] = useState<
-    (LeagueListElement | undefined)[]
+    ({ id: IDType; name: Translation } | undefined)[]
   >([]);
   const [selectedTeam1s, setSelectedTeam1] = useState<
-    (TeamListElement | undefined)[]
+    ({ id: IDType; name: Translation } | undefined)[]
   >([]);
   const [selectedTeam2s, setSelectedTeam2] = useState<
-    (TeamListElement | undefined)[]
+    ({ id: IDType; name: Translation } | undefined)[]
   >([]);
   const [dates, setDate] = useState<(Date | undefined)[]>([new Date()]);
   const [matchDays, setMatchDay] = useState<number[]>([-1]);
@@ -466,7 +378,7 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
   );
 
   const setSelectedTeam1Cont = useCallback(
-    (team: TeamListElement | undefined) => {
+    (team: { id: IDType; name: Translation } | undefined) => {
       setSelectedTeam1((tms) => {
         tms[Math.floor(currentIndex.current / 6)] = team;
         if (team) currentIndex.current++;
@@ -476,7 +388,7 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
     [],
   );
   const setSelectedTeam2Cont = useCallback(
-    (team: TeamListElement | undefined) => {
+    (team: { id: IDType; name: Translation } | undefined) => {
       setSelectedTeam2((tms) => {
         tms[Math.floor(currentIndex.current / 6)] = team;
         if (team) currentIndex.current++;
@@ -486,7 +398,7 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
     [],
   );
   const setSelectedLeagueCont = useCallback(
-    (league: LeagueListElement | undefined) => {
+    (league: { id: IDType; name: Translation } | undefined) => {
       setSelectedLeague((lgs) => {
         lgs[Math.floor(currentIndex.current / 6)] = league;
         setSelectedTeam1Cont(undefined);
@@ -495,7 +407,7 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
         return [...lgs];
       });
     },
-    [],
+    [setSelectedTeam1Cont, setSelectedTeam2Cont],
   );
   const setDateCont = useCallback((date: Date | undefined) => {
     setDate((d) => {
@@ -512,7 +424,7 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
     }
   }, []);
   const setSelectedLocationCont = useCallback(
-    (location: Location | undefined) => {
+    (location: { id: IDType; name: Translation } | undefined) => {
       if (location) currentIndex.current++;
       setSelectedLocation((lcs) => {
         lcs[Math.floor(currentIndex.current / 6)] = location;
@@ -671,6 +583,18 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
     selectedTeam1s,
     selectedTeam2s,
   ]);
+  const reducedLocations = useMemo(
+    () => locations.map((loc) => ({ id: loc.id, name: loc.name })),
+    [locations],
+  );
+  const reducedTeams = useMemo(
+    () => teams.map((loc) => ({ id: loc.id, name: loc.name })),
+    [teams],
+  );
+  const reducedLeagues = useMemo(
+    () => leagues.map((loc) => ({ id: loc.id, name: loc.name })),
+    [leagues],
+  );
   return (
     <>
       <Row>
@@ -818,7 +742,7 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
                   onChange={onSearchLeague}
                   label="searchLeague"
                   name={`league${index}`}
-                  items={leagues}
+                  items={reducedLeagues}
                   selectedItem={selectedLeagues[index]}
                   onSelect={setSelectedLeagueCont}
                   className={
@@ -840,7 +764,7 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
                   onFocus={onSetFocus}
                   label="searchLocation"
                   name={`location${index}`}
-                  items={locations}
+                  items={reducedLocations}
                   selectedItem={selectedLocations[index]}
                   onSelect={setSelectedLocationCont}
                 />
@@ -866,7 +790,7 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
                   onChange={onSearchTeam1}
                   label="searchTeam1"
                   name={`team1${index}`}
-                  items={teams}
+                  items={reducedTeams}
                   selectedItem={selectedTeam1s[index]}
                   onSelect={setSelectedTeam1Cont}
                   className={
@@ -897,7 +821,7 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
                   onChange={onSearchTeam2}
                   label="searchTeam2"
                   name={`team2${index}`}
-                  items={teams}
+                  items={reducedTeams}
                   selectedItem={selectedTeam2s[index]}
                   onSelect={setSelectedTeam2Cont}
                   className={

@@ -15,4 +15,5 @@ export enum ImageTypeEnum {
     AD_DESKTOP = 'ad_desktop',
     PROFILE_PICTURE = 'profile_picture',
     BADGE = 'badge',
+    AD_SHARES = 'ad_shares',
 }

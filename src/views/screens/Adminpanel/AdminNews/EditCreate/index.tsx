@@ -52,9 +52,10 @@ const EditCreateNews: React.FC<EditCreateProps> = ({
   const progressTarget = useRef<number>(-1);
   const [fileUploadProgress, setFileUploadProgress] = useState(0);
   const [fileUploadError, setFileUploadError] = useState<string>();
-
+  const submitted = useRef(false);
   const onSubmitCont = useCallback(() => {
-    if (image)
+    if (image && !submitted.current) {
+      submitted.current = true;
       onSubmit({
         title: {
           textEN: titleEN,
@@ -75,6 +76,7 @@ const EditCreateNews: React.FC<EditCreateProps> = ({
         link,
         uid,
       });
+    }
   }, [
     image,
     onSubmit,
@@ -147,36 +149,42 @@ const EditCreateNews: React.FC<EditCreateProps> = ({
         onChange={setSummaryDE}
         name="summaryDE"
         label="summaryDE"
+        multiline
       />
       <TextInput
         value={summaryIT}
         onChange={setSummaryIT}
         name="summaryIT"
         label="summaryIT"
+        multiline
       />
       <TextInput
         value={summaryEN}
         onChange={setSummaryEN}
         name="summaryEN"
         label="summaryEN"
+        multiline
       />
       <TextInput
         value={bodyDE}
         onChange={setBodyDE}
         name="bodyDE"
         label="bodyDE"
+        multiline
       />
       <TextInput
         value={bodyIT}
         onChange={setBodyIT}
         name="bodyIT"
         label="bodyIT"
+        multiline
       />
       <TextInput
         value={bodyEN}
         onChange={setBodyEN}
         name="bodyEN"
         label="bodyEN"
+        multiline
       />
       <Row>
         <Col xs={12} md={6}>

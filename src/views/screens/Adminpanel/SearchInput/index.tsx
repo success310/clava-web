@@ -23,6 +23,7 @@ import {
   Location,
   MatchListElement,
   TeamListElement,
+  Translation,
   User,
 } from '../../../../client/api';
 import { IDType } from '../../../../config/types';
@@ -36,7 +37,8 @@ type Searchable =
   | Blog
   | ExternalVideo
   | User
-  | MatchListElement;
+  | MatchListElement
+  | { id: IDType; name: Translation };
 
 type SearchInputProps<T extends Searchable> = {
   value: string;

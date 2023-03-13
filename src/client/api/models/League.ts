@@ -21,6 +21,10 @@ export type League = {
     hasTeamStatistics: boolean;
     hasManOfTheMatch: boolean;
     hasLineup: boolean;
+    hasFeed: boolean;
+    hasScorers: boolean;
+    hasSquad: boolean;
+    hasBetting: boolean;
     matchDurationMinutes: number;
     halftimeDurationMinutes: number;
     currentMatchDay: number;

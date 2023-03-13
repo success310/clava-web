@@ -17,8 +17,6 @@ body {
     --bs-body-bg: #fff;
     --bs-body-color: #000;
     --bs-header: #eee;
-    --bs-modal-bg: #dee2e6;
-    --bs-modal-content-bg: #dee2e6;
     --bs-input-placeholder-color: #adb5bd;
     --bs-input-group-addon-bg: #dee2e6;
     --bs-input-disabled-bg: #dee2e6;
@@ -53,6 +51,10 @@ body {
         color: var(--bs-input-disabled-color);
         background-color: var(--bs-input-disabled-bg);
       }
+    }
+    .modal{
+      --bs-modal-bg: #dee2e6;
+      --bs-modal-content-bg: #dee2e6;
     }
   }
   .content {
