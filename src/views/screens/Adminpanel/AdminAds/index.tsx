@@ -65,6 +65,7 @@ const AdminpanelAds: React.FC<ConnectedProps<typeof connector>> = ({
       setMethod('search');
     } else if (ad && isCreating.current && status !== 'loading') {
       isCreating.current = false;
+      setSelectedAd(ad);
       setMethod('edit');
     } else if (ad && isDownloading.current && status !== 'loading') {
       isDownloading.current = false;

@@ -56,6 +56,7 @@ const EditCreateAd: React.FC<EditCreateProps> = ({ selectedAd, onSubmit }) => {
   const [useSameFile, setUseSameFile] = useState(false);
 
   const setPositionCont = useCallback((val: string) => {
+    if (val === AdPositionEnum.TEAM_OF_THE_WEEK) setUseSameFile(true);
     setPosition(val as AdPositionEnum);
   }, []);
 
@@ -96,8 +97,11 @@ const EditCreateAd: React.FC<EditCreateProps> = ({ selectedAd, onSubmit }) => {
           .uploadFile(
             file,
             position === AdPositionEnum.HOME_MATCH ||
-              position === AdPositionEnum.LEAGUE_MATCH_MATCH
+              position === AdPositionEnum.LEAGUE_MATCH_MATCH ||
+              position === AdPositionEnum.USER_FEED
               ? ImageTypeEnum.AD_MOBILE_MEDIUM
+              : position === AdPositionEnum.TEAM_OF_THE_WEEK
+              ? ImageTypeEnum.AD_SHARES
               : ImageTypeEnum.AD_MOBILE_SMALL,
             name,
             (p) => {
@@ -179,6 +183,16 @@ const EditCreateAd: React.FC<EditCreateProps> = ({ selectedAd, onSubmit }) => {
               label: translate('leagueMatchAd', l),
               value: AdPositionEnum.LEAGUE_MATCH_MATCH,
             },
+            {
+              key: AdPositionEnum.USER_FEED,
+              label: translate('feed', l),
+              value: AdPositionEnum.USER_FEED,
+            },
+            {
+              key: AdPositionEnum.TEAM_OF_THE_WEEK,
+              label: translate('tow', l),
+              value: AdPositionEnum.TEAM_OF_THE_WEEK,
+            },
           ]}
           disabledMsg={
             !!fileDesktop || !!fileMobile
@@ -231,6 +245,7 @@ const EditCreateAd: React.FC<EditCreateProps> = ({ selectedAd, onSubmit }) => {
         label="useSameFile"
         onChange={setUseSameFile}
         name="useSameFile"
+        disabled={position === AdPositionEnum.TEAM_OF_THE_WEEK}
         value={useSameFile}
       />
       {!useSameFile && (

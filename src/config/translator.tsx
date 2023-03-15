@@ -2302,6 +2302,11 @@ const generalKeywords = {
     it: 'Dark mode',
     en: 'Dark mode',
   },
+  feed: {
+    de: 'Feed',
+    it: 'Feed',
+    en: 'Feed',
+  },
   emptyString: {
     de: '',
     it: '',
