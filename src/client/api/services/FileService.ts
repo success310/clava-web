@@ -48,18 +48,21 @@ formData: Body_upload_image_upload_image_post,
      * Upload Image New
      * @param imageTypeEnum 
      * @param formData 
+     * @param removeBackgroundAndCrop 
      * @returns File Successful Response
      * @throws ApiError
      */
     public static uploadImageNewUploadImageNewPost(
 imageTypeEnum: ImageTypeEnum,
 formData: Body_upload_image_new_upload_image_new_post,
+removeBackgroundAndCrop: boolean = false,
 ): CancelablePromise<File> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/upload/image_new',
             query: {
                 'image_type_enum': imageTypeEnum,
+                'remove_background_and_crop': removeBackgroundAndCrop,
             },
             formData: formData,
             mediaType: 'multipart/form-data',

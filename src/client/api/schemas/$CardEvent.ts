@@ -5,7 +5,6 @@ export const $CardEvent = {
     properties: {
         minute: {
     type: 'number',
-    isRequired: true,
 },
         id: {
     type: 'number',
@@ -25,7 +24,6 @@ export const $CardEvent = {
 },
         player: {
     type: 'PlayerListElement',
-    isRequired: true,
 },
     },
 } as const;

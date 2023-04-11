@@ -5,7 +5,6 @@ export const $GoalEvent = {
     properties: {
         minute: {
     type: 'number',
-    isRequired: true,
 },
         id: {
     type: 'number',

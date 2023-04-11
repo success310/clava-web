@@ -10,5 +10,5 @@ export type TeamCreate = {
     thumbId: number;
     photoId?: number;
     leader: PersonCreate;
-    officialName: string;
+    officialName?: string;
 };

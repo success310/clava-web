@@ -584,15 +584,17 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
     selectedTeam2s,
   ]);
   const reducedLocations = useMemo(
-    () => locations.map((loc) => ({ id: loc.id, name: loc.name })),
+    () =>
+      locations ? locations.map((loc) => ({ id: loc.id, name: loc.name })) : [],
     [locations],
   );
   const reducedTeams = useMemo(
-    () => teams.map((loc) => ({ id: loc.id, name: loc.name })),
+    () => (teams ? teams.map((loc) => ({ id: loc.id, name: loc.name })) : []),
     [teams],
   );
   const reducedLeagues = useMemo(
-    () => leagues.map((loc) => ({ id: loc.id, name: loc.name })),
+    () =>
+      leagues ? leagues.map((loc) => ({ id: loc.id, name: loc.name })) : [],
     [leagues],
   );
   return (

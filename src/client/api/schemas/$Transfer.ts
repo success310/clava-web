@@ -3,6 +3,10 @@
 /* eslint-disable */
 export const $Transfer = {
     properties: {
+        id: {
+    type: 'number',
+    isRequired: true,
+},
         player: {
     type: 'PlayerListElement',
     isRequired: true,

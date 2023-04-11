@@ -5,7 +5,6 @@ export const $ChangeEventCreate = {
     properties: {
         minute: {
     type: 'number',
-    isRequired: true,
 },
         teamId: {
     type: 'number',

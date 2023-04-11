@@ -13,11 +13,12 @@ import {
   getChangeEvents,
   getGoalEvents,
   matchStatusDate,
+  sortEventsMinute,
 } from '../../../config/utils';
 import { ClavaContext } from '../../../config/contexts';
 import MatchScoreDisplay from './MatchScoreDisplay';
 import ClavaImage from '../ClavaImage';
-import { ChangeEvent, EventTypeEnum } from '../../../client/api';
+import { EventTypeEnum } from '../../../client/api';
 import { parseParams } from '../../../config/routes';
 import MatchEvent from './MatchEvent';
 import Lineup from '../Lineup';
@@ -71,19 +72,19 @@ const Match: React.FC<ConnectedProps<typeof connector>> = ({
                 e.type === EventTypeEnum.CHANCE ||
                 e.type === EventTypeEnum.CARD,
             )
-            .sort((a, b) => a.minute - b.minute)
+            .sort(sortEventsMinute)
         : [],
     [fullMatch],
-  );
+  ); /*
   const changes = useMemo<ChangeEvent[]>(
     () =>
       fullMatch
         ? (fullMatch.events
             .filter((e) => e.type === EventTypeEnum.CHANGE)
-            .sort((a, b) => a.minute - b.minute) as ChangeEvent[])
+            .sort(sortEventsMinute) as ChangeEvent[])
         : [],
-    [fullMatch],
-  );
+    [fullMatch], 
+  );*/
   const live = typeof status === 'number';
   standing1.current = 0;
   standing2.current = 0;

@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 export type GoalEventCreate = {
-    minute: number;
+    minute?: number;
     teamId: number;
     assistId?: number;
     goalTypeId?: number;

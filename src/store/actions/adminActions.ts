@@ -31,6 +31,7 @@ import {
   MatchPatch,
   UserBadgeCreateDelete,
 } from '../../client/api';
+import { MatchFilterType } from '../../views/screens/Adminpanel/AdminMatch/types';
 
 export function getMatch(dispatch: Dispatch<AdminActions>, matchId: IDType) {
   defaultGet(
@@ -166,7 +167,7 @@ export function createMatchMultiple(
 ) {
   defaultGet(
     dispatch,
-    AdminActionTypes.FETCH_MATCH_SUCCESS,
+    AdminActionTypes.PATCH_MATCH_SUCCESS,
     AdminActionTypes.FETCH_ERROR,
     AdminActionTypes.FETCH_MATCH,
     client().createMatchMultiple,
@@ -286,6 +287,28 @@ export function searchAdmin(
     q,
     0,
     100,
+  );
+}
+
+export function searchMatchFiltered(
+  dispatch: Dispatch<AdminActions>,
+  q: string,
+  filters: MatchFilterType[],
+  limit: number,
+  offset: number,
+) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.SEARCH_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.SEARCH,
+    client().searchMatchesFiltered,
+    false,
+    { id: SEARCH_MATCH },
+    q,
+    filters,
+    limit,
+    offset,
   );
 }
 
@@ -430,7 +453,6 @@ export function deleteEventAdmin(
     eventId,
   );
 }
-// asf
 
 export function createNews(dispatch: Dispatch<AdminActions>, news: BlogCreate) {
   defaultGet(
@@ -444,4 +466,35 @@ export function createNews(dispatch: Dispatch<AdminActions>, news: BlogCreate) {
     news,
   );
 }
-// asf
+
+export function bulkDeleteMatches(
+  dispatch: Dispatch<AdminActions>,
+  ids: IDType[],
+) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.BULK_DELETE_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.BULK_DELETE,
+    client().bulkDeleteMatches,
+    false,
+    false,
+    ids,
+  );
+}
+export function bulkPatchMatches(
+  dispatch: Dispatch<AdminActions>,
+  patches: MatchPatch[],
+) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.PATCH_MATCH_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.FETCH_MATCH,
+    client().bulkPatchMatches,
+    false,
+    false,
+    patches,
+  );
+}
+// as  f

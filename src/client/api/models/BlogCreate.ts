@@ -12,4 +12,5 @@ export type BlogCreate = {
     pictureId: number;
     date?: string;
     uid: string;
+    deleted?: boolean;
 };

@@ -6,6 +6,7 @@ import type { PlayerListElement } from './PlayerListElement';
 import type { TeamListElement } from './TeamListElement';
 
 export type Transfer = {
+    id: number;
     player: PlayerListElement;
     teamFrom: TeamListElement;
     teamTo: TeamListElement;

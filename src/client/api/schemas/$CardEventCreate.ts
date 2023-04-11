@@ -5,7 +5,6 @@ export const $CardEventCreate = {
     properties: {
         minute: {
     type: 'number',
-    isRequired: true,
 },
         teamId: {
     type: 'number',

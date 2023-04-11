@@ -1797,6 +1797,16 @@ const generalKeywords = {
     it: 'Datum',
     en: 'Datum',
   },
+  searchLeagueExpl: {
+    de: 'Liga Suchen (Name oder Liga ID)',
+    it: 'Liga Suchen (Name oder Liga ID)',
+    en: 'Liga Suchen (Name oder Liga ID)',
+  },
+  searchTeamExpl: {
+    de: 'Team Suchen (Name oder Liga ID)',
+    it: 'Team Suchen (Name oder Liga ID)',
+    en: 'Team Suchen (Name oder Liga ID)',
+  },
   summary: {
     de: 'Zusammenfassung',
     it: 'Zusammenfassung',
@@ -1871,6 +1881,36 @@ const generalKeywords = {
     de: 'Spiel nicht gefunden',
     it: 'Spiel nicht gefunden',
     en: 'Spiel nicht gefunden',
+  },
+  filter: {
+    de: 'Filter',
+    it: 'Filter',
+    en: 'Filter',
+  },
+  time: {
+    de: 'Uhrzeit',
+    it: 'uhrzeit',
+    en: 'Uhrzeit',
+  },
+  selectAll: {
+    de: 'Alle auswählen',
+    it: 'Alle auswählen',
+    en: 'Alle auswählen',
+  },
+  team1: {
+    de: 'Heimmannschaft',
+    it: 'Heimmannschaft',
+    en: 'Heimmannschaft',
+  },
+  team2: {
+    de: 'Gegenmannschaft',
+    it: 'Gegenmannschaft',
+    en: 'Gegenmannschaft',
+  },
+  createSingle: {
+    de: 'Einzeln Erstellen',
+    it: 'Einzeln Erstellen',
+    en: 'Einzeln Erstellen',
   },
   createBulk: {
     de: 'Mehrere Erstellen',
@@ -2011,6 +2051,11 @@ const generalKeywords = {
     de: 'Admin Key',
     it: 'Admin Key',
     en: 'Admin Key',
+  },
+  league: {
+    de: 'Liga',
+    it: 'Liga',
+    en: 'Liga',
   },
   clearCache: {
     de: 'Cache leeren ( Behebt manchmal Fehler )',
@@ -2153,9 +2198,9 @@ const generalKeywords = {
     en: 'Liga erstellen',
   },
   searchMatchExpl: {
-    de: 'Suche nach ein Spiel indem du nach den gegenüberstehenden Mannschaften suchst (z.B.: "Feld Bri", würde alle Spiele Feldthurns gegen Brixen finden)',
-    it: 'Suche nach ein Spiel indem du nach den gegenüberstehenden Mannschaften suchst (z.B.: "Feld Bri", würde alle Spiele Feldthurns gegen Brixen finden)',
-    en: 'Suche nach ein Spiel indem du nach den gegenüberstehenden Mannschaften suchst (z.B.: "Feld Bri", würde alle Spiele Feldthurns gegen Brixen finden)',
+    de: 'Suche (Spiele oder SpielID)',
+    it: 'Suche (Spiele oder SpielID)',
+    en: 'Suche (Spiele oder SpielID)',
   },
   giveBadge: {
     de: 'Badge geben',
@@ -2232,10 +2277,85 @@ const generalKeywords = {
     it: 'Gast',
     en: 'Gast',
   },
+  goals1: {
+    de: 'Tore Heim',
+    it: 'Tore Heim',
+    en: 'Tore Heim',
+  },
+  goals2: {
+    de: 'Tore Gast',
+    it: 'Tore Gast',
+    en: 'Tore Gast',
+  },
   leagueNotFound: {
     de: 'Liga nicht gefunden',
     it: 'Liga nicht gefunden',
     en: 'Liga nicht gefunden',
+  },
+  applyFilter: {
+    de: 'Filter anwenden',
+    it: 'Filter anwenden',
+    en: 'Filter anwenden',
+  },
+  bulkActions: {
+    de: 'Massenaktionen',
+    it: 'Massenaktionen',
+    en: 'Massenaktionen',
+  },
+  selectedMatches: {
+    de: 'Ausgewählt:',
+    it: 'Ausgewählt:',
+    en: 'Ausgewählt:',
+  },
+  unsavedChanges: {
+    de: '[numChanges] ungespeichtere Änderungen',
+    it: '[numChanges] ungespeichtere Änderungen',
+    en: '[numChanges] ungespeichtere Änderungen',
+  },
+  noUnsavedChanges: {
+    de: 'Keine Änderungen',
+    it: 'Keine Änderungen',
+    en: 'Keine Änderungen',
+  },
+  saveChanges: {
+    de: 'Änderungen speichern',
+    it: 'Änderungen speichern',
+    en: 'Änderungen speichern',
+  },
+  matchActions: {
+    de: 'Aktionen',
+    it: 'Aktionen',
+    en: 'Aktionen',
+  },
+  saveSuccess: {
+    de: 'Erfolgreich gespeichert',
+    it: 'Erfolgreich gespeichert',
+    en: 'Erfolgreich gespeichert',
+  },
+  deleteSuccess: {
+    de: 'Erfolgreich gelöscht',
+    it: 'Erfolgreich gelöscht',
+    en: 'Erfolgreich gelöscht',
+  },
+  deleteFailed: {
+    de: 'Löschen fehlgeschlagen',
+    it: 'Löschen fehlgeschlagen',
+    en: 'Löschen fehlgeschlagen',
+  },
+  saveFailed: {
+    de: 'Etwas ist schief gelaufen',
+    it: 'Etwas ist schief gelaufen',
+    en: 'Etwas ist schief gelaufen',
+  },
+  discardUnsavedChanges: {
+    de: 'Du hast ungespeicherte Änderungen!',
+    it: 'Du hast ungespeicherte Änderungen!',
+    en: 'Du hast ungespeicherte Änderungen!',
+  },
+  discardChanges: {
+    de: 'Änderungen verwerfen',
+    it: 'Änderungen verwerfen',
+    en: 'Änderungen verwerfen',
   },
   titleDE: {
     de: 'Titel DE',
@@ -2306,6 +2426,21 @@ const generalKeywords = {
     de: 'Feed',
     it: 'Feed',
     en: 'Feed',
+  },
+  successCreate: {
+    de: 'Erfolgreich erstellt',
+    it: 'Erfolgreich erstellt',
+    en: 'Erfolgreich erstellt',
+  },
+  successEdit: {
+    de: 'Erfolgreich bearbeitet',
+    it: 'Erfolgreich bearbeitet',
+    en: 'Erfolgreich bearbeitet',
+  },
+  successDelete: {
+    de: 'Erfolgreich gelöscht',
+    it: 'Erfolgreich gelöscht',
+    en: 'Erfolgreich gelöscht',
   },
   emptyString: {
     de: '',

@@ -5,7 +5,7 @@
 import type { PlayerListElement } from './PlayerListElement';
 
 export type ChangeEvent = {
-    minute: number;
+    minute?: number;
     id: number;
     teamId: number;
     playerIn: PlayerListElement;

@@ -105,12 +105,12 @@ commentId: number,
     }
 
     /**
-     * Like Comment
+     * Unlike Comment
      * @param commentId 
      * @returns Comment Successful Response
      * @throws ApiError
      */
-    public static likeCommentCommentUnlikeCommentIdPost(
+    public static unlikeCommentCommentUnlikeCommentIdPost(
 commentId: number,
 ): CancelablePromise<Comment> {
         return __request(OpenAPI, {

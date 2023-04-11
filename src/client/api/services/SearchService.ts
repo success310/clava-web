@@ -170,6 +170,12 @@ offset: number,
     /**
      * Search Match
      * @param query 
+     * @param areaOfInterestId 
+     * @param leagueId 
+     * @param teamId 
+     * @param matchDay 
+     * @param dateFrom 
+     * @param dateTo 
      * @param length 
      * @param offset 
      * @returns MatchListElementList Successful Response
@@ -177,8 +183,14 @@ offset: number,
      */
     public static searchMatchSearchMatchQueryGet(
 query: string,
-length: number,
-offset: number,
+areaOfInterestId?: number,
+leagueId?: number,
+teamId?: number,
+matchDay?: number,
+dateFrom?: string,
+dateTo?: string,
+length: number = 100,
+offset?: number,
 ): CancelablePromise<MatchListElementList> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -187,6 +199,12 @@ offset: number,
                 'query': query,
             },
             query: {
+                'area_of_interest_id': areaOfInterestId,
+                'league_id': leagueId,
+                'team_id': teamId,
+                'match_day': matchDay,
+                'date_from': dateFrom,
+                'date_to': dateTo,
                 'length': length,
                 'offset': offset,
             },
@@ -237,7 +255,7 @@ offset: number,
 query: string,
 length: number,
 offset: number,
-): CancelablePromise<Ad> {
+): CancelablePromise<Array<Ad>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/search/ad/{query}',

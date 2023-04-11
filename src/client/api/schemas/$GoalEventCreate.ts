@@ -5,7 +5,6 @@ export const $GoalEventCreate = {
     properties: {
         minute: {
     type: 'number',
-    isRequired: true,
 },
         teamId: {
     type: 'number',

@@ -7,7 +7,7 @@ import React, {
   useRef,
 } from 'react';
 import { Button, FormGroup, Input, InputGroup, Label } from 'reactstrap';
-import { faRefresh } from '@fortawesome/pro-regular-svg-icons';
+import { faClose, faRefresh } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   showTranslated,
@@ -45,7 +45,7 @@ type SearchInputProps<T extends Searchable> = {
   searching: boolean;
   disabled?: boolean;
   onChange: (text: string) => void;
-  label: TranslatorKeys;
+  label?: TranslatorKeys;
   selectedItem?: T | undefined;
   name: string;
   items: T[];
@@ -91,9 +91,11 @@ function SearchInput<T extends Searchable>({
     [items, onSelect],
   );
   const onReset = useCallback(() => {
-    onChange('');
-    onSelect(undefined);
-  }, [onChange, onSelect]);
+    if (!disabled) {
+      onChange('');
+      onSelect(undefined);
+    }
+  }, [disabled, onChange, onSelect]);
   const onKeyDownHandler = useCallback<KeyboardEventHandler<HTMLInputElement>>(
     (e) => {
       if (e.key === 'Backspace' && selectedItem) {
@@ -111,16 +113,20 @@ function SearchInput<T extends Searchable>({
   }, [index, onFocus]);
   return (
     <FormGroup>
-      <Label htmlFor={`search${name}`} className={className}>
-        {translate(label, l)}
-      </Label>
+      {label && (
+        <Label htmlFor={`search${name}`} className={className}>
+          {translate(label, l)}
+        </Label>
+      )}
       <InputGroup className={searching && isFocused ? 'searching' : ''}>
         <Input
           onFocus={onFocusCont}
           autoFocus={isFocused}
           tabIndex={0}
+          autoCorrect="off"
+          autoComplete="off"
           className={
-            (selectedItem ? 'text-white' : 'text-white-50') + className
+            (selectedItem ? 'text-white ' : 'text-white-50 ') + className
           }
           disabled={disabled}
           innerRef={inputElem}
@@ -161,6 +167,15 @@ function SearchInput<T extends Searchable>({
         <div className="input-group-addon refreshing">
           <FontAwesomeIcon icon={faRefresh} />
         </div>
+        {!!selectedItem && !disabled && (
+          <Button
+            type="button"
+            onClick={onReset}
+            color="secondary"
+            className="reset-form input-group-addon">
+            <FontAwesomeIcon icon={faClose} />
+          </Button>
+        )}
       </InputGroup>
       {!!items.length && !selectedItem && isFocused && (
         <div className="search-addon">
@@ -200,25 +215,19 @@ function SearchInput<T extends Searchable>({
           ))}
         </div>
       )}
-      <Button
-        type="button"
-        onClick={onReset}
-        color="secondary"
-        className="reset-form">
-        <span>{translate('reset', l)}</span>
-      </Button>
     </FormGroup>
   );
 }
 
 SearchInput.defaultProps = {
   disabled: false,
-  isFocused: false,
+  isFocused: undefined,
   index: undefined,
   className: undefined,
   onFocus: undefined,
   selectedItem: undefined,
+  label: undefined,
 };
 
 export default SearchInput;
-// reload
+// reloa d

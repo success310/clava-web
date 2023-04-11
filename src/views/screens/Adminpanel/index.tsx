@@ -1,6 +1,18 @@
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
+import { NavbarToggler } from 'reactstrap';
+import {
+  faArrowLeftToLine,
+  faArrowRightFromLine,
+} from '@fortawesome/pro-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ClavaContext } from '../../../config/contexts';
 import { translate, TranslatorKeys } from '../../../config/translator';
 import { isAdmin } from '../../../config/utils';
@@ -18,6 +30,10 @@ const Adminpanel: React.FC = () => {
   const navigate = useNavigate();
   const { adminSite } = useParams();
   const admin = useMemo(() => isAdmin(user), [user]);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const toggleSidebar = useCallback(() => {
+    setSidebarOpen((so) => !so);
+  }, []);
   useEffect(() => {
     if (!admin) {
       setTimeout(() => {
@@ -26,9 +42,14 @@ const Adminpanel: React.FC = () => {
     }
   }, [navigate, admin]);
   return (
-    <div className="container">
+    <div className="container full">
       <div className="adminpanel">
-        <div className="adminpanel-sidebar">
+        <div className={`adminpanel-sidebar ${sidebarOpen ? 'open' : 'close'}`}>
+          <NavbarToggler onClick={toggleSidebar}>
+            <FontAwesomeIcon
+              icon={sidebarOpen ? faArrowLeftToLine : faArrowRightFromLine}
+            />
+          </NavbarToggler>
           <NavLink
             to="/backoffice/users"
             className={adminSite === 'users' ? 'selected bold' : ''}>

@@ -35,13 +35,23 @@ const AdminpanelAds: React.FC<ConnectedProps<typeof connector>> = ({
   const [query, setQuery] = useState('');
   const [selectedAd, setSelectedAd] = useState<Ad>();
   const isCreating = useRef(false);
+  const message = useRef('');
   const isDownloading = useRef(false);
+  const isDeleting = useRef(false);
   const timeout = useRef<number>(-1);
-  useEffect(() => {
-    if (ads.length === 0) {
-      searchAd('');
-    }
-  }, []);
+  const onSearch = useCallback(
+    (q: string) => {
+      if (timeout.current !== -1) {
+        window.clearTimeout(timeout.current);
+      }
+      setQuery(q);
+      timeout.current = window.setTimeout(() => {
+        searchAd(q);
+        window.clearTimeout(timeout.current);
+      }, 500);
+    },
+    [searchAd],
+  );
   const filteredAds = useMemo(
     () =>
       ads.filter(
@@ -67,11 +77,17 @@ const AdminpanelAds: React.FC<ConnectedProps<typeof connector>> = ({
       isCreating.current = false;
       setSelectedAd(ad);
       setMethod('edit');
+      message.current = translate('successCreate', l);
     } else if (ad && isDownloading.current && status !== 'loading') {
       isDownloading.current = false;
+      message.current = translate('successEdit', l);
       setSelectedAd(ad);
+    } else if (ad && isDeleting.current && status !== 'loading') {
+      isDeleting.current = false;
+      message.current = translate('successDelete', l);
+      setSelectedAd(undefined);
     }
-  }, [adminElemId, getAd, method, status, ad, adminMethod]);
+  }, [adminElemId, getAd, method, status, ad, adminMethod, l]);
   const reset = useCallback(() => {
     setSelectedAd(undefined);
   }, []);
@@ -112,7 +128,7 @@ const AdminpanelAds: React.FC<ConnectedProps<typeof connector>> = ({
   );
   const onDelete = useCallback(() => {
     if (selectedAd) {
-      isDownloading.current = true;
+      isDeleting.current = true;
       deleteAd(selectedAd.id);
       setMethod('search');
     }
@@ -128,7 +144,7 @@ const AdminpanelAds: React.FC<ConnectedProps<typeof connector>> = ({
         </button>
         <SearchInput
           value={query}
-          onChange={setQuery}
+          onChange={onSearch}
           label="searchAds"
           isFocused={method === 'search'}
           selectedItem={selectedAd}

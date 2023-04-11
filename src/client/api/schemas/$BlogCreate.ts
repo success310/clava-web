@@ -29,5 +29,8 @@ export const $BlogCreate = {
     type: 'string',
     isRequired: true,
 },
+        deleted: {
+    type: 'boolean',
+},
     },
 } as const;

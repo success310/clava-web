@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 export type CardEventCreate = {
-    minute: number;
+    minute?: number;
     teamId: number;
     cardTypeId: number;
     playerId: number;

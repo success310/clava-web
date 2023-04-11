@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 export type ChangeEventCreate = {
-    minute: number;
+    minute?: number;
     teamId: number;
     playerInId: number;
     injured: boolean;

@@ -48,6 +48,7 @@ import {
   LocationService,
   ManOfTheMatchService,
   ManOfTheMatchVote,
+  Match,
   MatchBetService,
   MatchCreate,
   MatchDayService,
@@ -86,6 +87,7 @@ import { formatDate } from '../config/utils';
 import { AMOUNT_MATCHDAYS, PROD_ENDPOINT } from '../config/constants';
 import { ClavaFile } from '../views/screens/Adminpanel/FileInput';
 import { addLog } from '../store/middleware/logger';
+import { MatchFilterType } from '../views/screens/Adminpanel/AdminMatch/types';
 
 class Client {
   public static token: string | undefined = undefined;
@@ -1107,21 +1109,7 @@ class Client {
   }
 
   searchAds(q: string, offset: number, limit: number) {
-    return new CancelablePromise((resolve, reject) => {
-      AdService.getAdsByPositionAdPositionPositionGet(
-        AdPositionEnum.HOME_MATCH,
-      ).then((a) => {
-        AdService.getAdsByPositionAdPositionPositionGet(
-          AdPositionEnum.LEAGUE_MATCH_MATCH,
-        ).then((b) => {
-          AdService.getAdsByPositionAdPositionPositionGet(
-            AdPositionEnum.MATCH_HISTORY_BOTTOM,
-          ).then((c) => {
-            resolve(a.concat(b).concat(c));
-          }, reject);
-        }, reject);
-      }, reject);
-    });
+    return SearchService.searchAdSearchAdQueryGet(q, limit, offset);
   }
 
   searchUser(q: string, offset: number, limit: number) {
@@ -1129,7 +1117,7 @@ class Client {
   }
 
   deleteAd(id: IDType) {
-    return AdService.patchAdAdAdIdPatch(id, { paused: true });
+    return AdService.deleteAdAdAdIdDelete(id);
   }
 
   searchLocations(q: string, offset: number, limit: number) {
@@ -1141,7 +1129,58 @@ class Client {
   }
 
   searchMatches(q: string, offset: number, limit: number) {
-    return SearchService.searchMatchSearchMatchQueryGet(q, limit, offset);
+    return SearchService.searchMatchSearchMatchQueryGet(
+      q,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      limit,
+      offset,
+    );
+  }
+
+  searchMatchesFiltered(
+    q: string,
+    filters: MatchFilterType[],
+    offset: number,
+    limit: number,
+  ) {
+    const aoi = filters.find((f) => f.type === 'aoiId');
+    const league = filters.find((f) => f.type === 'leagueId');
+    const team = filters.find((f) => f.type === 'teamId');
+    const dateFrom = filters.find((f) => f.type === 'dateFrom');
+    const dateTo = filters.find((f) => f.type === 'dateTo');
+    const matchDay = filters.find((f) => f.type === 'matchDay');
+    return SearchService.searchMatchSearchMatchQueryGet(
+      q,
+      aoi?.value,
+      league?.value,
+      team?.value,
+      matchDay?.value,
+      dateFrom
+        ? formatDate(
+            new Date(dateFrom.value),
+            LanguageLocaleEnum.DE,
+            true,
+            false,
+            true,
+          )
+        : undefined,
+      dateTo
+        ? formatDate(
+            new Date(dateTo.value),
+            LanguageLocaleEnum.DE,
+            true,
+            false,
+            true,
+          )
+        : undefined,
+      limit,
+      offset,
+    );
   }
 
   deleteMatch(id: IDType) {
@@ -1266,6 +1305,45 @@ class Client {
     return SearchService.bulkSearchSearchBulkPost(searchType, searchBody);
   }
 
+  bulkDeleteMatches(ids: IDType[]) {
+    return new CancelablePromise<IDType[]>((resolve, reject) => {
+      const promises: Promise<number>[] = [];
+      ids.forEach((id) => {
+        promises.push(MatchService.deleteMatchMatchMatchIdDelete(id));
+      });
+      Promise.allSettled(promises).then((results) => {
+        const retval: IDType[] = [];
+        results.forEach((result) => {
+          if (result.status === 'fulfilled') {
+            retval.push(result.value);
+          }
+        });
+        resolve(retval);
+      }, reject);
+    });
+  }
+
+  bulkPatchMatches(patches: MatchPatch[]) {
+    return new CancelablePromise<Match[]>((resolve, reject) => {
+      const promises: Promise<Match>[] = [];
+      patches.forEach((patch) => {
+        const id = patch.locationId;
+        patch.locationId = undefined;
+        if (!id) return;
+        promises.push(MatchService.patchMatchMatchMatchIdPatch(id, patch));
+      });
+      Promise.allSettled(promises).then((results) => {
+        const retval: Match[] = [];
+        results.forEach((result) => {
+          if (result.status === 'fulfilled') {
+            retval.push(result.value);
+          }
+        });
+        resolve(retval);
+      }, reject);
+    });
+  }
+
   private filterAoi(
     aois: AreaOfInterest[],
     id: IDType,
@@ -1295,4 +1373,4 @@ class Client {
 
 const client = Client.getInstance;
 export default client;
-// relo ad
+// reload

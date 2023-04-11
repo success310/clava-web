@@ -273,6 +273,7 @@ key?: string,
      * @param filename 
      * @param formData 
      * @param key 
+     * @param removeBackgroundAndCrop 
      * @returns any Successful Response
      * @throws ApiError
      */
@@ -282,6 +283,7 @@ caption: string,
 filename: string,
 formData: Body_change_team_icon_admin_change_team_icon__team_id__post,
 key?: string,
+removeBackgroundAndCrop: boolean = false,
 ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'POST',
@@ -293,6 +295,7 @@ key?: string,
                 'caption': caption,
                 'filename': filename,
                 'key': key,
+                'remove_background_and_crop': removeBackgroundAndCrop,
             },
             formData: formData,
             mediaType: 'multipart/form-data',
@@ -423,17 +426,20 @@ key?: string,
     /**
      * Do Work
      * @param key 
+     * @param dryRun 
      * @returns any Successful Response
      * @throws ApiError
      */
     public static doWorkAdminDoWorkPost(
 key?: string,
+dryRun: boolean = true,
 ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/admin/do_work',
             query: {
                 'key': key,
+                'dry_run': dryRun,
             },
             errors: {
                 422: `Validation Error`,
@@ -442,17 +448,17 @@ key?: string,
     }
 
     /**
-     * Test News
+     * Import Vss 2022 Hr
      * @param key 
      * @returns any Successful Response
      * @throws ApiError
      */
-    public static testNewsAdminTestNewsPost(
+    public static importVss2022HrAdminImportVss2022HrPost(
 key?: string,
 ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/admin/test_news',
+            url: '/admin/import_vss_2022_hr',
             query: {
                 'key': key,
             },

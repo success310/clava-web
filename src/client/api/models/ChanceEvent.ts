@@ -6,7 +6,7 @@ import type { ChanceType } from './ChanceType';
 import type { PlayerListElement } from './PlayerListElement';
 
 export type ChanceEvent = {
-    minute: number;
+    minute?: number;
     id: number;
     teamId: number;
     chanceType: ChanceType;

@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 export type ChanceEventCreate = {
-    minute: number;
+    minute?: number;
     teamId: number;
     chanceTypeId: number;
     playerId?: number;

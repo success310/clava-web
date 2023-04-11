@@ -711,6 +711,7 @@ export enum AdminActionTypes {
   FETCH_USER_SUCCESS = '@@admin/FETCH_USER_SUCCESS',
   FETCH_MATCH = '@@admin/FETCH_MATCH',
   FETCH_MATCH_SUCCESS = '@@admin/FETCH_MATCH_SUCCESS',
+  PATCH_MATCH_SUCCESS = '@@admin/PATCH_MATCH_SUCCESS',
   DELETE_MATCH_SUCCESS = '@@admin/DELETE_MATCH_SUCCESS',
   FETCH_EVENT_SUCCESS = '@@admin/FETCH_EVENT_SUCCESS',
   DELETE_EVENT_SUCCESS = '@@admin/DELETE_EVENT_SUCCESS',
@@ -732,6 +733,9 @@ export enum AdminActionTypes {
   FETCH_BADGES_SUCCESS = '@@admin/FETCH_BADGES_SUCCESS',
   PATCH_BADGE_SUCCESS = '@@admin/PATCH_BADGE_SUCCESS',
   CREATE_TASK_SUCCESS = '@@admin/CREATE_TASK_SUCCESS',
+  BULK_DELETE_SUCCESS = '@@admin/BULK_DELETE_SUCCESS',
+  BULK_DELETE = '@@admin/BULK_DELETE',
+  RESET_MATCHES = '@@admin/RESET_MATCHES',
 }
 
 export const SEARCH_USERS = 1;
@@ -768,15 +772,21 @@ export type AdminActions =
         | AdminActionTypes.FETCH_MATCH
         | AdminActionTypes.FETCH_VIDEO
         | AdminActionTypes.FETCH_LEAGUE
+        | AdminActionTypes.RESET_MATCHES
         | AdminActionTypes.FETCH_TEAM
         | AdminActionTypes.FETCH_USER
         | AdminActionTypes.FETCH_BADGES
+        | AdminActionTypes.BULK_DELETE
         | AdminActionTypes.CREATE_TASK
         | AdminActionTypes.SEARCH;
     }
   | {
       type: AdminActionTypes.FETCH_NEWS_SUCCESS;
       payload: Blog;
+    }
+  | {
+      type: AdminActionTypes.BULK_DELETE_SUCCESS;
+      payload: IDType[];
     }
   | {
       type: AdminActionTypes.DELETE_MATCH_SUCCESS;
@@ -799,7 +809,9 @@ export type AdminActions =
       payload: Team;
     }
   | {
-      type: AdminActionTypes.FETCH_MATCH_SUCCESS;
+      type:
+        | AdminActionTypes.FETCH_MATCH_SUCCESS
+        | AdminActionTypes.PATCH_MATCH_SUCCESS;
       payload: Match | Match[];
     }
   | {

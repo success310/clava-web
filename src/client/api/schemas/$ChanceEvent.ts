@@ -5,7 +5,6 @@ export const $ChanceEvent = {
     properties: {
         minute: {
     type: 'number',
-    isRequired: true,
 },
         id: {
     type: 'number',

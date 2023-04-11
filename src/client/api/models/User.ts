@@ -37,4 +37,5 @@ export type User = {
     player?: PlayerListElement;
     agbLevel?: string;
     newsletter: boolean;
+    blocked: boolean;
 };

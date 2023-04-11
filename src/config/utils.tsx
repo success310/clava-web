@@ -587,7 +587,7 @@ export function browserLang(): LanguageLocaleEnum {
 }
 
 export function sortEventsMinute(e1: EventType, e2: EventType): number {
-  return e1.minute - e2.minute;
+  return (e1.minute ?? 99) - (e2.minute ?? 99);
 }
 
 export function getMainLeague<T extends League | LeagueListElement>(

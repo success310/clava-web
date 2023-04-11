@@ -20,7 +20,6 @@ export const $TeamCreate = {
 },
         officialName: {
     type: 'string',
-    isRequired: true,
 },
     },
 } as const;

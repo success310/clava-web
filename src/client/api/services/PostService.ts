@@ -122,12 +122,12 @@ postId: number,
     }
 
     /**
-     * Like Post
+     * Unlike Post
      * @param postId 
      * @returns Post Successful Response
      * @throws ApiError
      */
-    public static likePostPostUnlikePostIdPost(
+    public static unlikePostPostUnlikePostIdPost(
 postId: number,
 ): CancelablePromise<Post> {
         return __request(OpenAPI, {
@@ -164,6 +164,39 @@ formData: Body_upload_media_post_upload_post,
             },
             formData: formData,
             mediaType: 'multipart/form-data',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Test Upload Files
+     * @returns File Successful Response
+     * @throws ApiError
+     */
+    public static testUploadFilesPostTestUploadFeldthurnsPost(): CancelablePromise<File> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/post/test_upload_feldthurns',
+        });
+    }
+
+    /**
+     * Test Create Custom Formats
+     * @param fileId 
+     * @returns File Successful Response
+     * @throws ApiError
+     */
+    public static testCreateCustomFormatsPostTestCreateCustomFormatsPost(
+fileId: number,
+): CancelablePromise<File> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/post/test_create_custom_formats',
+            query: {
+                'file_id': fileId,
+            },
             errors: {
                 422: `Validation Error`,
             },

@@ -11,7 +11,10 @@ import {
   SEARCH_USERS,
   SEARCH_VIDEOS,
 } from '../actions/types';
-import { getGoalEvents } from '../../config/utils';
+import {
+  getGoalEvents,
+  replaceOrAddResponseMultiple,
+} from '../../config/utils';
 
 const initialState: AdminState = {
   user: null,
@@ -21,6 +24,7 @@ const initialState: AdminState = {
   match: null,
   matches: [],
   team: null,
+  deletedMatches: [],
   teams: [],
   location: null,
   locations: [],
@@ -43,6 +47,8 @@ const reducer: Reducer<AdminState> = (
 ) => {
   let found = false;
   switch (action.type) {
+    case AdminActionTypes.RESET_MATCHES:
+      return { ...state, matches: [] };
     case AdminActionTypes.FETCH_MATCH:
     case AdminActionTypes.FETCH_USER:
     case AdminActionTypes.FETCH_TEAM:
@@ -71,6 +77,17 @@ const reducer: Reducer<AdminState> = (
             return b;
           })
           .concat(found ? [] : [action.payload]),
+      };
+    case AdminActionTypes.BULK_DELETE:
+      return { ...state, status: 'loading', deletedMatches: [] };
+    case AdminActionTypes.BULK_DELETE_SUCCESS:
+      return {
+        ...state,
+        status: 'idle',
+        deletedMatches: action.payload,
+        matches: state.matches.filter(
+          (m) => action.payload.indexOf(m.id) === -1,
+        ),
       };
     case AdminActionTypes.SEARCH:
       return { ...state, statusSearch: 'loading' };
@@ -136,6 +153,18 @@ const reducer: Reducer<AdminState> = (
           ...state,
           status: 'idle',
           matches: action.payload,
+        };
+      return {
+        ...state,
+        status: 'idle',
+        match: action.payload,
+      };
+    case AdminActionTypes.PATCH_MATCH_SUCCESS:
+      if (Array.isArray(action.payload))
+        return {
+          ...state,
+          status: 'idle',
+          matches: replaceOrAddResponseMultiple(action.payload, state.matches),
         };
       return {
         ...state,

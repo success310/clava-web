@@ -105,5 +105,9 @@ export const $User = {
     type: 'boolean',
     isRequired: true,
 },
+        blocked: {
+    type: 'boolean',
+    isRequired: true,
+},
     },
 } as const;
