@@ -57,6 +57,7 @@ import {
   MatchPatch,
   MatchService,
   OpenAPI,
+  OutService,
   PlayerCreate,
   PlayerPatch,
   PlayerService,
@@ -1342,6 +1343,13 @@ class Client {
         resolve(retval);
       }, reject);
     });
+  }
+
+  adStats() {
+    return OutService.getOutSummaryOutSummaryGet(
+      '2022-04-12T09:21:32.688Z',
+      '2030-04-12T09:21:32.688Z',
+    );
   }
 
   private filterAoi(

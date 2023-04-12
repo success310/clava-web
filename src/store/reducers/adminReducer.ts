@@ -23,6 +23,7 @@ const initialState: AdminState = {
   leagues: [],
   match: null,
   matches: [],
+  outSummary: [],
   team: null,
   deletedMatches: [],
   teams: [],
@@ -52,6 +53,7 @@ const reducer: Reducer<AdminState> = (
     case AdminActionTypes.FETCH_MATCH:
     case AdminActionTypes.FETCH_USER:
     case AdminActionTypes.FETCH_TEAM:
+    case AdminActionTypes.FETCH_OUT:
     case AdminActionTypes.CREATE_TASK:
     case AdminActionTypes.FETCH_LEAGUE:
     case AdminActionTypes.FETCH_BADGES:
@@ -102,6 +104,9 @@ const reducer: Reducer<AdminState> = (
     }
     case AdminActionTypes.FETCH_LEAGUE_SUCCESS: {
       return { ...state, status: 'idle', league: action.payload };
+    }
+    case AdminActionTypes.FETCH_OUT_SUCCESS: {
+      return { ...state, status: 'idle', outSummary: action.payload };
     }
     case AdminActionTypes.FETCH_NEWS_SUCCESS: {
       return { ...state, news: action.payload, status: 'idle' };

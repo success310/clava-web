@@ -10,7 +10,7 @@ import React, {
 import { useParams } from 'react-router';
 import { faChevronDown, faChevronUp } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button } from 'reactstrap';
+import { Button, Col, Row } from 'reactstrap';
 import { ClavaContext } from '../../../../config/contexts';
 import { translate } from '../../../../config/translator';
 import { connector } from './redux';
@@ -23,6 +23,8 @@ const AdminpanelAds: React.FC<ConnectedProps<typeof connector>> = ({
   searching,
   deleteAd,
   getAd,
+  getStats,
+  outSummary,
   ad,
   ads,
   createAd,
@@ -39,6 +41,15 @@ const AdminpanelAds: React.FC<ConnectedProps<typeof connector>> = ({
   const isDownloading = useRef(false);
   const isDeleting = useRef(false);
   const timeout = useRef<number>(-1);
+  useEffect(() => {
+    if (outSummary.length === 0) {
+      getStats();
+    }
+  }, [outSummary.length]);
+  const selectedOutSummary = useMemo(() => {
+    if (outSummary.length === 0 || !selectedAd) return undefined;
+    return outSummary.find((o) => selectedAd.url.indexOf(o.key) !== -1);
+  }, [outSummary, selectedAd]);
   const onSearch = useCallback(
     (q: string) => {
       if (timeout.current !== -1) {
@@ -154,14 +165,23 @@ const AdminpanelAds: React.FC<ConnectedProps<typeof connector>> = ({
           searching={searching}
         />
         {selectedAd && (
-          <div className="options">
-            <Button color="primary" onClick={toggleEdit}>
-              {translate('editAd', l)}
-            </Button>
-            <Button color="danger" onClick={toggleDelete}>
-              {translate('deleteAd', l)}
-            </Button>
-          </div>
+          <>
+            <div className="options">
+              <Button color="primary" onClick={toggleEdit}>
+                {translate('editAd', l)}
+              </Button>
+              <Button color="danger" onClick={toggleDelete}>
+                {translate('deleteAd', l)}
+              </Button>
+            </div>
+            {selectedOutSummary && (
+              <Row className="mt-2">
+                <Col xs={12}>
+                  <span>{`${selectedOutSummary.sum} Clicks`}</span>
+                </Col>
+              </Row>
+            )}
+          </>
         )}
       </fieldset>
       <fieldset className={`form ${method === 'create' ? 'open' : 'close'}`}>

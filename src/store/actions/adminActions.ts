@@ -284,7 +284,7 @@ export function searchAdmin(
       : client().searchLeagues,
     false,
     { id: type },
-    q,
+    q.length === 0 ? ' ' : q,
     0,
     100,
   );
@@ -498,3 +498,15 @@ export function bulkPatchMatches(
   );
 }
 // as  f
+
+export function getClicks(dispatch: Dispatch<AdminActions>) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.FETCH_OUT_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.FETCH_OUT,
+    client().adStats,
+    false,
+    false,
+  );
+}

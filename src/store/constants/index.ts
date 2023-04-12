@@ -20,6 +20,7 @@ import {
   Match,
   MatchBetVoting,
   MatchListElement,
+  OutSummary,
   Player,
   PlayerListElement,
   PlayerPosition,
@@ -180,6 +181,7 @@ export interface AdminState {
   readonly locations: Location[];
   readonly news: Blog | null;
   readonly newses: Blog[];
+  readonly outSummary: OutSummary[];
   readonly team: Team | null;
   readonly teams: TeamListElement[];
   readonly video: ExternalVideo | null;

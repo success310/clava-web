@@ -23,6 +23,7 @@ import {
   Match,
   MatchBetVoting,
   MatchListElement,
+  OutSummary,
   Player,
   PlayerListElement,
   PlayerPosition,
@@ -726,6 +727,8 @@ export enum AdminActionTypes {
   FETCH_TEAM = '@@admin/FETCH_TEAM',
   FETCH_TEAM_SUCCESS = '@@admin/FETCH_TEAM_SUCCESS',
   SEARCH = '@@admin/SEARCH',
+  FETCH_OUT = '@@admin/FETCH_OUT',
+  FETCH_OUT_SUCCESS = '@@admin/FETCH_OUT_SUCCESS',
   SEARCH_SUCCESS = '@@admin/SEARCH_SUCCESS',
   FETCH_ERROR = '@@admin/FETCH_ERROR',
   CREATE_TASK = '@@admin/CREATE_TASK',
@@ -776,6 +779,7 @@ export type AdminActions =
         | AdminActionTypes.FETCH_TEAM
         | AdminActionTypes.FETCH_USER
         | AdminActionTypes.FETCH_BADGES
+        | AdminActionTypes.FETCH_OUT
         | AdminActionTypes.BULK_DELETE
         | AdminActionTypes.CREATE_TASK
         | AdminActionTypes.SEARCH;
@@ -787,6 +791,10 @@ export type AdminActions =
   | {
       type: AdminActionTypes.BULK_DELETE_SUCCESS;
       payload: IDType[];
+    }
+  | {
+      type: AdminActionTypes.FETCH_OUT_SUCCESS;
+      payload: OutSummary[];
     }
   | {
       type: AdminActionTypes.DELETE_MATCH_SUCCESS;

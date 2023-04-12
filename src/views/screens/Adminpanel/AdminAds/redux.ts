@@ -6,6 +6,7 @@ import {
   createAd,
   deleteAd,
   getAd,
+  getClicks,
   patchAd,
   searchAdmin,
 } from '../../../../store/actions/adminActions';
@@ -30,12 +31,17 @@ const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
   searchAd: (q: string) => {
     performAction({ f: searchAdmin, p: [dispatch, q, SEARCH_ADS] });
   },
+
+  getStats: () => {
+    performAction({ f: getClicks, p: [dispatch] });
+  },
 });
 
 const props = (state: RootState) => ({
   ad: state.admin.ad ?? undefined,
   ads: state.admin.ads,
   searching: state.admin.statusSearch === 'loading',
+  outSummary: state.admin.outSummary,
   status: state.admin.status,
 });
 
