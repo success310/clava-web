@@ -13,6 +13,7 @@ import {
 } from '../../../../../store/actions/types';
 import { performAction } from '../../../../../store/actions/all';
 import { MatchCreate } from '../../../../../client/api';
+import { MatchCreateParsed } from '../types';
 
 const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
   createMultiple: (matches: MatchCreate[]) => {
@@ -28,8 +29,10 @@ const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
     performAction({ f: searchAdmin, p: [dispatch, q, SEARCH_LOCATION] });
   },
 });
-
-const props = (state: RootState) => ({
+type CreateBulkProps = {
+  rowAdder: (match: MatchCreateParsed) => void;
+};
+const props = (state: RootState, prevProps: CreateBulkProps) => ({
   match: state.admin.match,
   matches: state.admin.matches,
   searching: state.admin.statusSearch === 'loading',
@@ -38,7 +41,8 @@ const props = (state: RootState) => ({
   leagues: state.admin.leagues,
   locations: state.admin.locations,
   teams: state.admin.teams,
+  ...prevProps,
 });
 
 export const connector = connect(props, mapper);
-// reload
+// re load

@@ -80,12 +80,13 @@ export function fetchBulletins(
     limit,
   );
 }
+export const TRANSFERS_LIMIT = 20;
 
 export function fetchTransfers(
   dispatch: Dispatch<Action<NewsActions>>,
   aoiId: IDType,
   offset: number,
-  limit: number,
+  limit: number = TRANSFERS_LIMIT,
 ) {
   defaultGet(
     dispatch,

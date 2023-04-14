@@ -23,13 +23,19 @@ import { ClavaContext } from '../../../../config/contexts';
 import { translate, TranslatorKeys } from '../../../../config/translator';
 import { connector } from './redux';
 import MatchList from './MatchList';
-import { MatchChange, MatchFilterRemoveType, MatchFilterType } from './types';
+import {
+  MatchChange,
+  MatchCreateParsed,
+  MatchFilterRemoveType,
+  MatchFilterType,
+} from './types';
 import MatchFilter from './MatchFilter';
 import { getMatchDate } from '../../../../config/utils';
 import Loading from '../../../components/Loading';
 import { IDType } from '../../../../config/types';
 import { MatchCreate, MatchPatch } from '../../../../client/api';
 import matchDay from '../../../components/MatchDays/MatchDay';
+import CreateBulk from './CreateBulk';
 
 function isMatchCreate(value: MatchCreate | undefined): value is MatchCreate {
   return !!value;
@@ -63,10 +69,16 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
   const [changes, setChanges] = useState<MatchChange[]>([]);
   const [discardChanges, setDiscardChanges] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [doImport, setDoImport] = useState(false);
+  const rowAdder = useRef<() => void>();
+  const [rowFiller, setRowFiller] = useState<MatchCreateParsed[]>([]);
   const [error, setError] = useState<TranslatorKeys[]>([]);
   const toggleBulkActions = useCallback(() => {
     setWantDelete(false);
     setBulkActions((ba) => !ba);
+  }, []);
+  const toggleImport = useCallback(() => {
+    setDoImport((i) => !i);
   }, []);
   const addFilter = useCallback((filter: MatchFilterType) => {
     setFilters((oldFilters) => oldFilters.concat([filter]));
@@ -282,52 +294,72 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
     },
     [changes],
   );
+  const addRow = useCallback(() => {
+    if (rowAdder.current) {
+      rowAdder.current();
+    }
+  }, [rowAdder]);
+  const addRowFilled = useCallback((fillMatch: MatchCreateParsed) => {
+    setRowFiller((rf) => rf.concat([fillMatch]));
+  }, []);
   return (
     <div className="adminpanel-match">
       <fieldset className="form open">
         <h5>{translate('createMatch', l)}</h5>
         <Row className="match-section">
           <Col xs={12}>
-            <Button type="button" color="secondary">
+            <Button type="button" color="secondary" onClick={addRow}>
               {translate('createSingle', l)}
             </Button>
-            <Button type="button" color="secondary" className="ms-2">
-              {translate('createBulk', l)}
+            <Button
+              type="button"
+              color="secondary"
+              className="ms-2"
+              onClick={toggleImport}>
+              {translate(!doImport ? 'createBulk' : 'editMatch', l)}
             </Button>
           </Col>
         </Row>
-        <h5>{translate('editMatch', l)}</h5>
-        <Row className="match-section">
-          <Col xs={12} sm={6}>
-            <FormGroup>
-              <Label htmlFor="searchMatch">
-                {translate('searchMatchExpl', l)}
-              </Label>
-              <InputGroup className={searching ? 'searching' : ''}>
-                <Input
-                  type="text"
-                  id="searchMatch"
-                  value={query}
-                  onChange={onSearchMatch}
-                />
-                <div className="input-group-addon refreshing">
-                  <FontAwesomeIcon icon={faRefresh} />
-                </div>
-                <div className="input-group-addon">
-                  <FontAwesomeIcon icon={faSearch} />
-                </div>
-              </InputGroup>
-            </FormGroup>
-          </Col>
-        </Row>
-        <h5>{translate('filter', l)}</h5>
-        <MatchFilter
-          filter={filters}
-          canApplyFilter={matches.length === 0}
-          reset={resetFilters}
-          addFilter={changeFilter}
-          applyFilter={applyFilter}
-        />
+        <h5>{translate(doImport ? 'createBulk' : 'editMatch', l)}</h5>
+        {doImport ? (
+          <Row className="match-section ">
+            <CreateBulk rowAdder={addRowFilled} />
+          </Row>
+        ) : (
+          <>
+            <Row className="match-section">
+              <Col xs={12} sm={6}>
+                <FormGroup>
+                  <Label htmlFor="searchMatch">
+                    {translate('searchMatchExpl', l)}
+                  </Label>
+                  <InputGroup className={searching ? 'searching' : ''}>
+                    <Input
+                      type="text"
+                      id="searchMatch"
+                      value={query}
+                      onChange={onSearchMatch}
+                    />
+                    <div className="input-group-addon refreshing">
+                      <FontAwesomeIcon icon={faRefresh} />
+                    </div>
+                    <div className="input-group-addon">
+                      <FontAwesomeIcon icon={faSearch} />
+                    </div>
+                  </InputGroup>
+                </FormGroup>
+              </Col>
+            </Row>
+            <h5>{translate('filter', l)}</h5>
+            <MatchFilter
+              filter={filters}
+              canApplyFilter={matches.length === 0}
+              reset={resetFilters}
+              addFilter={changeFilter}
+              applyFilter={applyFilter}
+            />
+          </>
+        )}
         {discardChanges && (
           <Row>
             <Col xs={12} className="text-center">
@@ -436,6 +468,8 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
           selectMatch={selectMatch}
           addChange={addChange}
           changes={changes}
+          rowAdder={rowAdder}
+          rowFiller={rowFiller}
         />
       </fieldset>
     </div>
@@ -443,4 +477,4 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
 };
 
 export default connector(AdminpanelMatch);
-// relo ad
+// reload

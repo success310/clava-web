@@ -12,14 +12,8 @@ import { RootState } from '../../../store';
 import { AreaOfInterest, Language } from '../../../client/api';
 import { fetchAois } from '../../../store/actions/aoiActions';
 import { fetchLanguages } from '../../../store/actions/languageActions';
-import {
-  LeagueActionTypes,
-  MatchActionTypes,
-  StandingActionTypes,
-  TeamActionTypes,
-} from '../../../store/actions/types';
 import client from '../../../client';
-import socket from '../../../client/Websockets/events';
+import EventsSocket from '../../../client/Websockets/events';
 import { AS_ENDPOINT } from '../../../config/constants';
 
 const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
@@ -31,10 +25,6 @@ const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
   },
   changeAoi: (aoi: AreaOfInterest) => {
     performAction({ f: changeAoi, p: [dispatch, aoi] });
-    dispatch({ type: MatchActionTypes.RESET });
-    dispatch({ type: StandingActionTypes.RESET });
-    dispatch({ type: LeagueActionTypes.RESET });
-    dispatch({ type: TeamActionTypes.RESET });
   },
   getLanguages: () => {
     performAction({ f: fetchLanguages, p: [dispatch] });
@@ -44,7 +34,7 @@ const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
   },
   setEndpoint: (endpoint: string) => {
     client().setEndpoint(endpoint);
-    socket().setEndpoint(endpoint);
+    EventsSocket.setEndpoint(endpoint);
     localStorage.setItem(AS_ENDPOINT, endpoint);
     refreshToken(dispatch);
   },
@@ -57,4 +47,4 @@ const props = (state: RootState) => ({
 });
 
 export const connector = connect(props, mapper);
-// reload
+// relo ad

@@ -9,7 +9,12 @@ import { Button, Col, Label, Row } from 'reactstrap';
 import { faPlus } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import BulkMatchRow from '../BulkMatchRow';
-import { MatchChange, SortDirections, SortTypes } from '../types';
+import {
+  MatchChange,
+  MatchCreateParsed,
+  SortDirections,
+  SortTypes,
+} from '../types';
 import { getMatchDate } from '../../../../../config/utils';
 import { showTranslated, translate } from '../../../../../config/translator';
 import { Match, MatchListElement } from '../../../../../client/api';
@@ -21,6 +26,8 @@ type MatchListProps = {
   selectMatch: (index: number) => void;
   addChange: (c: MatchChange) => void;
   changes: MatchChange[];
+  rowAdder: React.MutableRefObject<(() => void) | undefined>;
+  rowFiller: MatchCreateParsed[];
 };
 
 const MatchList: React.FC<MatchListProps> = ({
@@ -28,15 +35,18 @@ const MatchList: React.FC<MatchListProps> = ({
   selectedMatches,
   addChange,
   changes,
+  rowAdder,
+  rowFiller,
   selectMatch,
 }) => {
   const { l } = useContext(ClavaContext);
   const [sortDirection, setSortDirection] = useState<SortDirections>('DESC');
   const [sortType, setSortType] = useState<SortTypes>('none');
-  const [newRows, setNewRos] = useState<number[]>([]);
+  const [newRows, setNewRows] = useState<number[]>([]);
+
   useEffect(() => {
     if (changes.length === 0) {
-      setNewRos([]);
+      setNewRows([]);
     }
   }, [changes.length, matches.length]);
   const sortedMatches = useMemo(() => {
@@ -80,9 +90,14 @@ const MatchList: React.FC<MatchListProps> = ({
     },
     [],
   );
+
   const addRow = useCallback(() => {
-    setNewRos((newR) => newR.concat([sortedMatches.length + newR.length]));
-  }, [sortedMatches.length]);
+    setNewRows((newR) => newR.concat([sortedMatches.length + newRows.length]));
+  }, [newRows.length, sortedMatches.length]);
+
+  useEffect(() => {
+    rowAdder.current = addRow;
+  }, [addRow, rowAdder]);
   return (
     <>
       <Label htmlFor="selectAll">{translate('selectAll', l)}</Label>
@@ -116,6 +131,19 @@ const MatchList: React.FC<MatchListProps> = ({
           key={`match-row-${i}`}
         />
       ))}
+      {rowFiller.map((m, i) => {
+        const idx = sortedMatches.length + newRows.length + i;
+        return (
+          <BulkMatchRow
+            onChange={addChange}
+            change={changes.find((c) => c.index === idx)}
+            selected
+            index={idx}
+            key={`match-row-${idx}`}
+            rowFiller={m}
+          />
+        );
+      })}
       <Row>
         <Col xs={12} className="text-center">
           <Button color="secondary" onClick={addRow}>
@@ -129,4 +157,4 @@ const MatchList: React.FC<MatchListProps> = ({
 
 export default MatchList;
 
-// rel oad
+// reload

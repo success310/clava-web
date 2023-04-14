@@ -6,6 +6,7 @@ import { Match, MatchListElement } from '../../../../../client/api';
 import {
   MatchChange,
   MatchCreateCont,
+  MatchCreateParsed,
   SortDirections,
   SortTypes,
 } from '../types';
@@ -29,6 +30,7 @@ type BulkMatchHeaderProps = {
   onChange?: undefined;
   change?: undefined;
   index?: undefined;
+  rowFiller?: undefined;
 };
 
 type BulkMatchCreateProps = {
@@ -42,6 +44,7 @@ type BulkMatchCreateProps = {
   onChange: (change: MatchChange) => void;
   change: MatchChange | undefined;
   index: number;
+  rowFiller?: MatchCreateParsed;
 };
 type BulkMatchEditProps = {
   header?: false;
@@ -54,8 +57,8 @@ type BulkMatchEditProps = {
   onChange: (change: MatchChange) => void;
   change: MatchChange | undefined;
   index: number;
+  rowFiller?: undefined;
 };
-
 type BulkMatchRowProps =
   | BulkMatchCreateProps
   | BulkMatchEditProps

@@ -305,7 +305,7 @@ export function searchMatchFiltered(
     client().searchMatchesFiltered,
     false,
     { id: SEARCH_MATCH },
-    q,
+    q.length === 0 ? ' ' : q,
     filters,
     limit,
     offset,

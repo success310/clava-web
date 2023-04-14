@@ -1913,9 +1913,14 @@ const generalKeywords = {
     en: 'Einzeln Erstellen',
   },
   createBulk: {
-    de: 'Mehrere Erstellen',
-    it: 'Mehrere Erstellen',
-    en: 'Mehrere Erstellen',
+    de: 'Spiele importieren',
+    it: 'Spiele importieren',
+    en: 'Spiele importieren',
+  },
+  unexpectedErrorReload: {
+    de: 'Ein unerwarteter Fehler ist aufgetreten, bitte Seite neu Laden',
+    it: 'Ein unerwarteter Fehler ist aufgetreten, bitte Seite neu Laden',
+    en: 'Ein unerwarteter Fehler ist aufgetreten, bitte Seite neu Laden',
   },
   uploadSheet: {
     de: 'Liste hochladen ( Funktioniert nicht auf Safari )',

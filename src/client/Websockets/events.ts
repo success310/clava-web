@@ -1,41 +1,38 @@
-/* eslint-disable camelcase */
 import * as Sentry from '@sentry/react';
 import { io, Socket } from 'socket.io-client';
 import { DisconnectDescription } from 'socket.io-client/build/esm/socket';
-import { IDType } from '../../config/types';
-import { dayToNumber, sameDay } from '../../config/utils';
-import client from '../index';
-import { addLog } from '../../store/middleware/logger';
-import {
-  getInsiderByTeam,
-  refreshToken,
-} from '../../store/actions/userActions';
-import { store } from '../../store';
-import {
-  fetchLeagueMatchesOfDay,
-  fetchLeagueMatchesOfDayLeague,
-  fetchMatch,
-  fetchMatchOfTeam,
-} from '../../store/actions/matchActions';
-import { MatchActionTypes, NewsActionTypes } from '../../store/actions/types';
-import { fetchByLeague } from '../../store/actions/standingActions';
 import {
   BETA_ENDPOINT,
   BETA_SOCKET_ENDPOINT,
   DEV_ENDPOINT,
   DEV_SOCKET_ENDPOINT,
   PROD_SOCKET_ENDPOINT,
+  STAG_ENDPOINT,
+  STAG_SOCKET_ENDPOINT,
 } from '../../config/constants';
-
-export interface EventSocketType {
-  setUser: (id: IDType, aoi: IDType) => void;
-  close: () => void;
-}
+import { store } from '../../store';
+import {
+  getInsiderByTeam,
+  refreshToken,
+} from '../../store/actions/userActions';
+import { fetchByLeague } from '../../store/actions/standingActions';
+import { getLineupOfMatch } from '../../store/actions/matchActions';
+import { MatchActionTypes, NewsActionTypes } from '../../store/actions/types';
+import { errorLogging } from '../../config/utils';
+import client from '../index';
+import { addLog } from '../../store/middleware/logger';
+import { EventTypeEnum, Match, MatchLocationEnum } from '../api';
+import { ValueStore } from '../../store/constants';
+import {
+  fetchTransfers,
+  TRANSFERS_LIMIT,
+} from '../../store/actions/newsActions';
+import { IDType } from '../../config/types';
 
 type EventSocketMessage = {
   match_id: IDType;
   league_id: IDType;
-  team_id: IDType;
+  sub_type: EventTypeEnum;
   type: 'event';
 };
 type LineupSocketMessage = {
@@ -62,50 +59,161 @@ type MatchSocketMessage = {
   type: 'match';
 };
 
+type FileUploadMessage = {
+  file_id: IDType;
+  type: 'file_formats_created';
+};
+type MatchFeedMessage = {
+  match_id: IDType;
+  post_id: IDType;
+  type: 'match_feed';
+};
+type PostMessage = {
+  post_id: IDType;
+  type: 'post';
+};
+type UserFeedMessage = {
+  post_id: IDType;
+  type: 'user_feed';
+};
+
+type FileUploadCompleteListener = (id: IDType) => void;
+
 type SocketMessage =
+  | FileUploadMessage
   | EventSocketMessage
   | LineupSocketMessage
   | UserSocketMessage
   | TransfersSocketMessage
   | MatchSocketMessage
+  | PostMessage
+  | UserFeedMessage
+  | MatchFeedMessage
   | { type: 'ping' };
 
-class EventsSocket implements EventSocketType {
-  private static __instance: EventsSocket;
-
-  private static alive: number | undefined;
+class EventsSocket {
+  private static alive: number;
 
   private static readonly ALIVE_TIMEOUT = 120000;
 
-  private websocket: Socket | undefined;
+  private static websocket: Socket | undefined;
 
-  private userID: IDType = -1;
+  private static userID: IDType = -1;
 
-  private aoiID: IDType = -1;
+  private static aoiID: IDType = -1;
 
-  private endpoint = `wss://${PROD_SOCKET_ENDPOINT}/`;
+  private static endpoint = `wss://${PROD_SOCKET_ENDPOINT}/`;
 
-  private ignoreUserRefreshs = 0;
+  private static ignoreUserRefreshs = 0;
 
-  private constructor(endpoint: string) {
-    this.endpoint = `wss://${endpoint}/`;
-    // TODO remove comment this.open();
-  }
+  private static fileUploadCompleteListener:
+    | FileUploadCompleteListener
+    | undefined;
 
-  static getInstance(endpoint?: string): EventsSocket {
-    if (!EventsSocket.__instance) {
-      if (!endpoint) endpoint = PROD_SOCKET_ENDPOINT;
-      if (endpoint === BETA_ENDPOINT)
-        EventsSocket.__instance = new EventsSocket(BETA_SOCKET_ENDPOINT);
-      else if (endpoint === DEV_ENDPOINT)
-        EventsSocket.__instance = new EventsSocket(DEV_SOCKET_ENDPOINT);
-      else EventsSocket.__instance = new EventsSocket(PROD_SOCKET_ENDPOINT);
-    }
-    return EventsSocket.__instance;
+  static init(endpoint: string | undefined | null) {
+    if (!endpoint) endpoint = PROD_SOCKET_ENDPOINT;
+    if (endpoint === BETA_ENDPOINT) endpoint = BETA_SOCKET_ENDPOINT;
+    else if (endpoint === DEV_ENDPOINT) endpoint = DEV_SOCKET_ENDPOINT;
+    else if (endpoint === STAG_ENDPOINT) endpoint = STAG_SOCKET_ENDPOINT;
+    else endpoint = PROD_SOCKET_ENDPOINT;
+    EventsSocket.endpoint = `wss://${endpoint}/`;
+    EventsSocket.open();
   }
 
   public static isOpen(websocket: Socket | undefined): websocket is Socket {
     return !!websocket && websocket.active;
+  }
+
+  static setFileUploadListener(listener: FileUploadCompleteListener) {
+    EventsSocket.fileUploadCompleteListener = listener;
+  }
+
+  static setUser(id?: IDType, aoi?: IDType) {
+    if (id && aoi) {
+      EventsSocket.userID = id;
+      EventsSocket.aoiID = aoi;
+      const sock = EventsSocket.websocket;
+      if (sock) {
+        sock.emit('user_id', id);
+        addLog('socket', { User: id });
+      }
+      setTimeout(() => {
+        if (sock) {
+          sock.emit('room', `aoi_${aoi}`);
+          addLog('socket', { Room: `aoi_${aoi}` });
+        }
+      }, 1000);
+      if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development')
+        console.log(`Identify as ${id} in room aoi_${aoi}`);
+      else
+        Sentry.addBreadcrumb({
+          type: 'info',
+          category: 'socket',
+          data: { user_id: id, room: `aoi_${aoi}` },
+        });
+    } else if (EventsSocket.userID && EventsSocket.aoiID) {
+      const sock = EventsSocket.websocket;
+      if (sock) {
+        sock.emit('user_id', EventsSocket.userID);
+        addLog('socket', { User: id });
+      }
+      setTimeout(() => {
+        if (sock) {
+          sock.emit('room', `aoi_${EventsSocket.aoiID}`);
+          addLog('socket', { Room: `aoi_${aoi}` });
+        }
+      }, 1000);
+      if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development')
+        console.log(
+          `Identify as ${EventsSocket.userID} in room aoi_${EventsSocket.aoiID}`,
+        );
+      else
+        Sentry.addBreadcrumb({
+          type: 'info',
+          category: 'socket',
+          data: {
+            user_id: EventsSocket.userID,
+            room: `aoi_${EventsSocket.aoiID}`,
+          },
+        });
+    }
+  }
+
+  static open() {
+    if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development')
+      console.log('\x1b[35m%s%O\x1b[0m', `Open WS to ${EventsSocket.endpoint}`);
+    addLog('socket', { Open: EventsSocket.endpoint });
+    EventsSocket.close();
+    EventsSocket.websocket = io(EventsSocket.endpoint);
+    EventsSocket.websocket.on('message', EventsSocket.onMessage);
+    EventsSocket.websocket.on('connect', EventsSocket.onOpen);
+    EventsSocket.websocket.on('connect_error', EventsSocket.onError);
+    EventsSocket.websocket.on('disconnect', EventsSocket.onClose);
+  }
+
+  static close() {
+    if (EventsSocket.isOpen(EventsSocket.websocket))
+      EventsSocket.websocket.close();
+  }
+
+  static setEndpoint(endpoint: string) {
+    const newEndpoint =
+      endpoint === DEV_ENDPOINT
+        ? DEV_SOCKET_ENDPOINT
+        : endpoint === BETA_ENDPOINT
+        ? BETA_SOCKET_ENDPOINT
+        : endpoint === STAG_ENDPOINT
+        ? STAG_SOCKET_ENDPOINT
+        : PROD_SOCKET_ENDPOINT;
+    if (`wss://${newEndpoint}/` !== EventsSocket.endpoint) {
+      EventsSocket.endpoint = `wss://${newEndpoint}/`;
+      EventsSocket.close();
+      EventsSocket.open();
+    }
+  }
+
+  static ignoreUserRefresh(length: number) {
+    EventsSocket.ignoreUserRefreshs = length;
   }
 
   /**
@@ -118,44 +226,12 @@ class EventsSocket implements EventSocketType {
     reason: Socket.DisconnectReason,
     description?: DisconnectDescription,
   ) {
-    console.log('WS closed: ', reason);
-    addLog('socket', `WS closed due to: ${reason}`, '#faa');
-  }
-
-  /**
-   *
-   * @private
-   * @deprecated with Socket.IO
-   */
-  private static checkAlive() {
-    const ws = socket().websocket;
-    if (EventsSocket.isOpen(ws)) {
-      // TODO ignore?
-    } else {
-      socket().open();
-    }
-    EventsSocket.alive = undefined;
-  }
-
-  private static onOpen() {
-    console.log(`WS open to ${socket().endpoint}`);
-    addLog('socket', `WS open to ${socket().endpoint}`, '#faa');
-    setTimeout(() => {
-      const sock = socket().websocket;
-      if (sock) sock.emit('user_id', socket().userID);
-      setTimeout(() => {
-        if (sock) sock.emit('room', `aoi_${socket().aoiID}`);
-      }, 1000);
-    }, 1000);
-  }
-
-  private static onError(error: Error) {
-    console.log('Error:', error);
-    addLog('socket', `WS Error: ${error}`, '#faa');
+    console.log('\x1b[35m%s%O\x1b[0m', 'WS closed, reason: ', reason);
+    addLog('socket', { Closed: { reason, description } });
   }
 
   private static handleUserMessage(userId: IDType) {
-    if (userId === socket().userID) {
+    if (userId === EventsSocket.userID) {
       refreshToken(store.dispatch);
     } else {
       const possibleInsider = store
@@ -175,131 +251,87 @@ class EventsSocket implements EventSocketType {
       type: NewsActionTypes.REFRESH,
       payload: { transfers: [] },
     });
+    fetchTransfers(store.dispatch, EventsSocket.aoiID, 0, TRANSFERS_LIMIT);
   }
 
   private static handleMatchMessage(
     addDate: string,
-    removeDate: string | undefined,
+    removeDate: string,
     matchId: IDType,
   ) {
-    // TODO refresh match
-    const add = new Date(addDate);
-    if (add) {
-      const dateAsNumber = dayToNumber(add);
-      let found = false;
-      let min = Infinity;
-      let max = 0;
-      const state = store.getState();
-      state.match.matchDays.forEach((day) => {
-        if (sameDay(day, add)) {
-          found = true;
-        }
-        if (day.getTime() > max) max = day.getTime();
-        if (day.getTime() < min) min = day.getTime();
-      });
-      if (!found && add.getTime() < max && add.getTime() > min) {
+    client()
+      .getMatch(matchId)
+      .then((match) => {
         store.dispatch({
-          type: MatchActionTypes.FETCH_SUCCESS_MATCH_DAYS,
-          payload: [add.toISOString()],
+          type: MatchActionTypes.REFRESH_MATCH_DAYS,
+          payload: {
+            match,
+            addDate,
+            removeDate,
+            aoiID: EventsSocket.aoiID,
+          },
         });
-      }
-      // TODO matchday
-      if (
-        found &&
-        state.match.leagueMatches &&
-        state.match.leagueMatches.date === dateAsNumber
-      ) {
-        fetchLeagueMatchesOfDay(store.dispatch, socket().aoiID, dateAsNumber);
-      }
-      if (
-        found &&
-        state.match.matchElements &&
-        state.match.matchElements.date === dateAsNumber
-      ) {
-        fetchLeagueMatchesOfDayLeague(
-          store.dispatch,
-          state.match.matchElements.id,
-          dateAsNumber,
-        );
-      }
-      if (
-        state.match.matchesOfTeam &&
-        !!state.match.matchesOfTeam.response.find((m) => m.id === matchId)
-      ) {
-        fetchMatchOfTeam(store.dispatch, state.match.matchesOfTeam.id);
-      }
-    }
-    const remove = removeDate ? new Date(removeDate) : undefined;
-    if (remove) {
-      let found = false;
-      client()
-        .getMatchDays(remove, { aoi: socket().aoiID, type: 'month' })
-        .then((matchDays) => {
-          matchDays.forEach((md) => {
-            const day = new Date(md);
-            if (sameDay(day, remove)) found = true;
-          });
-          if (!found) {
-            store.dispatch({
-              type: MatchActionTypes.REMOVE_MATCH_DAY,
-              payload: remove,
-            });
-          }
-        });
-    }
+      }, errorLogging);
   }
 
   private static handleEventMessage(
     leagueId: IDType,
     matchId: IDType,
-    teamId: IDType,
+    subType: EventTypeEnum,
   ) {
     const state = store.getState();
     if (state.standing.value.find((v) => v.id === leagueId)) {
       fetchByLeague(store.dispatch, leagueId);
     }
-    const match = state.match.matches.find((m) => m.id === matchId);
-    if (match) {
-      fetchMatch(store.dispatch, match.id);
-    }
-    const { leagueMatches } = state.match;
-    if (leagueMatches && leagueMatches.id === socket().aoiID) {
-      if (
-        leagueMatches.response.filter(
-          (lm) =>
-            lm.league.id === leagueId &&
-            !!lm.matches.find((m) => m.id === matchId),
-        ).length !== 0
-      ) {
-        fetchLeagueMatchesOfDay(
-          store.dispatch,
-          socket().aoiID,
-          leagueMatches.date as number,
-        );
-      }
-    }
+    client()
+      .getMatch(matchId)
+      .then((match) => {
+        const payload: ValueStore<Match> = {
+          id: EventsSocket.aoiID,
+          fetchDate: new Date(),
+          response: match,
+        };
+        store.dispatch({ type: MatchActionTypes.REFRESH_MATCH, payload });
+      });
+    // refreshMatch(store.dispatch, matchId, EventsSocket.aoiID);
+  }
 
-    if (
-      state.match.matchesOfTeam &&
-      !!state.match.matchesOfTeam.response.find((m) => m.id === matchId)
-    ) {
-      fetchMatchOfTeam(store.dispatch, state.match.matchesOfTeam.id);
+  private static handleLineupMessage(matchId: IDType, teamId: IDType) {
+    const match = store.getState().match.matches.find((m) => m.id === matchId);
+    if (match)
+      getLineupOfMatch(
+        store.dispatch,
+        matchId,
+        teamId === match.team1.id
+          ? MatchLocationEnum.HOME
+          : MatchLocationEnum.AWAY,
+      );
+  }
+
+  /**
+   *
+   * @private
+   * @deprecated with Socket.IO
+   */
+  private static checkAlive() {
+    const ws = EventsSocket.websocket;
+    if (EventsSocket.isOpen(ws)) {
+      // IGNORE
+    } else {
+      EventsSocket.open();
     }
-    // TODO Statistct aktualisiern
-    // TODO matchElements
-    // goalDistribution
-    // league stats ? eher lei periodisch
+    EventsSocket.alive = -1;
   }
 
   private static onMessage(payload: any) {
-    console.log(`Message from Socket: `, payload);
-    addLog('socket', `WS Message: ${JSON.stringify(payload)}`, '#faa');
-    const ws = socket().websocket;
+    if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development')
+      console.log('\x1b[35m%s%O\x1b[0m', `WS Message: `, payload);
+    addLog('socket', { Message: payload });
     try {
       const message: SocketMessage = JSON.parse(payload as string);
       if (message.type === 'user') {
-        if (socket().ignoreUserRefreshs) {
-          socket().ignoreUserRefreshs--;
+        if (EventsSocket.ignoreUserRefreshs) {
+          EventsSocket.ignoreUserRefreshs--;
         } else {
           EventsSocket.handleUserMessage(message.user_id);
         }
@@ -308,7 +340,7 @@ class EventsSocket implements EventSocketType {
         EventsSocket.handleEventMessage(
           message.league_id,
           message.match_id,
-          message.team_id,
+          message.sub_type,
         );
       }
       if (message.type === 'transfer') {
@@ -325,48 +357,30 @@ class EventsSocket implements EventSocketType {
           message.match_id,
         );
       }
-      // TODO do fahlt villeicht no wos
+      if (message.type === 'lineup') {
+        EventsSocket.handleLineupMessage(message.match_id, message.team_id);
+      }
+      if (message.type === 'file_formats_created') {
+        const listener = EventsSocket.fileUploadCompleteListener;
+        if (listener) listener(message.file_id);
+      }
     } catch (e) {
       Sentry.captureException(e);
     }
   }
 
-  open() {
-    this.close();
-    this.websocket = io(socket().endpoint);
-    this.websocket.on('message', EventsSocket.onMessage);
-    this.websocket.on('connect', EventsSocket.onOpen);
-    this.websocket.on('connect_error', EventsSocket.onError);
-    this.websocket.on('disconnect', EventsSocket.onClose);
+  private static onOpen() {
+    if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development')
+      console.log('\x1b[35m%s%O\x1b[0m', `WS open to ${EventsSocket.endpoint}`);
+    addLog('socket', { Connected: EventsSocket.endpoint });
+    setTimeout(EventsSocket.setUser, 1000);
   }
 
-  setUser(id: IDType, aoi: IDType) {
-    this.userID = id;
-    this.aoiID = aoi;
-  }
-
-  close() {
-    if (EventsSocket.isOpen(this.websocket)) this.websocket.close();
-  }
-
-  setEndpoint(endpoint: string) {
-    const newEndpoint =
-      endpoint === DEV_ENDPOINT
-        ? DEV_SOCKET_ENDPOINT
-        : endpoint === BETA_ENDPOINT
-        ? BETA_SOCKET_ENDPOINT
-        : PROD_SOCKET_ENDPOINT;
-    if (`wss://${newEndpoint}/` !== this.endpoint) {
-      this.endpoint = `wss://${newEndpoint}/`;
-      this.close();
-      this.open();
-    }
-  }
-
-  ignoreUserRefresh(length: number) {
-    this.ignoreUserRefreshs = length;
+  private static onError(error: Error) {
+    if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development')
+      console.log('\x1b[35m%s%O\x1b[0m', 'WS Error:', error);
+    addLog('socket', { Error: error });
   }
 }
 
-const socket = EventsSocket.getInstance;
-export default socket;
+export default EventsSocket;

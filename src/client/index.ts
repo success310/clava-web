@@ -1219,17 +1219,14 @@ class Client {
         headers,
       };
 
-      addLog('req', `POST: ${url}`, '#5d5dff');
+      addLog('req', { Post: url, Body: data });
       console.log('\x1b[34m%s\x1b[0m', `POST: ${url}`);
       try {
         axios.request(config).then(
           (response) => {
+            addLog('response', response);
             if (response.status >= 200 && response.status < 300) {
               const body = response.status !== 204 ? response.data : undefined;
-              if (body) {
-                console.log('\x1b[34m%s%O\x1b[0m', 'Body:', body);
-                addLog('reqData', `Body: ${JSON.stringify(body)}`, '#5d5dff');
-              }
               resolve(body);
             } else {
               reject(`Failed to uplaod: ${response.statusText}`);

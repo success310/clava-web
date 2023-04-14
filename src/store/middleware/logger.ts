@@ -20,11 +20,17 @@ import { Middleware } from 'redux';
  *
  * @param object
  */
-
+export declare type LogType =
+  | 'all'
+  | 'appState'
+  | 'req'
+  | 'cam'
+  | 'response'
+  | 'socket'
+  | 'firebase'
+  | 'cache'
+  | 'redux';
 function replaceArrays(object: any): any {
-  return object;
-  /*
-  this is only needed on web, here we have a proper console
   if (object) {
     if (Array.isArray(object)) {
       return {
@@ -43,54 +49,74 @@ function replaceArrays(object: any): any {
     }
   }
   return object;
-  */
 }
 
-export declare type LogType =
-  | 'all'
-  | 'req'
-  | 'reqData'
-  | 'response'
-  | 'socket'
-  | 'firebase'
-  | 'redux';
-
+export const LOG_COLORS: {
+  [T in LogType]: string;
+} = {
+  all: '#fff',
+  appState: '#45DF31',
+  req: '#CD7F32',
+  response: '#CD7F32',
+  cam: '#00ff00',
+  cache: '#45DF31',
+  socket: '#5AA0E1',
+  firebase: '#FF9C09',
+  redux: '#EA4C89',
+};
 export const LOG_TYPES: LogType[] = [
   'all',
+  'appState',
   'req',
-  'reqData',
   'response',
   'socket',
   'redux',
   'firebase',
+  'cache',
+  'cam',
 ];
 let logId = 0;
-type LogElem = {
+export const loggerSettings = {
+  enabled: true,
+};
+
+export declare type LogElem = {
   type: LogType;
-  color?: string;
+  color: string;
   time: Date;
-  msg: string;
+  msg: Record<string, any>;
   id: number;
 };
 const logs: LogElem[] = [];
 
-export function addLog(type: LogType, msg: string, color?: string) {
-  logs.push({ id: logId++, time: new Date(), msg, color, type });
-  if (logs.length > 100) logs.shift();
+export function addLog(type: LogType, msg: Record<string, any>) {
+  if (loggerSettings.enabled) {
+    logs.push({
+      id: logId++,
+      time: new Date(),
+      msg,
+      color: LOG_COLORS[type] ?? 'WHITE',
+      type,
+    });
+    if (logs.length > 100) logs.shift();
+  }
 }
 
 export function getLog(): LogElem[] {
   return logs;
 }
 
-const logger: Middleware<any, any, any> = () => (next) => (action) => {
-  console.log('\x1b[32m%s\x1b[0m', `Dispatch: ${action.type}`);
-  addLog('redux', `Dispatch: ${action.type}`, '#0a0');
+const logger: Middleware<any, any, any> = (_) => (next) => (action) => {
+  if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development')
+    console.log('\x1b[32m%s\x1b[0m', `Dispatch: ${action.type}`);
+  const msg: Record<string, any> = { Dispatch: action.type };
   if ('payload' in action) {
     const p = replaceArrays(action.payload);
-    console.log('\x1b[32m%s%O\x1b[0m', 'Payload: ', p);
-    addLog('redux', `Payload: ${JSON.stringify(p)}`, '#0a0');
+    if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development')
+      console.log('\x1b[32m%s%O\x1b[0m', 'Payload: ', p);
+    msg.Payload = p;
   }
+  addLog('redux', msg);
   // console.debug('Next state', store.getState());
   // console.groupEnd();
   return next(action);

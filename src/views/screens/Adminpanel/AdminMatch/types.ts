@@ -1,5 +1,9 @@
 import { IDType } from '../../../../config/types';
-import { LeagueListElement, TeamListElement } from '../../../../client/api';
+import {
+  LeagueListElement,
+  TeamListElement,
+  Translation,
+} from '../../../../client/api';
 
 export declare type SortTypes =
   | 'matchday'
@@ -71,6 +75,21 @@ export type MatchPatchCont = {
   team2Id?: number;
   goal2?: number;
   matchId?: number;
+};
+
+export declare type TranslatableSearch = { id: number; name: Translation };
+
+export declare type MatchCreateParsed = {
+  matchDay: number;
+  team1: TranslatableSearch | undefined;
+  team1String: string;
+  league: TranslatableSearch | undefined;
+  leagueString: string;
+  team2: TranslatableSearch | undefined;
+  team2String: string;
+  date: Date | undefined;
+  location: TranslatableSearch | undefined;
+  locationString: string;
 };
 
 export declare type LastAction<T extends keyof MatchPatchCont> = Record<

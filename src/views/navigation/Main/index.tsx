@@ -4,6 +4,7 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import { DeviceUUID } from 'device-uuid';
@@ -12,8 +13,8 @@ import { Button } from 'reactstrap';
 import { faPalette } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connector } from './redux';
-import socket from '../../../client/Websockets/events';
-import { browserLang, getDeviceInfo } from '../../../config/utils';
+import EventsSocket from '../../../client/Websockets/events';
+import { browserLang, getDeviceInfo, isAdmin } from '../../../config/utils';
 import FirstOpen from '../../screens/FirstOpen';
 import client from '../../../client';
 import Loading from '../../components/Loading';
@@ -29,6 +30,7 @@ import Register from '../../screens/Profile/Register';
 import ConfirmMail from '../../screens/Profile/ConfirmMail';
 import Adminpanel from '../../screens/Adminpanel';
 import { translate, TranslatorKeys } from '../../../config/translator';
+import { loggerSettings } from '../../../store/middleware/logger';
 
 const Main: React.FC<ConnectedProps<typeof connector>> = ({
   user,
@@ -40,6 +42,7 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
   getInsidersByTeam,
   initBaseDataUser,
   setTheme,
+  resetStoredData,
   status,
   getLeagues,
 }) => {
@@ -50,11 +53,11 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
   }, [setTheme, theme]);
   useEffect(() => {
     const endpoint = window.localStorage.getItem(AS_ENDPOINT);
-    socket(endpoint ?? PROD_ENDPOINT).open();
+    EventsSocket.setEndpoint(endpoint ?? PROD_ENDPOINT);
     client(endpoint ?? PROD_ENDPOINT).setLang(browserLang());
     initBaseDataUser();
     return () => {
-      socket().close();
+      EventsSocket.close();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -90,11 +93,16 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
     createUser,
     refreshToken,
   ]);
+  const aoiRef = useRef(user?.areaOfInterest.id ?? -1);
   useEffect(() => {
     if (user) {
       getLeagues(user.areaOfInterest.id);
       fb().subscribeUserSpecific(user);
-      socket().setUser(user.id, user.areaOfInterest.id);
+      if (aoiRef.current === -1) aoiRef.current = user.areaOfInterest.id;
+      if (aoiRef.current !== user.areaOfInterest.id) {
+        resetStoredData();
+      }
+      EventsSocket.setUser(user.id, user.areaOfInterest.id);
       client().setLang(user.language.locale);
       const teamInsider = user.groups.filter(
         (u) => u.key === GroupEnum.TEAM_INSIDER,
@@ -104,8 +112,10 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
           getInsidersByTeam(group.team.id);
         });
       }
+
+      loggerSettings.enabled = isAdmin(user);
     }
-  }, [getInsidersByTeam, getLeagues, user]);
+  }, [getInsidersByTeam, getLeagues, resetStoredData, user]);
   const clavaContext = useMemo(
     () =>
       user

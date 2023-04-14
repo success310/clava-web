@@ -507,6 +507,8 @@ export enum MatchActionTypes {
   FETCH_EVENTS_SUCCESS = '@@match/FETCH_EVENTS_SUCCESS',
   REFRESH = '@@match/REFRESH',
   POST_EVENT = '@@match/POST_EVENT',
+  REFRESH_MATCH = '@@match/REFRESH_MATCH',
+  REFRESH_MATCH_DAYS = '@@match/REFRESH_MATCH_DAYS',
   POST_EVENT_SUCCESS = '@@match/POST_EVENT_SUCCESS',
   PATCH_EVENT_SUCCESS = '@@match/PATCH_EVENT_SUCCESS',
   FETCH_EVENT_TYPE_SUCCESS = '@@match/FETCH_EVENT_TYPE_SUCCESS',
@@ -555,6 +557,19 @@ export type MatchActions =
   | {
       type: MatchActionTypes.FETCH_MATCH_BET_SUCCESS;
       payload: ValueStore<MatchBetVoting>;
+    }
+  | {
+      type: MatchActionTypes.REFRESH_MATCH;
+      payload: ValueStore<Match>;
+    }
+  | {
+      type: MatchActionTypes.REFRESH_MATCH_DAYS;
+      payload: {
+        match: Match;
+        addDate: string;
+        removeDate: string;
+        aoiID: IDType;
+      };
     }
   | {
       type: MatchActionTypes.DELETE_EVENT_SUCCESS;

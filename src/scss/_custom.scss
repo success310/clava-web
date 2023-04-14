@@ -218,6 +218,12 @@ body {
     &.beta {
       background-color: var(--bs-primary);
     }
+    &.stag {
+      background-color: var(--bs-success);
+    }
+    &.dev {
+      background-color: var(--bs-danger);
+    }
   }
 
   .spacer {

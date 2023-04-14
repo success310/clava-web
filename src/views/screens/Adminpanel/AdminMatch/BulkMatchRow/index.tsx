@@ -3,6 +3,7 @@ import React, {
   ChangeEvent,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -13,7 +14,13 @@ import { showTranslated, translate } from '../../../../../config/translator';
 import MatchSorter from '../MatchSorter';
 import { getMatchDate } from '../../../../../config/utils';
 import SearchInput from '../../SearchInput';
-import { LeagueListElement, TeamListElement } from '../../../../../client/api';
+import {
+  League,
+  LeagueListElement,
+  Team,
+  TeamListElement,
+} from '../../../../../client/api';
+import { MatchCreateParsed, TranslatableSearch } from '../types';
 
 const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
   selected,
@@ -24,7 +31,7 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
   currentDirection,
   getTeams,
   currentSorted,
-  change,
+  rowFiller,
   index,
   leagues,
   teams,
@@ -32,9 +39,15 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
 }) => {
   const { l } = useContext(ClavaContext);
   const [matchDay, setMatchDay] = useState(match?.matchDay?.toString() ?? '');
-  const [team1, setTeam1] = useState(match?.team1);
-  const [team2, setTeam2] = useState(match?.team2);
-  const [league, setLeague] = useState(match?.league);
+  const [team1, setTeam1] = useState<
+    Team | TeamListElement | TranslatableSearch | undefined
+  >(match?.team1);
+  const [team2, setTeam2] = useState<
+    Team | TeamListElement | TranslatableSearch | undefined
+  >(match?.team2);
+  const [league, setLeague] = useState<
+    League | LeagueListElement | undefined | TranslatableSearch
+  >(match?.league);
   const [goals1, setGoals1] = useState(match?.goal1?.toString() ?? '');
   const [goals2, setGoals2] = useState(match?.goal2?.toString() ?? '');
   const [leagueQuery, setLeagueQuery] = useState('');
@@ -48,7 +61,7 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
     );
   }, [l, leagueQuery, leagues]);
 
-  const [teamQuery, setTeamQuery] = useState('');
+  const [teamQuery, setTeam1Query] = useState('');
   const filteredTeamResults = useMemo(() => {
     if (teamQuery.length === 0 || !league) return [];
     const teamList = teams.find((team) => team.id === league.id);
@@ -61,7 +74,7 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
       );
     return [];
   }, [l, league, teamQuery, teams]);
-  const [teamQuery2, setTeamQuery2] = useState('');
+  const [teamQuery2, setTeam2Query] = useState('');
   const filteredTeamResults2 = useMemo(() => {
     if (teamQuery2.length === 0 || !league) return [];
     const teamList = teams.find((team) => team.id === league.id);
@@ -108,6 +121,7 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
         .padStart(2, '0')}`,
     [match],
   );
+
   const [time, setTime] = useState(originalTime);
   const [dateError, setDateError] = useState(false);
   const [timeError, setTimeError] = useState(false);
@@ -144,9 +158,19 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
       goal2: parseInt(goals2, 10),
       goal1: parseInt(goals1, 10),
     };
-  }, [date, goals1, goals2, league?.id, matchDay, team1?.id, team2?.id, time]);
+  }, [
+    date,
+    goals1,
+    goals2,
+    league?.id,
+    match,
+    matchDay,
+    team1?.id,
+    team2?.id,
+    time,
+  ]);
   const setLeagueCont = useCallback(
-    (lea: LeagueListElement | undefined) => {
+    (lea: LeagueListElement | League | TranslatableSearch | undefined) => {
       setLeague(lea);
       if (lea) getTeams(lea.id);
       if (!header) {
@@ -164,7 +188,7 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
     [currentMatchChange, getTeams, header, index, match, onChange],
   );
   const setTeam1Cont = useCallback(
-    (tea: TeamListElement | undefined) => {
+    (tea: Team | TeamListElement | TranslatableSearch | undefined) => {
       setTeam1(tea);
       if (!header) {
         onChange({
@@ -181,7 +205,7 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
     [currentMatchChange, header, index, match, onChange],
   );
   const setTeam2Cont = useCallback(
-    (tea: TeamListElement | undefined) => {
+    (tea: Team | TeamListElement | TranslatableSearch | undefined) => {
       setTeam2(tea);
       if (!header) {
         onChange({
@@ -302,7 +326,7 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
           setTimeError(false);
           onChange({
             index,
-            type: 'edit',
+            type: match ? 'edit' : 'create',
             lastAction: { startTime: currentMatchChange.startTime },
             change: {
               ...currentMatchChange,
@@ -314,6 +338,54 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
     },
     [currentMatchChange, date, header, index, onChange],
   );
+  const fillRow = useCallback(
+    (m: MatchCreateParsed) => {
+      setMatchDay(m.matchDay.toString(10));
+      setLeagueQuery(m.leagueString);
+      setTeam1Query(m.team1String);
+      setTeam2Query(m.team2String);
+      setTeam1(m.team1);
+      setTeam2(m.team2);
+      setLeague((oldLeague) =>
+        m.league ? leagues.find((lea) => lea.id === m.league?.id) : oldLeague,
+      );
+      const d = (m.date ? m.date : new Date()).toISOString().split('T')[0];
+      const t = `${(m.date ? m.date : new Date())
+        .getHours()
+        .toString()
+        .padStart(2, '0')}:${(m.date ? m.date : new Date())
+        .getMinutes()
+        .toString()
+        .padStart(2, '0')}`;
+      setDate(d);
+      setTime(t);
+      setGoals1('0');
+      setGoals2('0');
+      if (onChange)
+        onChange({
+          index: index ?? 0,
+          type: 'create',
+          lastAction: {
+            // empty
+          },
+          change: {
+            matchDay: m.matchDay,
+            startTime: m.date ? m.date.toISOString() : new Date().toISOString(),
+            goal1: 0,
+            goal2: 0,
+            team1Id: m.team1?.id,
+            team2Id: m.team2?.id,
+            leagueId: m.league?.id,
+          },
+        });
+    },
+    [leagues],
+  );
+  useEffect(() => {
+    if (rowFiller) {
+      fillRow(rowFiller);
+    }
+  }, [fillRow, rowFiller]);
   return (
     <Row
       className={`bulk-table-row ${header ? 'bulk-header' : ''} ${
@@ -435,7 +507,7 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
           />
         ) : (
           <SearchInput
-            onChange={setTeamQuery}
+            onChange={setTeam1Query}
             isFocused
             value={teamQuery}
             disabled={!!match}
@@ -459,7 +531,7 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
           />
         ) : (
           <SearchInput
-            onChange={setTeamQuery2}
+            onChange={setTeam2Query}
             isFocused
             value={teamQuery2}
             disabled={!!match}
@@ -504,4 +576,4 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
 // @ts-ignore
 export default connector(BulkMatchRow);
 
-// rel oad
+// reload

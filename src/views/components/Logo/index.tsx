@@ -2,7 +2,11 @@ import React, { useContext } from 'react';
 import { Button } from 'reactstrap';
 import { ClavaRootContext } from '../../../config/contexts';
 import client from '../../../client';
-import { BETA_ENDPOINT } from '../../../config/constants';
+import {
+  BETA_ENDPOINT,
+  DEV_ENDPOINT,
+  STAG_ENDPOINT,
+} from '../../../config/constants';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const logoPng = require('../../../assets/images/logo-app.png');
@@ -25,7 +29,13 @@ const Logo: React.FC<LogoProps> = ({ vertical, onPress }) => {
       <div
         className={
           (vertical ? 'logo-vertical' : 'logo') +
-          (endpoint === BETA_ENDPOINT ? ' beta' : '')
+          (endpoint === STAG_ENDPOINT
+            ? ' stag'
+            : endpoint === BETA_ENDPOINT
+            ? ' beta'
+            : endpoint === DEV_ENDPOINT
+            ? ' dev'
+            : '')
         }>
         <img
           src={

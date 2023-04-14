@@ -31,12 +31,14 @@ import {
   BETA_ENDPOINT,
   DEV_ENDPOINT,
   PROD_ENDPOINT,
+  STAG_ENDPOINT,
 } from '../../../config/constants';
 
 const endpoints = {
   Production: PROD_ENDPOINT,
-  Beta: BETA_ENDPOINT,
-  Dev: DEV_ENDPOINT,
+  Stag: STAG_ENDPOINT,
+  Test: BETA_ENDPOINT,
+  Development: DEV_ENDPOINT,
 };
 
 const Sidebar: React.FC<ConnectedProps<typeof connector>> = ({
@@ -56,9 +58,11 @@ const Sidebar: React.FC<ConnectedProps<typeof connector>> = ({
   const [selectedEndpoint, setSelectedEndpoint] = useState(
     client().getEndpoint() === PROD_ENDPOINT
       ? 'Production'
+      : client().getEndpoint() === STAG_ENDPOINT
+      ? 'Stag'
       : client().getEndpoint() === BETA_ENDPOINT
-      ? 'Beta'
-      : 'Dev',
+      ? 'Test'
+      : 'Development',
   );
   useEffect(() => {
     getLanguages();

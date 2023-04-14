@@ -17,7 +17,7 @@ import { Favorite, LanguageISO, Notification } from './types';
 import { GroupEnum, LanguageLocaleEnum, User } from '../client/api';
 import client from '../client';
 import { addLog } from '../store/middleware/logger';
-import { BETA_ENDPOINT } from './constants';
+import { STAG_ENDPOINT } from './constants';
 
 export type AD_SHOWN_EVENT = 'ad_view_web';
 export type AD_CLICK_EVENT = 'ad_clicked_web';
@@ -162,7 +162,7 @@ class FirebaseFactory {
       ) {
         //   this.messaging.subscribeToTopic(topic).then(() => {
         this.subscribedTopics.push(topic);
-        addLog('firebase', `Subscribe New Topics: ${topic}`, '#8ef67e');
+        addLog('firebase', { Subscribe: topic });
         //   });
       }
     } else {
@@ -173,7 +173,7 @@ class FirebaseFactory {
         ) {
           //  this.messaging.subscribeToTopic(topic).then(() => {
           this.subscribedTopics.push(topic);
-          addLog('firebase', `Remove Subscribed Topics: ${topic}`, '#8ef67e');
+          addLog('firebase', { Subscribe: topic });
           //   });
         }
       });
@@ -192,7 +192,7 @@ class FirebaseFactory {
         const topics = favorites.map(
           (fav) =>
             `${fav.type}_${fav.id}_${this.language}${
-              client().getEndpoint() === BETA_ENDPOINT ? '_beta' : ''
+              client().getEndpoint() === STAG_ENDPOINT ? '_beta' : ''
             }`,
         );
         topics.forEach((topic) => {

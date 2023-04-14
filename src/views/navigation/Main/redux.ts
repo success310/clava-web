@@ -13,6 +13,13 @@ import { RootState, store } from '../../../store';
 import { IDType } from '../../../config/types';
 import { UserCreate } from '../../../client/api';
 import { fetchLeagues } from '../../../store/actions/leagueActions';
+import {
+  AdActionTypes,
+  LeagueActionTypes,
+  MatchActionTypes,
+  StandingActionTypes,
+  TeamActionTypes,
+} from '../../../store/actions/types';
 
 const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
   login: (email: string, password: string) => {
@@ -31,6 +38,13 @@ const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
     initBaseData(dispatch, store);
   },
 
+  resetStoredData: () => {
+    dispatch({ type: MatchActionTypes.RESET });
+    dispatch({ type: StandingActionTypes.RESET });
+    dispatch({ type: LeagueActionTypes.RESET });
+    dispatch({ type: TeamActionTypes.RESET });
+    dispatch({ type: AdActionTypes.RESET });
+  },
   getInsidersByTeam: (teamId: IDType) => {
     performAction({ f: getInsiderByTeam, p: [dispatch, teamId] });
   },
