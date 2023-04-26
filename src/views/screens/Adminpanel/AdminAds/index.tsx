@@ -124,8 +124,23 @@ const AdminpanelAds: React.FC<ConnectedProps<typeof connector>> = ({
   const onEdit = useCallback(
     (adPatch: AdPatch) => {
       if (selectedAd) {
+        const patch: AdPatch = {};
+        if (selectedAd.name !== adPatch.name) patch.name = adPatch.name;
+        if (selectedAd.url !== adPatch.url) patch.url = adPatch.url;
+        if (adPatch.color !== selectedAd.color) patch.color = adPatch.color;
+        if (adPatch.paused !== selectedAd.paused) patch.paused = adPatch.paused;
+        if (adPatch.stop !== selectedAd.stop) patch.stop = adPatch.stop;
+        if (adPatch.position !== selectedAd.position)
+          patch.position = adPatch.position;
+        if (adPatch.fileDesktopId !== selectedAd.fileDesktop.id)
+          patch.fileDesktopId = adPatch.fileDesktopId;
+        if (adPatch.fileMobileId !== selectedAd.fileMobile.id)
+          patch.fileMobileId = adPatch.fileDesktopId;
+        if (adPatch.priority !== selectedAd.priority)
+          patch.priority = adPatch.priority;
+        if (adPatch.start !== selectedAd.start) patch.start = adPatch.start;
         isDownloading.current = true;
-        patchAd(selectedAd.id, adPatch);
+        patchAd(selectedAd.id, patch);
       }
     },
     [patchAd, selectedAd],

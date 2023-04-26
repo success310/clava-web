@@ -45,6 +45,12 @@ export function fetchError(
   // 413 file too big
   // 415 unsupported media type
   // 422 unprocessable entity ( server error )
+  // 451 Teams do not match / teams können nicht gegeneinander spieleb
+  // 452 Player not in this match
+  // 453 Match already started
+  // 455 This goal has been reported more than one time
+  // 457 You have already voted for this match
+  // 458
   // 50x server error
   // 901 team not match to match ---> changed to 451
   // 902 player not in team/match ---> changed to 452

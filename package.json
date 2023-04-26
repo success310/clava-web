@@ -1,6 +1,6 @@
 {
   "name": "clava-web",
-  "version": "1.1.23",
+  "version": "1.1.25",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
@@ -11,9 +11,10 @@
     "postinstall": "patch-package",
     "devtools": "react-devtools",
     "fix": "eslint --fix ./src/**/*.ts && eslint --fix ./src/**/*.tsx",
-    "generate-client": "openapi --input https://api.clava-sports.com/openapi.json --output ./src/client/api --client axios --exportSchemas true",
-    "generate-client-dev": "openapi --input https://api.clava.kivi.bz.it/openapi.json --output ./src/client/api --client axios --exportSchemas true",
-    "generate-client-beta": "openapi --input https://api.beta.clava-sports.com/openapi.json --output ./src/client/api --client axios --exportSchemas true"
+    "generate-client-prod": "openapi --input https://api.clava-sports.com/openapi.json --output ./src/client/api --client axios --exportSchemas true",
+    "generate-client-stag": "openapi --input https://api.stag.clava-sports.com/openapi.json --output ./src/client/api --client axios --exportSchemas true",
+    "generate-client-dev": "openapi --input https://api.dev.clava-sports.com/openapi.json --output ./src/client/api --client axios --exportSchemas true",
+    "generate-client-test": "openapi --input https://api.beta.clava-sports.com/openapi.json --output ./src/client/api --client axios --exportSchemas true"
   },
   "dependencies": {
     "@firebase/analytics": "^0.8.0",

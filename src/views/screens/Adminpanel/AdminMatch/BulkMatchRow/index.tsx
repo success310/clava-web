@@ -379,7 +379,7 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
           },
         });
     },
-    [leagues],
+    [index, leagues, onChange],
   );
   useEffect(() => {
     if (rowFiller) {

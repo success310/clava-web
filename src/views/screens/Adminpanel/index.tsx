@@ -16,7 +16,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ClavaContext } from '../../../config/contexts';
 import { translate, TranslatorKeys } from '../../../config/translator';
 import { isAdmin } from '../../../config/utils';
-import AdminVideo from './AdminVideo';
 import AdminMatch from './AdminMatch';
 import AdminAds from './AdminAds';
 import AdminAdministration from './AdminAdministration';
@@ -102,9 +101,9 @@ const Adminpanel: React.FC = () => {
             <div className="adminpanel-content">
               {adminSite === 'users' ? (
                 <AdminUser />
-              ) : adminSite === 'videos' ? (
+              ) : /* adminSite === 'videos' ? (
                 <AdminVideo />
-              ) : adminSite === 'matches' ? (
+              ) :  */ adminSite === 'matches' ? (
                 <AdminMatch />
               ) : adminSite === 'ads' ? (
                 <AdminAds />
