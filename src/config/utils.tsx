@@ -718,3 +718,13 @@ export function getActualMatchMinute(
     ),
   );
 }
+
+export function isContentManager(user: User | undefined | null) {
+  return (
+    isAdmin(user) ||
+    !!(
+      user &&
+      !!user.scopes.find((scope) => scope.key === ScopeEnum.CONTENT_MANAGER)
+    )
+  );
+}

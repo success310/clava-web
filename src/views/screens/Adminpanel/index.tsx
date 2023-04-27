@@ -15,7 +15,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ClavaContext } from '../../../config/contexts';
 import { translate, TranslatorKeys } from '../../../config/translator';
-import { isAdmin } from '../../../config/utils';
+import { isContentManager } from '../../../config/utils';
 import AdminMatch from './AdminMatch';
 import AdminAds from './AdminAds';
 import AdminAdministration from './AdminAdministration';
@@ -28,7 +28,7 @@ const Adminpanel: React.FC = () => {
   const { user, l } = useContext(ClavaContext);
   const navigate = useNavigate();
   const { adminSite } = useParams();
-  const admin = useMemo(() => isAdmin(user), [user]);
+  const admin = useMemo(() => isContentManager(user), [user]);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const toggleSidebar = useCallback(() => {
     setSidebarOpen((so) => !so);

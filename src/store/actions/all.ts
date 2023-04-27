@@ -55,7 +55,6 @@ export function fetchError(
   // 901 team not match to match ---> changed to 451
   // 902 player not in team/match ---> changed to 452
   // 903 match already startet on vote ---> changed to 453
-  // event dublicate --> 455
   // TODO fehlermeldungen handlen
   dispatch({
     type: actionType,

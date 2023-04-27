@@ -22,7 +22,7 @@ import { ClavaContext } from '../../../config/contexts';
 import { translate } from '../../../config/translator';
 import { connector } from './redux';
 import {
-  isAdmin,
+  isContentManager,
   isInsider,
   isRegistered,
   isTeamInsider,
@@ -96,7 +96,7 @@ const Profile: React.FC<ConnectedProps<typeof connector>> = ({
           </FormGroup>
         </div>
         <div className="profile-content">
-          {isAdmin(user) && (
+          {isContentManager(user) && (
             <div className="mt-2 text-center">
               <NavLink to="/backoffice">
                 <h5>Backoffice</h5>
