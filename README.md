@@ -3,7 +3,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
-It's highly recommended to use yarn!
+
 In the project directory, you can run:
 
 ### `yarn start`
@@ -43,6 +43,12 @@ Generates the ts files for the API of the selected endpoint. Clava is running on
 
 It's recommended to use the 'stag' environment for this project since ou are not able to f*** up data in production, but you can expect exactly the same behaviour from the production API.  
 
+### Node & Yarn
+
+Tested & running on Node v18.1.0, yarn v3.5.1
+It's highly recommended to use yarn not npm
+
+
 ## Clava Web
 
 Clava is a Livescore-App. It provides scores for soccer games in the amateur level. Currently, it's deployed in South Tyrol, but will be expanded asap. 
@@ -61,3 +67,16 @@ In `src/cofig/theme.ts` the Clava theme is defined.
 ### FontAwesome
 
 This Project uses FontAwesome 5 Pro, the `.yarnrc.yml` yaml file contains the Package Manager auth token to perform a successful `yarn install`. If this does not work, see [Fontawesome Docs](https://fontawesome.com/docs/web/setup/packages)
+
+### Scopes
+
+In the Clava users system there are 3 different Scopes:
+- ANONYMOUS: users with no scope are anonymous users, can do nothing 
+- REGISTERED: registered user, can post in feed (just App atm.)
+- CONTENT_MANAGER: can modify matches, events, news & transfers (just App), can access Adminpanel (just Web)
+- ADMIN: can do everything 
+- CONTENT_CREATOR: can write Blogs for the Newsfeed
+- MODERATOR: can moderate the Feed (edit/delete Feed Posts)
+
+For developer within this project an account with the Admin scope is very useful/required. ask @csaq5507
+
