@@ -1,6 +1,33 @@
 # Getting Started with Clava Web
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Clava is a Livescore-App. It provides scores for soccer games in the amateur level. Currently, it's deployed in South Tyrol, but will be expanded asap.
+Clava consists of a Fastapi-Backend, a React.js Web-Version(this project) and a React-Native App.
+
+### Node & Yarn
+
+Tested & running on Node v18.1.0, yarn v3.5.1
+It's highly recommended to use yarn not npm
+
+### Backend
+
+[More Details](/src/client/readme.md)
+
+### FontAwesome
+
+This Project uses FontAwesome 5 Pro, the `.yarnrc.yml` yaml file contains the Package Manager auth token to perform a successful `yarn install`. If this does not work, see [Fontawesome Docs](https://fontawesome.com/docs/web/setup/packages)
+
+### Scopes
+
+In the Clava users system there are 3 different Scopes:
+- ANONYMOUS: users with no scope are anonymous users, can do nothing
+- REGISTERED: registered user, can post in feed (just App atm.)
+- CONTENT_MANAGER: can modify matches, events, news & transfers (just App), can access Adminpanel (just Web)
+- ADMIN: can do everything
+- CONTENT_CREATOR: can write Blogs for the Newsfeed
+- MODERATOR: can moderate the Feed (edit/delete Feed Posts)
+
+For developer within this project an account with the Admin scope is very useful/required. ask @csaq5507
+
 
 ## Available Scripts
 
@@ -35,48 +62,13 @@ Runs eslint --fix on the whole project
 
 ### `yarn generate-client-{target-endpoint}`
 
-Generates the ts files for the API of the selected endpoint. Clava is running on 4 endpoints: 
-- 'prod': Production, please do not change things on the production environment
-- 'stag': Mostly the same features/settings like production environment, used to test new features & bugfixes
-- 'dev': Used to test new features almost ready for production, sometimes down, sometimes buggy
-- 'test': Used to test new features in development, mostly used by the backend developer
+Generates the ts files for the API of the selected endpoint. 
+See [readme](/src/client/readme.md) for the endpoint details.
 
-It's recommended to use the 'stag' environment for this project since ou are not able to f*** up data in production, but you can expect exactly the same behaviour from the production API.  
-
-### Node & Yarn
-
-Tested & running on Node v18.1.0, yarn v3.5.1
-It's highly recommended to use yarn not npm
-
-
-## Clava Web
-
-Clava is a Livescore-App. It provides scores for soccer games in the amateur level. Currently, it's deployed in South Tyrol, but will be expanded asap. 
-Clava consists of a Fastapi-Backend, a React.js Web-Version(this project) and a React-Native App.
-
-### Backend
-
-Every request should be made via the `src/client/index.ts`. Create or modify functions in this file to create new Requests. the `src/client/api/` folder is auto-generated, it contains every request the API can handle, models and schemas for the types.
-The `src/client/Websockets/` folder consists everything regarding real-time data. Currently there is only 1 active Websocket (`events.ts`), when a event (Goal, Change, Card, Chance) get submitted, this socket will trigger some refreshs.
+Additionally, this script injects the logger middleware into the requests file.
 
 ### Theme
 
 In `src/cofig/theme.ts` the Clava theme is defined.
 `src/scss/_custom.scss` contains any custom styling.
-
-### FontAwesome
-
-This Project uses FontAwesome 5 Pro, the `.yarnrc.yml` yaml file contains the Package Manager auth token to perform a successful `yarn install`. If this does not work, see [Fontawesome Docs](https://fontawesome.com/docs/web/setup/packages)
-
-### Scopes
-
-In the Clava users system there are 3 different Scopes:
-- ANONYMOUS: users with no scope are anonymous users, can do nothing 
-- REGISTERED: registered user, can post in feed (just App atm.)
-- CONTENT_MANAGER: can modify matches, events, news & transfers (just App), can access Adminpanel (just Web)
-- ADMIN: can do everything 
-- CONTENT_CREATOR: can write Blogs for the Newsfeed
-- MODERATOR: can moderate the Feed (edit/delete Feed Posts)
-
-For developer within this project an account with the Admin scope is very useful/required. ask @csaq5507
 
