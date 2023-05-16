@@ -29,7 +29,9 @@ The `src/client/api/` folder is auto-generated, it contains every request the AP
 
 #### DO NOT TOUCH ANYTHING INSIDE `src/client/api/`
 
-call `yarn generate-client-prod` to regenerate those files. More infos [here](/readme.md)
+call `yarn generate-client-prod` to regenerate those files. More infos to this script in the root Readme.
+
+## Websockets
 
 The `src/client/Websockets/` folder consists everything regarding real-time data. 
 
