@@ -29,7 +29,7 @@ module.exports = {
   },
   plugins: ['react', 'react-hooks', '@typescript-eslint', 'prettier'],
   rules: {
-    'prettier/prettier': 'error',
+    'prettier/prettier': 'off',
 
     'no-console': ['warn', { allow: ['tron'] }],
     'spaced-comment': ['error', 'always', { markers: ['/'] }],

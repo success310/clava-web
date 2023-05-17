@@ -98,9 +98,9 @@ const generalKeywords = {
     en: '-- Choose --',
   },
   first_open: {
-    de: 'Willkommen auf Clava-Sports, Sie sind das erste mal hier? Zwei kurze schritte bevor wir beginnen:',
-    it: 'Benvenuto in Clava-Sports, sei qui per la prima volta? Due rapidi passaggi prima di iniziare:',
-    en: 'Welcome to Clava-Sports, are you here for the first time? Two quick steps before we begin:',
+    de: 'In welcher Sprache möchtest du die App nutzen?',
+    it: "In quale lingua vorresti utilizzare l'app?",
+    en: 'In which language would you like to use the app?',
   },
   error_occurred: {
     de: 'Ups... da ist ein Fehler aufgetreten!',

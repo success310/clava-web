@@ -46,7 +46,7 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
   status,
   getLeagues,
 }) => {
-  const [firstOpen, setFirstOpen] = useState(false);
+  const [firstOpen, setFirstOpen] = useState(true);
   const { fbToken, theme } = useContext(ClavaRootContext);
   const toggleTheme = useCallback(() => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
@@ -121,10 +121,10 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
       user
         ? { l: user.language.locale, aoi: user.areaOfInterest.id, user }
         : {
-            l: browserLang(),
-            aoi: -1,
-            user: {} as User,
-          },
+          l: browserLang(),
+          aoi: -1,
+          user: {} as User,
+        },
     [user],
   );
   const onFirstOpenFinish = useCallback(() => {
