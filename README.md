@@ -28,6 +28,12 @@ In the Clava users system there are 3 different Scopes:
 
 For developer within this project an account with the Admin scope is very useful/required. ask @csaq5507
 
+### More Infos in the sub-folders
+
+- [Config folder](/src/config/readme.md)
+- [SCSS](/src/scss/readme.md)
+- [Redux Store](/src/store/readme.md)
+- [UI](/src/views/readme.md)
 
 ## Available Scripts
 
