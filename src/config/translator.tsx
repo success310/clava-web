@@ -52,15 +52,10 @@ const generalKeywords = {
     it: 'Whoops',
     en: 'Whoops',
   },
-  chooseLanguage: {
-    de: 'Sprache wählen',
-    it: 'Seleziona lingua',
-    en: 'Choose language',
-  },
   chooseProvince: {
-    de: 'Provinz wählen',
-    it: 'Seleziona provincia',
-    en: 'Choose province',
+    de: 'Welche Region ist für dich von Interesse?',
+    it: 'Quale regione ti interessa?',
+    en: 'What region is of interest to you?',
   },
   no_user_found: {
     de: 'User nicht gefunden!',
@@ -101,6 +96,26 @@ const generalKeywords = {
     de: 'In welcher Sprache möchtest du die App nutzen?',
     it: "In quale lingua vorresti utilizzare l'app?",
     en: 'In which language would you like to use the app?',
+  },
+  first_open_title: {
+    de: 'ALLGEMEIN',
+    it: "GENERALMENTE",
+    en: 'GENERALLY',
+  },
+  first_open_settings_title: {
+    de: 'Basiseinstellungen',
+    it: "Impostazioni di base",
+    en: 'Basic settings'
+  },
+  first_open_settings_description: {
+    de: 'In welcher Sprache möchtest du die App nutzen?',
+    it: "In quale lingua vorresti utilizzare l'app?",
+    en: 'In which language would you like to use the app?'
+  },
+  first_open_settings_language_label: {
+    de: 'Sprache wählen',
+    it: "Seleziona la tua lingua",
+    en: 'Select your language'
   },
   error_occurred: {
     de: 'Ups... da ist ein Fehler aufgetreten!',

@@ -1,19 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ConnectedProps } from 'react-redux';
 import { Button, Col, Row } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight } from '@fortawesome/pro-regular-svg-icons';
 import {
   AreaOfInterest,
   Language,
   LanguageLocaleEnum,
   User,
 } from '../../../../client/api';
-import { showTranslated, translate } from '../../../../config/translator';
+import { showTranslated, Translatable, translate } from '../../../../config/translator';
 import Loading from '../../../components/Loading';
 import { IDType, LanguageISO } from '../../../../config/types';
 import { connector } from './redux';
-import ClavaPicker from '../../../components/Form/ClavaPicker';
 import { ClavaContext } from '../../../../config/contexts';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -32,6 +29,37 @@ export declare type FirstOpenAoiLangViewProps = ConnectedProps<
 type FirstOpenAoiLangProps = FirstOpenAoiLangViewProps & {
   language: LanguageISO;
   callback: (aoi: AreaOfInterest, lang: Language) => void;
+};
+
+type MySelectorProps<T extends Translatable> = {
+  items: T[];
+  onChange: (value: T | undefined) => void;
+  l: LanguageLocaleEnum;
+  value: number | undefined;
+};
+
+function ClavaSelector<T extends Translatable>({
+  items,
+  onChange,
+  value,
+  l
+}: MySelectorProps<T>) {
+  return (
+  <Row>
+    {
+      items.map(item => (
+        <Col key={item.id}>
+          <Button
+            color={value === item.id ? 'primary' : 'secondary'}
+            onClick={() => onChange(item)}
+          >
+            <span>{'name' in item && showTranslated(item.name, l)}</span>
+          </Button>
+        </Col>
+      ))
+    }
+  </Row>
+  );
 };
 
 const AoiButton: React.FC<{
@@ -93,7 +121,7 @@ const AoiLang: React.FC<FirstOpenAoiLangProps> = ({
       callback(
         aois.filter((aoi) => aoi.id === selected)[0],
         selectedLanguage ||
-          (languages.find((l) => l.locale === language) as Language),
+        (languages.find((l) => l.locale === language) as Language),
       );
     }
   }, [aois, callback, language, languages, selected, selectedLanguage]);
@@ -106,39 +134,38 @@ const AoiLang: React.FC<FirstOpenAoiLangProps> = ({
   );
   return (
     <ClavaContext.Provider value={contextValue}>
+      {/* title */}
       <Row className="mb-3">
-        <Col xs={12}>
-          <h4 className="text-center">{translate('first_open', realLang)}</h4>
+        <Col xs="12">
+          <p className="text-secondary">{translate('first_open_title', realLang)}</p>
+          <h5 className="mb-5">{translate('first_open_settings_title', realLang)}</h5>
         </Col>
       </Row>
-      <Row>
-        <Col
-          xs={12}
-          md={6}
-          className="align-items-center justify-content-center">
-          <div className="spacer" />
 
-          <Row>
-            <h5 className="text-center">
-              {translate('chooseLanguage', realLang)}
-            </h5>
-          </Row>
-
-          {languages.length === 0 ? (
-            <Loading small />
-          ) : (
-            <Row className="align-items-center justify-content-center">
-              <Col xs={12} md={4}>
-                <ClavaPicker
-                  itemsTranslatable={languages}
+      {/* selecting language */}
+      <Row className="mb-3">
+        <Col xs="12">
+          <p className="mb-5">
+            {translate('first_open_settings_description', realLang)}
+          </p>
+          <p>{translate('first_open_settings_language_label', realLang)}</p>
+          {
+            languages.length === 0 ?
+              (<Loading small />) :
+              (
+                <ClavaSelector
+                  items={languages}
                   value={selectedLanguage?.id}
-                  submit={setSelectedLanguage}
+                  onChange={setSelectedLanguage}
+                  l={realLang}
                 />
-              </Col>
-            </Row>
-          )}
+              )
+          }
         </Col>
+      </Row>
 
+      {/* selecting province */}
+      <Row className="mb-5">
         <Col
           xs={12}
           md={6}
@@ -153,7 +180,7 @@ const AoiLang: React.FC<FirstOpenAoiLangProps> = ({
               <Col
                 xs={12}
                 md={6}
-                className="text-center"
+                className="text-center w-50"
                 key={`aoi-${aoi.key}`}>
                 <AoiButton
                   aoi={aoi}
@@ -168,14 +195,19 @@ const AoiLang: React.FC<FirstOpenAoiLangProps> = ({
         </Col>
       </Row>
 
-      <div className="position-absolute bottom-0 end-0 m-5 text-center">
-        <Button color="transparent" onClick={onContinue}>
-          <strong className="text-primary text-center">
+      {/* button */}
+      <Row>
+        <Button color=" bg-primary w-100 mb-3" onClick={onContinue}>
+          <strong className="text-center">
             {`${translate('continue', realLang)} `}
           </strong>
-          <FontAwesomeIcon icon={faChevronRight} className="text-primary" />
         </Button>
-      </div>
+        <Button color=" w-100 bg-white" onClick={onContinue}>
+          <strong className="text-primary text-center">
+            {`${translate('back', realLang)} `}
+          </strong>
+        </Button>
+      </Row>
     </ClavaContext.Provider>
   );
 };
