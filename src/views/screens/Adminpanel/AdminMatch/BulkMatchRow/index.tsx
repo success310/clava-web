@@ -5,10 +5,11 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import { Col, Input, Row } from 'reactstrap';
-import { connector } from './redux';
+import { connector, RowError } from './redux';
 import { ClavaContext } from '../../../../../config/contexts';
 import { showTranslated, translate } from '../../../../../config/translator';
 import MatchSorter from '../MatchSorter';
@@ -21,6 +22,40 @@ import {
   TeamListElement,
 } from '../../../../../client/api';
 import { MatchCreateParsed, TranslatableSearch } from '../types';
+
+function isError(errors: RowError[] | undefined): boolean {
+  if (!errors) return false;
+  if (errors.length === 0) return false;
+  return errors.filter((err) => err.type !== 'create').length !== 0;
+}
+
+function isTypedError(
+  errors: RowError[] | undefined,
+  type: RowError['type'],
+): boolean {
+  if (!errors) return false;
+  if (errors.length === 0) return false;
+  return (
+    errors.filter((err) =>
+      type === 'team1' || type === 'team2'
+        ? err.type === type || err.type === 'team'
+        : err.type === type,
+    ).length !== 0
+  );
+}
+function errorId(errors: RowError[] | undefined): string {
+  if (!errors) return 'NEW';
+  if (errors.length === 0) return 'NEW';
+  const e = errors.find(
+    (error) =>
+      error.type !== 'noImport' &&
+      error.type !== 'create' &&
+      error.type !== 'multiple' &&
+      !!error.match,
+  );
+  if (!e || !('match' in e)) return 'NEW';
+  return `ID: ${e.match?.id}`;
+}
 
 const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
   selected,
@@ -36,6 +71,7 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
   leagues,
   teams,
   onChange,
+  errors,
 }) => {
   const { l } = useContext(ClavaContext);
   const [matchDay, setMatchDay] = useState(match?.matchDay?.toString() ?? '');
@@ -60,7 +96,7 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
           .indexOf(leagueQuery.toLowerCase()) !== -1,
     );
   }, [l, leagueQuery, leagues]);
-
+  const getTeamsOnKeyup = useRef(false);
   const [teamQuery, setTeam1Query] = useState('');
   const filteredTeamResults = useMemo(() => {
     if (teamQuery.length === 0 || !league) return [];
@@ -72,19 +108,37 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
             .toLowerCase()
             .indexOf(teamQuery.toLowerCase()) !== -1,
       );
+
+    if (getTeamsOnKeyup.current) {
+      getTeams(league.id);
+    } else {
+      setTimeout(() => {
+        getTeamsOnKeyup.current = true;
+      }, 1000);
+    }
+
     return [];
   }, [l, league, teamQuery, teams]);
   const [teamQuery2, setTeam2Query] = useState('');
   const filteredTeamResults2 = useMemo(() => {
     if (teamQuery2.length === 0 || !league) return [];
     const teamList = teams.find((team) => team.id === league.id);
-    if (teamList)
+    if (teamList) {
       return teamList.response.filter(
         (team) =>
           showTranslated(team.name, l)
             .toLowerCase()
             .indexOf(teamQuery2.toLowerCase()) !== -1,
       );
+    }
+    if (getTeamsOnKeyup.current) {
+      getTeams(league.id);
+    } else {
+      setTimeout(() => {
+        getTeamsOnKeyup.current = true;
+      }, 1000);
+    }
+
     return [];
   }, [l, league, teamQuery2, teams]);
   const originalDate = useMemo(
@@ -336,7 +390,7 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
         }
       }
     },
-    [currentMatchChange, date, header, index, onChange],
+    [currentMatchChange, date, header, index, match, onChange],
   );
   const fillRow = useCallback(
     (m: MatchCreateParsed) => {
@@ -390,7 +444,8 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
     <Row
       className={`bulk-table-row ${header ? 'bulk-header' : ''} ${
         (index ?? 1) % 2 === 0 ? 'even' : 'odd'
-      }`}>
+      }  ${isError(errors) ? 'bg-danger' : ''}`}
+      id={`line-${index}`}>
       <Col xs={1}>
         {onSelect ? (
           <>
@@ -405,10 +460,18 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
             />
           </>
         ) : (
-          <span className="text-success">NEW</span>
+          <span className="text-success ">{errorId(errors)}</span>
         )}
       </Col>
-      <Col xs={1} className={header ? 'bulk-header' : ''}>
+      <Col
+        xs={1}
+        className={
+          header
+            ? 'bulk-header'
+            : isTypedError(errors, 'matchday')
+            ? 'bg-danger'
+            : ''
+        }>
         {header ? (
           <MatchSorter
             title="matchDay"
@@ -421,7 +484,7 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
           <Input
             type="number"
             className={
-              match?.matchDay === parseInt(matchDay, 10) ? '' : 'changed'
+              match?.matchDay === parseInt(matchDay, 10) ? '' : `changed`
             }
             onChange={changeMatchday}
             value={matchDay}
@@ -432,7 +495,7 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
         xs={1}
         className={`${header ? 'bulk-header' : ''} ${
           dateError ? 'text-bg-danger' : ''
-        }`}>
+        } ${isTypedError(errors, 'datetime') ? 'bg-danger' : ''}`}>
         {header ? (
           <MatchSorter
             title="date"
@@ -454,7 +517,7 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
         xs={1}
         className={`${header ? 'bulk-header' : ''} ${
           timeError ? 'text-bg-danger' : ''
-        }`}>
+        } ${isTypedError(errors, 'datetime') ? 'bg-danger' : ''}`}>
         {header ? (
           <MatchSorter
             title="time"
@@ -467,12 +530,16 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
           <Input
             type="time"
             onChange={changeTime}
-            className={originalTime === time ? '' : 'changed'}
+            className={`${originalTime === time ? '' : 'changed'} `}
             value={time}
           />
         )}
       </Col>
-      <Col xs={2} className={header ? 'bulk-header' : ''}>
+      <Col
+        xs={2}
+        className={`${header ? 'bulk-header' : ''} ${
+          isTypedError(errors, 'league') ? 'bg-danger' : ''
+        }`}>
         {header ? (
           <MatchSorter
             title="league"
@@ -496,7 +563,11 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
           />
         )}
       </Col>
-      <Col xs={2} className={header ? 'bulk-header' : ''}>
+      <Col
+        xs={2}
+        className={`${header ? 'bulk-header' : ''} ${
+          isTypedError(errors, 'team1') ? 'bg-danger' : ''
+        }`}>
         {header ? (
           <MatchSorter
             title="team1"
@@ -520,7 +591,11 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
           />
         )}
       </Col>
-      <Col xs={2} className={header ? 'bulk-header' : ''}>
+      <Col
+        xs={2}
+        className={`${header ? 'bulk-header' : ''} ${
+          isTypedError(errors, 'team2') ? 'bg-danger' : ''
+        }`}>
         {header ? (
           <MatchSorter
             title="team2"
@@ -544,7 +619,11 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
           />
         )}
       </Col>
-      <Col xs={1} className={header ? 'bulk-header' : ''}>
+      <Col
+        xs={1}
+        className={`${header ? 'bulk-header' : ''} ${
+          isTypedError(errors, 'goals') ? 'bg-danger' : ''
+        }`}>
         {header ? (
           <span>{translate('goals1', l)}</span>
         ) : (
@@ -556,7 +635,11 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
           />
         )}
       </Col>
-      <Col xs={1} className={header ? 'bulk-header' : ''}>
+      <Col
+        xs={1}
+        className={`${header ? 'bulk-header' : ''} ${
+          isTypedError(errors, 'goals') ? 'bg-danger' : ''
+        }`}>
         {header ? (
           <span>{translate('goals2', l)}</span>
         ) : (
@@ -576,4 +659,4 @@ const BulkMatchRow: React.FC<ConnectedProps<typeof connector>> = ({
 // @ts-ignore
 export default connector(BulkMatchRow);
 
-// reload
+// rel oad

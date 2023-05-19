@@ -19,6 +19,7 @@ import {
   ManOfTheMatch,
   Match,
   MatchBetVoting,
+  MatchImportResult,
   MatchListElement,
   OutSummary,
   Player,
@@ -29,6 +30,7 @@ import {
   SearchResult,
   Squad,
   Standing,
+  Task,
   Team,
   TeamListElement,
   TeamStatistic,
@@ -189,6 +191,8 @@ export interface AdminState {
   readonly error: TranslatorKeys | null;
   readonly status: 'idle' | 'loading' | 'failed';
   readonly statusSearch: 'idle' | 'loading' | 'failed';
+  readonly task: Task | null;
+  readonly taskResult: MatchImportResult[] | null;
 }
 
 export type ValueStore<T> = {

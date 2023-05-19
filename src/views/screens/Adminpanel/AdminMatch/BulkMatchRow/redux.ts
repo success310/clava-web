@@ -2,7 +2,12 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import { connect } from 'react-redux';
 import { RootState } from '../../../../../store';
-import { Match, MatchListElement } from '../../../../../client/api';
+import {
+  Match,
+  MatchFixEnum,
+  MatchImportResult,
+  MatchListElement,
+} from '../../../../../client/api';
 import {
   MatchChange,
   MatchCreateCont,
@@ -19,6 +24,80 @@ const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
   },
 });
 
+type RowErrorNoImport = {
+  type: 'noImport';
+};
+type RowErrorMatchday = {
+  type: 'matchday';
+  match?: MatchListElement;
+};
+type RowErrorDatetime = {
+  type: 'datetime';
+  match?: MatchListElement;
+};
+type RowErrorLeague = {
+  type: 'league';
+  match?: MatchListElement;
+};
+type RowErrorTeam1 = {
+  type: 'team1';
+  match?: MatchListElement;
+};
+type RowErrorTeam2 = {
+  type: 'team2';
+  match?: MatchListElement;
+};
+type RowErrorAnyTeam = {
+  type: 'team';
+  match?: MatchListElement;
+};
+type RowErrorGoals = {
+  type: 'goals';
+  match?: MatchListElement;
+};
+type RowNoticeCreate = {
+  type: 'create';
+};
+type RowErrorMultiple = {
+  type: 'multiple';
+};
+
+export type RowError = {
+  index: number;
+} & (
+  | RowNoticeCreate
+  | RowErrorDatetime
+  | RowErrorMatchday
+  | RowErrorLeague
+  | RowErrorNoImport
+  | RowErrorMultiple
+  | RowErrorGoals
+  | RowErrorAnyTeam
+  | RowErrorTeam2
+  | RowErrorTeam1
+);
+export function matchImportToRowError(tr: MatchImportResult): RowError {
+  switch (tr.fixType) {
+    case MatchFixEnum.MATCH_DAY_WRONG:
+      return { type: 'matchday', index: tr.lineIndex, match: tr.match };
+
+    case MatchFixEnum.MULTIPLE_MATCHES_FOUND:
+      return { type: 'multiple', index: tr.lineIndex };
+
+    case MatchFixEnum.MATCH_DATE_TIME_WRONG:
+      return { type: 'datetime', index: tr.lineIndex, match: tr.match };
+
+    case MatchFixEnum.GOAL_MISMATCH:
+      return { type: 'goals', index: tr.lineIndex, match: tr.match };
+
+    case MatchFixEnum.MATCH_NOT_FOUND:
+      return { type: 'create', index: tr.lineIndex };
+
+    default:
+      return { type: 'noImport', index: tr.lineIndex };
+  }
+}
+
 type BulkMatchHeaderProps = {
   header: true;
   onSort: (by: SortTypes, direction: SortDirections) => void;
@@ -31,6 +110,7 @@ type BulkMatchHeaderProps = {
   change?: undefined;
   index?: undefined;
   rowFiller?: undefined;
+  errors?: RowError[];
 };
 
 type BulkMatchCreateProps = {
@@ -45,6 +125,7 @@ type BulkMatchCreateProps = {
   change: MatchChange | undefined;
   index: number;
   rowFiller?: MatchCreateParsed;
+  errors?: RowError[];
 };
 type BulkMatchEditProps = {
   header?: false;
@@ -58,6 +139,7 @@ type BulkMatchEditProps = {
   change: MatchChange | undefined;
   index: number;
   rowFiller?: undefined;
+  errors?: RowError[];
 };
 type BulkMatchRowProps =
   | BulkMatchCreateProps

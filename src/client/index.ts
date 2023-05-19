@@ -34,6 +34,7 @@ import {
   File,
   GoalDistributionService,
   ImageTypeEnum,
+  ImportService,
   Language,
   LanguageLocaleEnum,
   LanguageService,
@@ -52,6 +53,7 @@ import {
   MatchBetService,
   MatchCreate,
   MatchDayService,
+  MatchImport,
   MatchListElement,
   MatchLocationEnum,
   MatchPatch,
@@ -1068,6 +1070,14 @@ class Client {
     return MatchService.createMultipleMatchesMatchMultiplePost(matches);
   }
 
+  csvImportMatch(matchImport: MatchImport[], dryRun: boolean) {
+    return ImportService.importMatchImportMatchPost(matchImport, dryRun);
+  }
+
+  csvImportResult(taskId: string) {
+    return ImportService.getMatchImportResultsImportMatchTaskIdGet(taskId);
+  }
+
   patchMatch(id: IDType, match: MatchPatch) {
     return MatchService.patchMatchMatchMatchIdPatch(id, match);
   }
@@ -1378,4 +1388,4 @@ class Client {
 
 const client = Client.getInstance;
 export default client;
-// reload
+// rel oad

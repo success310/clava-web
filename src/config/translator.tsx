@@ -2447,10 +2447,40 @@ const generalKeywords = {
     it: 'Erfolgreich gelöscht',
     en: 'Erfolgreich gelöscht',
   },
+  matchTaskRunning: {
+    de: 'Spiele werden überprüft...',
+    it: 'Giochi veranno controllato...',
+    en: 'Matches are being checked...',
+  },
+  dryRun: {
+    de: 'Überprüfen',
+    it: 'Controlla',
+    en: 'Check over',
+  },
+  line: {
+    de: 'Zeile',
+    it: 'Linea',
+    en: 'Line',
+  },
+  followingWillCreate: {
+    de: 'Folgende Spiele werden erstellt: Zeile ',
+    it: 'I seguenti vengono creati: linea ',
+    en: 'The following are created: line ',
+  },
+  noImport: {
+    de: 'Bitte keine anderen Aktionen vornehmen wenn ein Import gemacht wird',
+    it: "Si prega di non intraprendere altre azioni quando viene effettuata un'importazione",
+    en: 'Please do not take any other actions when an import is made',
+  },
+  strangeTaskError: {
+    de: 'Der Server hat seit über 10 Sekunden keinen Status Update geschickt... Etwas ist schief gelaufen!',
+    it: 'Il server non ha inviato un aggiornamento di stato per più di 10 secondi... Qualcosa è andato storto!',
+    en: "The server hasn't sent a status update for over 10 seconds... Something went wrong!",
+  },
   emptyString: {
     de: '',
     it: '',
-    en: '',
+    en: ' ',
   },
 };
 

@@ -8,6 +8,17 @@ Clava consists of a Fastapi-Backend, a React.js Web-Version(this project) and a 
 Tested & running on Node v18.1.0, yarn v3.5.1
 It's highly recommended to use yarn not npm
 
+### node-sass
+
+node-gyp is required for node-sass, to install run 
+
+``
+npm install -g node-gyp
+``
+
+CAUTION: There are some prerequiements to install node-gyp, see [Docs](https://github.com/nodejs/node-gyp#installation)
+
+
 ### Backend
 
 [More Details](/src/client/readme.md)

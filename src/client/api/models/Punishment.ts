@@ -14,5 +14,4 @@ export type Punishment = {
     match?: MatchListElement;
     league: LeagueListElement;
     cause: Translation;
-    hasPunishment: boolean;
 };

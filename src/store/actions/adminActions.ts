@@ -28,6 +28,7 @@ import {
   LeagueCreate,
   LeaguePatch,
   MatchCreate,
+  MatchImport,
   MatchPatch,
   UserBadgeCreateDelete,
 } from '../../client/api';
@@ -174,6 +175,24 @@ export function createMatchMultiple(
     false,
     false,
     match,
+  );
+}
+
+export function csvImportMatch(
+  dispatch: Dispatch<AdminActions>,
+  matches: MatchImport[],
+  dryRun: boolean,
+) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.MATCH_IMPORT_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.MATCH_IMPORT,
+    client().csvImportMatch,
+    false,
+    false,
+    matches,
+    dryRun,
   );
 }
 export function patchMatch(
@@ -510,3 +529,19 @@ export function getClicks(dispatch: Dispatch<AdminActions>) {
     false,
   );
 }
+export function csvImportResult(
+  dispatch: Dispatch<AdminActions>,
+  taskId: string,
+) {
+  defaultGet(
+    dispatch,
+    AdminActionTypes.MATCH_IMPORT_FINISH_SUCCESS,
+    AdminActionTypes.FETCH_ERROR,
+    AdminActionTypes.MATCH_IMPORT,
+    client().csvImportResult,
+    false,
+    false,
+    taskId,
+  );
+}
+// relo ad

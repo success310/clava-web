@@ -21,7 +21,7 @@ import { MatchActionTypes, NewsActionTypes } from '../../store/actions/types';
 import { errorLogging } from '../../config/utils';
 import client from '../index';
 import { addLog } from '../../store/middleware/logger';
-import { EventTypeEnum, Match, MatchLocationEnum } from '../api';
+import { EventTypeEnum, Match, MatchLocationEnum, Task } from '../api';
 import { ValueStore } from '../../store/constants';
 import {
   fetchTransfers,
@@ -77,6 +77,18 @@ type UserFeedMessage = {
   type: 'user_feed';
 };
 
+type TaskMessage = {
+  task_id: string;
+  progress: number;
+  total: number;
+  finished: boolean;
+  type: 'task_update';
+};
+export declare type TaskHandler = (
+  progress: number,
+  total: number,
+  finished: boolean,
+) => void;
 type FileUploadCompleteListener = (id: IDType) => void;
 
 type SocketMessage =
@@ -89,6 +101,7 @@ type SocketMessage =
   | PostMessage
   | UserFeedMessage
   | MatchFeedMessage
+  | TaskMessage
   | { type: 'ping' };
 
 class EventsSocket {
@@ -108,6 +121,10 @@ class EventsSocket {
 
   private static fileUploadCompleteListener:
     | FileUploadCompleteListener
+    | undefined;
+
+  private static taskHandler:
+    | { handler: TaskHandler; task: string }
     | undefined;
 
   static init(endpoint: string | undefined | null) {
@@ -242,6 +259,18 @@ class EventsSocket {
     }
   }
 
+  private static handleTaskMessage(message: TaskMessage) {
+    if (this.taskHandler && this.taskHandler.task === message.task_id)
+      this.taskHandler.handler(
+        message.progress,
+        message.total,
+        message.finished,
+      );
+    if (message.finished) {
+      this.taskHandler = undefined;
+    }
+  }
+
   private static handleTransferMessage(
     teamFrom: IDType,
     teamTo: IDType,
@@ -336,6 +365,9 @@ class EventsSocket {
           EventsSocket.handleUserMessage(message.user_id);
         }
       }
+      if (message.type === 'task_update') {
+        EventsSocket.handleTaskMessage(message);
+      }
       if (message.type === 'event') {
         EventsSocket.handleEventMessage(
           message.league_id,
@@ -380,6 +412,15 @@ class EventsSocket {
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development')
       console.log('\x1b[35m%s%O\x1b[0m', 'WS Error:', error);
     addLog('socket', { Error: error });
+  }
+
+  public static onTaskStarted(task: Task, handler: TaskHandler) {
+    const sock = EventsSocket.websocket;
+    EventsSocket.taskHandler = { task: task.id, handler };
+    if (sock) {
+      sock.emit('room', task.room);
+      addLog('socket', { Room: task.room, Task: task });
+    }
   }
 }
 
