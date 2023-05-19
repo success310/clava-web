@@ -36,11 +36,11 @@ const FavButton: React.FC<{
   }, [team.id, onSelect]);
   return (
     <Button
-      color="secondary"
-      className={`fav-button${selected ? ' selected' : ''}`}
+      color={selected ? 'primary' : 'secondary'}
+      className="fav-button"
       onClick={onPress}>
       <ClavaImage image={team.thumb} width={40} />
-      <span>{showTranslated(team.name, l)}</span>
+      <span>{showTranslated(team.name, l)}A</span>
     </Button>
   );
 };
