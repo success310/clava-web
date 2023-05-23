@@ -169,7 +169,7 @@ const AoiLang: React.FC<FirstOpenAoiLangProps> = ({
         <Col
           xs={12}
           md={6}
-          className="align-items-center justify-content-center mt-3 mt-sm-0 aoi-buttons">
+          className="align-items-center justify-content-center mt-3 mt-sm-0 aoi-buttons w-100">
           <Row>
             <h5 className="text-center">
               {translate('chooseProvince', realLang)}
@@ -180,7 +180,7 @@ const AoiLang: React.FC<FirstOpenAoiLangProps> = ({
               <Col
                 xs={12}
                 md={6}
-                className="text-center w-50"
+                className="text-center"
                 key={`aoi-${aoi.key}`}>
                 <AoiButton
                   aoi={aoi}
@@ -196,15 +196,10 @@ const AoiLang: React.FC<FirstOpenAoiLangProps> = ({
       </Row>
 
       {/* button */}
-      <Row>
-        <Button color=" bg-primary w-100 mb-3" onClick={onContinue}>
+      <Row className="justify-content-center">
+        <Button color=" bg-primary w-75 mb-3" onClick={onContinue}>
           <strong className="text-center">
             {`${translate('continue', realLang)} `}
-          </strong>
-        </Button>
-        <Button color=" w-100 bg-white" onClick={onContinue}>
-          <strong className="text-primary text-center">
-            {`${translate('back', realLang)} `}
           </strong>
         </Button>
       </Row>
