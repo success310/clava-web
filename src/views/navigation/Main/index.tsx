@@ -46,7 +46,7 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
   status,
   getLeagues,
 }) => {
-  const [firstOpen, setFirstOpen] = useState(true);
+  const [firstOpen, setFirstOpen] = useState(false);
   const { fbToken, theme } = useContext(ClavaRootContext);
   const toggleTheme = useCallback(() => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
