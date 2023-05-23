@@ -176,11 +176,12 @@ const News: React.FC<ConnectedProps<typeof connector>> = ({
             {openNews.picture && (
               <ClavaImage image={openNews.picture} width="100%" />
             )}
-            {openNews.picture && openNews.picture.caption.indexOf('@') !== -1 && (
-              <div className="backdrop">
-                <span>{openNews.picture.caption}</span>
-              </div>
-            )}
+            {openNews.picture &&
+              openNews.picture.caption.indexOf('@') !== -1 && (
+                <div className="backdrop">
+                  <span>{openNews.picture.caption}</span>
+                </div>
+              )}
             <h6 className="mt-1">{showTranslated(openNews.title, l)}</h6>
             {openNews.summary && <p>{showTranslated(openNews.summary, l)}</p>}
             <p>{showTranslated(openNews.body, l)}</p>

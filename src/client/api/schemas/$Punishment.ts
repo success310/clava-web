@@ -26,9 +26,5 @@ export const $Punishment = {
     type: 'Translation',
     isRequired: true,
 },
-        hasPunishment: {
-    type: 'boolean',
-    isRequired: true,
-},
     },
 } as const;

@@ -6,5 +6,5 @@ export type CardEventCreate = {
     minute?: number;
     teamId: number;
     cardTypeId: number;
-    playerId: number;
+    playerId?: number;
 };

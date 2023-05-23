@@ -20,7 +20,7 @@ import {
   Row,
 } from 'reactstrap';
 import { ClavaContext } from '../../../../config/contexts';
-import { translate, TranslatorKeys } from '../../../../config/translator';
+import { translate } from '../../../../config/translator';
 import { connector } from './redux';
 import MatchList from './MatchList';
 import {
@@ -30,14 +30,26 @@ import {
   MatchFilterType,
 } from './types';
 import MatchFilter from './MatchFilter';
-import { getMatchDate } from '../../../../config/utils';
+import { getMatchDate, numberedHash } from '../../../../config/utils';
 import Loading from '../../../components/Loading';
 import { IDType } from '../../../../config/types';
-import { MatchCreate, MatchPatch } from '../../../../client/api';
-import matchDay from '../../../components/MatchDays/MatchDay';
-import CreateBulk from './CreateBulk';
+import {
+  MatchCreate,
+  MatchFixEnum,
+  MatchImport,
+  MatchPatch,
+} from '../../../../client/api';
+import CreateBulk, { ImportError } from './CreateBulk';
+import EventsSocket, {
+  TaskHandler,
+} from '../../../../client/Websockets/events';
+import { matchImportToRowError, RowError } from './BulkMatchRow/redux';
 
 function isMatchCreate(value: MatchCreate | undefined): value is MatchCreate {
+  return !!value;
+}
+
+function isMatchImport(value: MatchImport | undefined): value is MatchImport {
   return !!value;
 }
 
@@ -53,6 +65,10 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
   resetMatches,
   bulkCreate,
   deleteMatch,
+  csvImportMatch,
+  csvImportResult,
+  task,
+  taskResult,
   searching,
   searchMatchFiltered,
 }) => {
@@ -72,14 +88,61 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
   const [doImport, setDoImport] = useState(false);
   const rowAdder = useRef<() => void>();
   const [rowFiller, setRowFiller] = useState<MatchCreateParsed[]>([]);
-  const [error, setError] = useState<TranslatorKeys[]>([]);
+  const [error, setError] = useState<RowError[]>([]);
+  const [progress, setProgress] = useState(0);
+  const total = useRef(0);
+  const [dryRun, setDryRun] = useState(true);
+  const dryRunAllowed = useRef(false);
+  const [strangeTaskError, setStrangeTaskError] = useState(false);
+  const strangeTaskErrorTimeout = useRef(-1);
+  const taskHandler = useCallback<TaskHandler>(
+    (p, t, f) => {
+      clearTimeout(strangeTaskErrorTimeout.current);
+      setProgress(p);
+      total.current = t;
+      if (task && f) {
+        csvImportResult(task.id);
+        isSaving.current = false;
+        isDeleting.current = false;
+        wasDeleting.current = false;
+      }
+      if (task && !f) {
+        strangeTaskErrorTimeout.current = window.setTimeout(() => {
+          csvImportResult(task.id);
+          setStrangeTaskError(true);
+        }, 10000);
+      }
+    },
+    [csvImportResult, task],
+  );
+  useEffect(() => {
+    if (taskResult) {
+      wasSaving.current = false;
+      wasDeleting.current = false;
+      setStrangeTaskError(false);
+      if (!dryRun) {
+        wasSaving.current = true;
+        setChanges([]);
+        setSuccess(true);
+        setRowFiller([]);
+      }
+    }
+  }, [taskResult]);
+  useEffect(() => {
+    if (task) {
+      EventsSocket.onTaskStarted(task, taskHandler);
+    }
+  }, [task, taskHandler]);
   const toggleBulkActions = useCallback(() => {
     setWantDelete(false);
     setBulkActions((ba) => !ba);
   }, []);
   const toggleImport = useCallback(() => {
-    setDoImport((i) => !i);
-  }, []);
+    if (changes.length) setDiscardChanges(true);
+    else {
+      setDoImport((i) => !i);
+    }
+  }, [changes.length]);
   const addFilter = useCallback((filter: MatchFilterType) => {
     setFilters((oldFilters) => oldFilters.concat([filter]));
   }, []);
@@ -223,15 +286,11 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
     wasDeleting.current = true;
     bulkDelete(isDeleting.current);
   }, [filteredMatches, bulkDelete, selectedMatches]);
-  const onSave = useCallback(() => {
-    const errors: TranslatorKeys[] = [];
+  const onSaveChanges = useCallback(() => {
+    const errors: RowError[] = [];
     const patches = changes
       .map<MatchPatch>((change) => {
-        if (
-          change.type === 'create' ||
-          !change.change ||
-          !change.change.matchId
-        )
+        if (change.type === 'edit' || !change.change || !change.change.matchId)
           return {
             locationId: -1,
           };
@@ -242,16 +301,32 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
         };
       })
       .filter((p) => p.locationId !== -1);
-
     const creations = changes
       .filter((c) => c.type === 'create')
       .map<MatchCreate | undefined>((change) => {
-        if (!change.change) return undefined; // Todo ba de jeweils a fehlermeldung
-        if (!change.change.matchDay) return undefined;
-        if (!change.change.team2Id) return undefined;
-        if (!change.change.team1Id) return undefined;
-        if (!change.change.startTime) return undefined;
-        if (!change.change.leagueId) return undefined;
+        if (!change.change) {
+          return undefined;
+        } // Todo ba de jeweils a fehlermeldung
+        if (!change.change.matchDay) {
+          errors.push({ type: 'matchday', index: change.index });
+          return undefined;
+        }
+        if (!change.change.team2Id) {
+          errors.push({ type: 'team2', index: change.index });
+          return undefined;
+        }
+        if (!change.change.team1Id) {
+          errors.push({ type: 'team1', index: change.index });
+          return undefined;
+        }
+        if (!change.change.startTime) {
+          errors.push({ type: 'datetime', index: change.index });
+          return undefined;
+        }
+        if (!change.change.leagueId) {
+          errors.push({ type: 'league', index: change.index });
+          return undefined;
+        }
         return {
           matchDay: change.change.matchDay,
           team1Id: change.change.team1Id,
@@ -275,33 +350,108 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
     }
     setError(errors);
   }, [bulkCreate, bulkPatch, changes]);
+  const onChangeDryRun = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setDryRun(e.target.checked);
+  }, []);
+  const onSaveImport = useCallback(() => {
+    const errors: RowError[] = [];
+    const creations = changes
+      .map<MatchImport | undefined>((change) => {
+        if (!change.change) {
+          errors.push({ type: 'noImport', index: change.index });
+          return undefined;
+        } // Todo ba de jeweils a fehlermeldung
+        if (!change.change.matchDay) {
+          errors.push({ type: 'matchday', index: change.index });
+          return undefined;
+        }
+        if (!change.change.team2Id) {
+          errors.push({ type: 'team2', index: change.index });
+          return undefined;
+        }
+        if (!change.change.team1Id) {
+          errors.push({ type: 'team1', index: change.index });
+          return undefined;
+        }
+        if (!change.change.startTime) {
+          errors.push({ type: 'datetime', index: change.index });
+          return undefined;
+        }
+        if (!change.change.leagueId) {
+          errors.push({ type: 'league', index: change.index });
+          return undefined;
+        }
+        return {
+          team1Id: change.change.team1Id,
+          team2Id: change.change.team2Id,
+          matchDay: change.change.matchDay,
+          leagueId: change.change.leagueId,
+          startTime: change.change.startTime,
+          goalsTeam1: change.change.goal1,
+          goalsTeam2: change.change.goal2,
+        };
+      })
+      .filter<MatchImport>(isMatchImport);
+    if (creations.length !== 0 && errors.length === 0) {
+      isSaving.current = true;
+      wasDeleting.current = false;
+      wasSaving.current = true;
+      csvImportMatch(creations, dryRun);
+      dryRunAllowed.current = true;
+    }
+    setError(errors);
+  }, [changes, csvImportMatch, dryRun]);
+  const onSave = useCallback(() => {
+    if (doImport) onSaveImport();
+    else onSaveChanges();
+  }, [doImport, onSaveChanges, onSaveImport]);
   const discardAllChanges = useCallback(() => {
     setDiscardChanges(false);
     setChanges([]);
   }, []);
-  const addChange = useCallback(
-    (c: MatchChange) => {
-      wasSaving.current = false;
-      wasDeleting.current = false;
-      const old = changes.find((oldChange) => oldChange.index === c.index);
+  const addChange = useCallback((c: MatchChange) => {
+    wasSaving.current = false;
+    wasDeleting.current = false;
+    setChanges((oldChanges) => {
+      const old = oldChanges.find((oldChange) => oldChange.index === c.index);
       if (old) {
-        setChanges(
-          changes.map((oldChange) =>
-            oldChange.index === c.index ? c : oldChange,
-          ),
+        return oldChanges.map((oldChange) =>
+          oldChange.index === c.index ? c : oldChange,
         );
-      } else setChanges(changes.concat([c]));
-    },
-    [changes],
-  );
+      }
+      return oldChanges.concat([c]);
+    });
+  }, []);
   const addRow = useCallback(() => {
     if (rowAdder.current) {
       rowAdder.current();
     }
   }, [rowAdder]);
+  const rowErrors = useMemo(() => {
+    if (taskResult) return taskResult.map<RowError>(matchImportToRowError);
+    return error;
+  }, [taskResult, error]);
   const addRowFilled = useCallback((fillMatch: MatchCreateParsed) => {
     setRowFiller((rf) => rf.concat([fillMatch]));
   }, []);
+  const onClickError = useCallback((index: number) => {
+    const elem = document.getElementById(`line-${index}`);
+    if (elem) {
+      window.scrollTo({
+        behavior: 'smooth',
+        top: elem.offsetTop,
+      });
+      elem.className += ' flashing';
+    }
+  }, []);
+  const taskResultError = useMemo(
+    () =>
+      taskResult && rowFiller.length !== 0
+        ? taskResult.filter((tr) => tr.fixType !== MatchFixEnum.MATCH_NOT_FOUND)
+        : [],
+    [rowFiller.length, taskResult],
+  );
+
   return (
     <div className="adminpanel-match">
       <fieldset className="form open">
@@ -322,8 +472,27 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
         </Row>
         <h5>{translate(doImport ? 'createBulk' : 'editMatch', l)}</h5>
         {doImport ? (
-          <Row className="match-section ">
+          <Row className="match-section">
             <CreateBulk rowAdder={addRowFilled} />
+            {taskResult && (
+              <Row className="my-3">
+                {taskResultError.length !== 0 && (
+                  <>
+                    <span>{translate('error_occurred', l)}:</span>
+                    <br />
+                    {taskResultError.map((tr) => (
+                      <ImportError
+                        onPress={onClickError}
+                        error={tr}
+                        key={`tr-${numberedHash(tr.fixMessage)}-${
+                          tr.lineIndex
+                        }`}
+                      />
+                    ))}
+                  </>
+                )}
+              </Row>
+            )}
           </Row>
         ) : (
           <>
@@ -376,7 +545,7 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
         )}
         {wantDelete && (
           <Row>
-            <Col xs={12} className="text-center">
+            <Col xs={12} className="text-center ">
               <span>
                 {translate('sureWantDelete', l, {
                   '[title]': filteredMatches
@@ -415,6 +584,16 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
           </Col>
           <Col xs={4} />
           <Col xs={4}>
+            <div className="text-center">
+              <Label htmlFor="dry-run">{translate('dryRun', l)}</Label>
+              <Input
+                id="dry-run"
+                type="checkbox"
+                onChange={onChangeDryRun}
+                checked={dryRun}
+                disabled={!dryRunAllowed.current}
+              />
+            </div>
             <Button
               type="button"
               color="primary"
@@ -459,6 +638,28 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
             )}
           </Col>
         </Row>
+        <Row>
+          {isSaving.current && !!task && (
+            <div className="task-proggress" data-task={task.id}>
+              <span>{translate('matchTaskRunning', l)}</span>
+              <div className="progress">
+                <div
+                  className="progress-bar bg-primary progress-bar-striped progress-bar-animated"
+                  role="progressbar"
+                  aria-label="progress"
+                  style={{
+                    width: `${Math.ceil((progress / total.current) * 100)}%`,
+                  }}
+                  aria-valuenow={progress}
+                  aria-valuemin={0}
+                  aria-valuemax={total.current}>
+                  {`${Math.ceil((progress / total.current) * 100)}%`}
+                </div>
+              </div>
+            </div>
+          )}
+          {strangeTaskError && <span>{translate('strangeTaskError', l)}</span>}
+        </Row>
         <h5>
           {`${translate('selectedMatches', l)} ${selectedMatches.length}`}
         </h5>
@@ -470,6 +671,7 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
           changes={changes}
           rowAdder={rowAdder}
           rowFiller={rowFiller}
+          errors={rowErrors}
         />
       </fieldset>
     </div>
@@ -477,4 +679,4 @@ const AdminpanelMatch: React.FC<ConnectedProps<typeof connector>> = ({
 };
 
 export default connector(AdminpanelMatch);
-// reload
+// rel oad

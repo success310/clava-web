@@ -347,6 +347,18 @@ report: string,
     }
 
     /**
+     * Get Random Match Id
+     * @returns number Successful Response
+     * @throws ApiError
+     */
+    public static getRandomMatchIdMatchRandomGet(): CancelablePromise<number> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/match/random',
+        });
+    }
+
+    /**
      * Get League Match By Date
      * @param date 
      * @param areaOfInterest 

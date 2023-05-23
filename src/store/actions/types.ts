@@ -22,6 +22,7 @@ import {
   ManOfTheMatch,
   Match,
   MatchBetVoting,
+  MatchImportResult,
   MatchListElement,
   OutSummary,
   Player,
@@ -32,6 +33,7 @@ import {
   SearchResult,
   Sponsor,
   Squad,
+  Task,
   Team,
   TeamListElement,
   TeamStatistic,
@@ -728,6 +730,9 @@ export enum AdminActionTypes {
   FETCH_MATCH = '@@admin/FETCH_MATCH',
   FETCH_MATCH_SUCCESS = '@@admin/FETCH_MATCH_SUCCESS',
   PATCH_MATCH_SUCCESS = '@@admin/PATCH_MATCH_SUCCESS',
+  MATCH_IMPORT_FINISH_SUCCESS = '@@admin/MATCH_IMPORT_FINISH_SUCCESS',
+  MATCH_IMPORT_SUCCESS = '@@admin/MATCH_IMPORT_SUCCESS',
+  MATCH_IMPORT = '@@admin/MATCH_IMPORT',
   DELETE_MATCH_SUCCESS = '@@admin/DELETE_MATCH_SUCCESS',
   FETCH_EVENT_SUCCESS = '@@admin/FETCH_EVENT_SUCCESS',
   DELETE_EVENT_SUCCESS = '@@admin/DELETE_EVENT_SUCCESS',
@@ -797,11 +802,20 @@ export type AdminActions =
         | AdminActionTypes.FETCH_OUT
         | AdminActionTypes.BULK_DELETE
         | AdminActionTypes.CREATE_TASK
+        | AdminActionTypes.MATCH_IMPORT
         | AdminActionTypes.SEARCH;
     }
   | {
       type: AdminActionTypes.FETCH_NEWS_SUCCESS;
       payload: Blog;
+    }
+  | {
+      type: AdminActionTypes.MATCH_IMPORT_FINISH_SUCCESS;
+      payload: MatchImportResult[];
+    }
+  | {
+      type: AdminActionTypes.MATCH_IMPORT_SUCCESS;
+      payload: Task;
     }
   | {
       type: AdminActionTypes.BULK_DELETE_SUCCESS;

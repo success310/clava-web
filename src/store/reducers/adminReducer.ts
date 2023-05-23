@@ -35,6 +35,8 @@ const initialState: AdminState = {
   news: null,
   newses: [],
   video: null,
+  task: null,
+  taskResult: null,
   videos: [],
   error: null,
   status: 'idle',
@@ -58,6 +60,7 @@ const reducer: Reducer<AdminState> = (
     case AdminActionTypes.FETCH_LEAGUE:
     case AdminActionTypes.FETCH_BADGES:
     case AdminActionTypes.FETCH_NEWS:
+    case AdminActionTypes.MATCH_IMPORT:
     case AdminActionTypes.FETCH_VIDEO:
     case AdminActionTypes.FETCH_AD:
       return { ...state, status: 'loading' };
@@ -223,6 +226,22 @@ const reducer: Reducer<AdminState> = (
       return {
         ...state,
         status: 'idle',
+      };
+    }
+    case AdminActionTypes.MATCH_IMPORT_SUCCESS: {
+      return {
+        ...state,
+        status: 'idle',
+        task: action.payload,
+        taskResult: null,
+      };
+    }
+    case AdminActionTypes.MATCH_IMPORT_FINISH_SUCCESS: {
+      return {
+        ...state,
+        status: 'idle',
+        task: null,
+        taskResult: action.payload,
       };
     }
     default: {

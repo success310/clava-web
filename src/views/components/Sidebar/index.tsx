@@ -224,7 +224,7 @@ const Sidebar: React.FC<ConnectedProps<typeof connector>> = ({
             <br />
             &copy; Copyright 2022, Clava Sports
             <br />
-            v1.1.25
+            v1.1.26
           </small>
         </Link>
       </Navbar>

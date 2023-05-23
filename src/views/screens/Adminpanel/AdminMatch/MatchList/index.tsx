@@ -19,6 +19,7 @@ import { getMatchDate } from '../../../../../config/utils';
 import { showTranslated, translate } from '../../../../../config/translator';
 import { Match, MatchListElement } from '../../../../../client/api';
 import { ClavaContext } from '../../../../../config/contexts';
+import { RowError } from '../BulkMatchRow/redux';
 
 type MatchListProps = {
   matches: Match[] | MatchListElement[];
@@ -28,6 +29,7 @@ type MatchListProps = {
   changes: MatchChange[];
   rowAdder: React.MutableRefObject<(() => void) | undefined>;
   rowFiller: MatchCreateParsed[];
+  errors: RowError[];
 };
 
 const MatchList: React.FC<MatchListProps> = ({
@@ -38,6 +40,7 @@ const MatchList: React.FC<MatchListProps> = ({
   rowAdder,
   rowFiller,
   selectMatch,
+  errors,
 }) => {
   const { l } = useContext(ClavaContext);
   const [sortDirection, setSortDirection] = useState<SortDirections>('DESC');
@@ -120,6 +123,7 @@ const MatchList: React.FC<MatchListProps> = ({
           selected={selectedMatches.indexOf(i) !== -1}
           onChange={addChange}
           key={`match-row-${m.id}`}
+          errors={errors.filter((err) => err.index === i)}
         />
       ))}
       {newRows.map((i) => (
@@ -128,6 +132,7 @@ const MatchList: React.FC<MatchListProps> = ({
           change={changes.find((c) => c.index === i)}
           selected
           index={i}
+          errors={errors.filter((err) => err.index === i)}
           key={`match-row-${i}`}
         />
       ))}
@@ -138,6 +143,7 @@ const MatchList: React.FC<MatchListProps> = ({
             onChange={addChange}
             change={changes.find((c) => c.index === idx)}
             selected
+            errors={errors.filter((err) => err.index === idx)}
             index={idx}
             key={`match-row-${idx}`}
             rowFiller={m}
@@ -157,4 +163,4 @@ const MatchList: React.FC<MatchListProps> = ({
 
 export default MatchList;
 
-// reload
+// relo ad

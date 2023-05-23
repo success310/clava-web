@@ -16,7 +16,6 @@ export const $CardEventCreate = {
 },
         playerId: {
     type: 'number',
-    isRequired: true,
 },
     },
 } as const;

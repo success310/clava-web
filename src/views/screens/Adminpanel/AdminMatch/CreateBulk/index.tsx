@@ -10,7 +10,12 @@ import { ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose, faInfo } from '@fortawesome/pro-regular-svg-icons';
 import Papa from 'papaparse';
-import { SearchRequest, SearchTypeEnum } from '../../../../../client/api';
+import {
+  MatchFixEnum,
+  MatchImportResult,
+  SearchRequest,
+  SearchTypeEnum,
+} from '../../../../../client/api';
 import { connector } from './redux';
 import { translate, TranslatorKeys } from '../../../../../config/translator';
 import { ClavaContext } from '../../../../../config/contexts';
@@ -358,6 +363,30 @@ const AdminCreateBulkMatch: React.FC<ConnectedProps<typeof connector>> = ({
         </Row>
       )}
     </>
+  );
+};
+
+export const ImportError: React.FC<{
+  onPress: (idx: number) => void;
+  error: MatchImportResult;
+}> = ({ onPress, error }) => {
+  const { l } = useContext(ClavaContext);
+  const onClick = useCallback(() => {
+    onPress(error.lineIndex);
+  }, [onPress, error.lineIndex]);
+  if (error.fixType === MatchFixEnum.MATCH_NOT_FOUND)
+    return (
+      <Button color="transparent" onClick={onClick}>
+        {error.lineIndex + 1},
+      </Button>
+    );
+
+  return (
+    <Col xs={12}>
+      <Button onClick={onClick} color="transparent">
+        {error.fixMessage}
+      </Button>
+    </Col>
   );
 };
 
