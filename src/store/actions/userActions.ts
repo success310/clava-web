@@ -372,6 +372,14 @@ export function registerPatch(
                     payload: 'telGiven',
                   });
                 }
+              })
+              .catch(err => {
+                if (err) {
+                  dispatch({
+                    type: UserActionTypes.REGISTER_FORM_INVALID,
+                    payload: 'telGiven',
+                  });
+                }
               });
           } else
             dispatch({

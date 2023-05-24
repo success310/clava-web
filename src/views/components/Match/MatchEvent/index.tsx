@@ -2,7 +2,6 @@ import React, { MutableRefObject, useContext, useMemo } from 'react';
 import { Col, Row } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faBaseball,
   faFutbol,
   faPencil,
 } from '@fortawesome/pro-regular-svg-icons';
@@ -71,12 +70,12 @@ const MatchEvent: React.FC<{
               event.cardType.key === CardTypeEnum.RED
                 ? 'red'
                 : event.cardType.key === CardTypeEnum.YELLOW_RED
-                ? 'yellow-red'
-                : 'yellow'
+                ? 'black-red'
+                : 'black'
             }`}
           />
         ) : (
-          <FontAwesomeIcon icon={faBaseball} />
+          <FontAwesomeIcon icon={faFutbol} />
         )}
         {event.type === EventTypeEnum.GOAL && (
           <span className="standing">

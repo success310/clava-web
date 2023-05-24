@@ -66,6 +66,7 @@ const LeagueMatches: React.FC<ConnectedProps<typeof connector>> = ({
   const adPositions = useRef<string[]>([]);
   useEffect(() => {
     if (!selectedDate) {
+      selectDate(selectedDate);
       adPositions.current = [];
     }
   }, [
@@ -78,7 +79,7 @@ const LeagueMatches: React.FC<ConnectedProps<typeof connector>> = ({
   const selectDate = useCallback(
     (day: Date | undefined) => {
       setSelectedDate(day);
-      if (day) {
+    if (day) {
         if (leagueId === -1) fetchLeagueMatchesOfDay(aoi, day);
         else fetchLeagueMatchesOfDayAndLeague(leagueId, day);
         adPositions.current = [];

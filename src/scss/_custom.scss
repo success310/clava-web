@@ -1031,6 +1031,26 @@ body {
             border-radius: 0.25rem;
           }
         }
+
+        &.black {
+          background-color: var(--bs-white);
+        }
+
+        &.black-red {
+          background-color: var(--bs-white);
+
+          &:after {
+            position: absolute;
+            width: 0.75rem;
+            height: 1rem;
+            top: 0.25rem;
+            border: 1px solid var(--bs-black);
+            left: 0.25rem;
+            content: " ";
+            background-color: var(--bs-red);
+            border-radius: 0.25rem;
+          }
+        }
       }
     }
   }

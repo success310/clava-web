@@ -198,7 +198,7 @@ const Match: React.FC<ConnectedProps<typeof connector>> = ({
               )}
             </Col>
             {match.league.hasLineup && (
-              <Col xs={12} className={view === 'lineup' ? '' : 'hidden'}>
+              <Col xs={12} className={view === 'lineup' ? 'h-100' : 'hidden'}>
                 <Lineup
                   matchId={fullMatch.id}
                   team1Id={fullMatch.team1.id}

@@ -15,9 +15,9 @@ import {
   Input,
   InputGroup,
   Label,
-  NavLink,
   Row,
 } from 'reactstrap';
+import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/pro-regular-svg-icons';
 import { connector } from './redux';
@@ -112,16 +112,24 @@ const Register: React.FC<ConnectedProps<typeof connector>> = ({
     setNewsletter((a) => !a);
   }, []);
   const onSubmit = useCallback(() => {
-    if (agbLevel)
-      submit(
-        givenName,
-        familyName,
-        email,
-        password,
-        passwordRepeat,
-        tel,
-        newsletter,
-      );
+    // if (agbLevel)
+    //   submit(
+    //     givenName,
+    //     familyName,
+    //     email,
+    //     password,
+    //     passwordRepeat,
+    //     tel,
+    //     newsletter
+    //   );
+    submit(
+          givenName,
+          familyName,
+          email,
+          password,
+          passwordRepeat,
+          tel,
+          newsletter)
   }, [
     agbLevel,
     submit,
@@ -312,7 +320,7 @@ const Register: React.FC<ConnectedProps<typeof connector>> = ({
               </Button>
             </Col>
             <Col xs={12} md={6}>
-              <NavLink to="/register" className="text-decoration-underline">
+              <NavLink to="/login" className="text-decoration-underline">
                 <span>{`${translate('alreadyRegistered', l)} ${translate(
                   'login',
                   l,

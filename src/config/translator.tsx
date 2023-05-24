@@ -1,7 +1,7 @@
 // noinspection SpellCheckingInspection
 
-import { CollectionType, LanguageISO } from './types';
-import { Translation, TranslationCreate } from '../client/api';
+import {CollectionType, LanguageISO} from './types';
+import {Translation, TranslationCreate} from '../client/api';
 
 type Keyword = {
   [T in LanguageISO]: string;
@@ -685,7 +685,7 @@ const generalKeywords = {
   codeInvalid: {
     de: 'Der eingegebene Code ist ungültig!',
     it: 'Il codice inserito non è valido!',
-    en: 'Der eingegebene Code ist ungültig!',
+    en: 'The entered code is invalid!',
   },
   submit: {
     de: 'Absenden',
@@ -695,7 +695,7 @@ const generalKeywords = {
   code: {
     de: 'Bestätigungscode',
     it: 'Codice di conferma',
-    en: 'Confirmatin code',
+    en: 'Confirmation code',
   },
   premiumPrice: {
     de: '14,99 € im Jahr',
@@ -2239,23 +2239,23 @@ const generalKeywords = {
   },
   acceptAgb1: {
     de: 'Hiermit bestätige ich dass ich die ',
-    it: 'Hiermit bestätige ich dass ich die ',
-    en: 'Hiermit bestätige ich dass ich die ',
+    it: 'Con la presente confermo di avere il ',
+    en: 'I hereby confirm that I have the ',
   },
   acceptAgb2: {
     de: ' und die ',
-    it: ' und die ',
-    en: ' und die ',
+    it: ' e il ',
+    en: ' and the ',
   },
   acceptAgb3: {
     de: ' gelesen habe und akzeptiere sie!',
-    it: ' gelesen habe und akzeptiere sie!',
-    en: ' gelesen habe und akzeptiere sie!',
+    it: ' ho letto e accetto!',
+    en: ' have read and accept them!',
   },
   wantNewsletter: {
     de: 'Ich möchte Emails mit Neuigkeiten und Informationen rund um Clava erhalten',
-    it: 'Ich möchte Emails mit Neuigkeiten und Informationen rund um Clava erhalten',
-    en: 'Ich möchte Emails mit Neuigkeiten und Informationen rund um Clava erhalten',
+    it: 'Desidero ricevere e-mail con notizie e informazioni su Clava',
+    en: 'I would like to receive emails with news and information about Clava',
   },
   telGiven: {
     de: 'Telefonnummer bereits vergeben',
@@ -2495,7 +2495,7 @@ const generalKeywords = {
   emptyString: {
     de: '',
     it: '',
-    en: ' ',
+    en: '',
   },
 };
 
