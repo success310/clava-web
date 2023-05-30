@@ -1,4 +1,4 @@
-import { ConnectedProps } from 'react-redux';
+import { ConnectedProps } from "react-redux";
 import React, {
   useCallback,
   useContext,
@@ -6,31 +6,31 @@ import React, {
   useMemo,
   useRef,
   useState,
-} from 'react';
-import { DeviceUUID } from 'device-uuid';
-import { Route, Routes } from 'react-router';
-import { Button } from 'reactstrap';
-import { faPalette } from '@fortawesome/pro-regular-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { connector } from './redux';
-import EventsSocket from '../../../client/Websockets/events';
-import { browserLang, getDeviceInfo, isAdmin } from '../../../config/utils';
-import FirstOpen from '../../screens/FirstOpen';
-import client from '../../../client';
-import Loading from '../../components/Loading';
-import { ClavaContext, ClavaRootContext } from '../../../config/contexts';
-import { fb } from '../../../config/firebase';
-import { AS_ENDPOINT, PROD_ENDPOINT } from '../../../config/constants';
-import { GroupEnum, User } from '../../../client/api';
-import Header from '../../components/Header';
-import Home from '../../screens/Home';
-import Login from '../../screens/Profile/Login';
-import Profile from '../../screens/Profile';
-import Register from '../../screens/Profile/Register';
-import ConfirmMail from '../../screens/Profile/ConfirmMail';
-import Adminpanel from '../../screens/Adminpanel';
-import { translate, TranslatorKeys } from '../../../config/translator';
-import { loggerSettings } from '../../../store/middleware/logger';
+} from "react";
+import { DeviceUUID } from "device-uuid";
+import { Route, Routes } from "react-router";
+import { Button } from "reactstrap";
+import { faPalette } from "@fortawesome/pro-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { connector } from "./redux";
+import EventsSocket from "../../../client/Websockets/events";
+import { browserLang, getDeviceInfo, isAdmin } from "../../../config/utils";
+import FirstOpen from "../../screens/FirstOpen";
+import client from "../../../client";
+import Loading from "../../components/Loading";
+import { ClavaContext, ClavaRootContext } from "../../../config/contexts";
+import { fb } from "../../../config/firebase";
+import { AS_ENDPOINT, PROD_ENDPOINT } from "../../../config/constants";
+import { GroupEnum, User } from "../../../client/api";
+import Header from "../../components/Header";
+import Home from "../../screens/Home";
+import Login from "../../screens/Profile/Login";
+import Profile from "../../screens/Profile";
+import Register from "../../screens/Profile/Register";
+import ConfirmMail from "../../screens/Profile/ConfirmMail";
+import Adminpanel from "../../screens/Adminpanel";
+import { translate, TranslatorKeys } from "../../../config/translator";
+import { loggerSettings } from "../../../store/middleware/logger";
 
 const Main: React.FC<ConnectedProps<typeof connector>> = ({
   user,
@@ -49,11 +49,11 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
   const [firstOpen, setFirstOpen] = useState(false);
   const { fbToken, theme } = useContext(ClavaRootContext);
   const toggleTheme = useCallback(() => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
+    setTheme(theme === "dark" ? "light" : "dark");
   }, [setTheme, theme]);
   useEffect(() => {
     const endpoint = window.localStorage.getItem(AS_ENDPOINT);
-    EventsSocket.setEndpoint(endpoint ?? PROD_ENDPOINT);
+    EventsSocket.init(endpoint ?? PROD_ENDPOINT);
     client(endpoint ?? PROD_ENDPOINT).setLang(browserLang());
     initBaseDataUser();
     return () => {
@@ -62,9 +62,9 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
-    if (status === 'failed') {
-      if (error === 'not_registered') {
-        if (aoi && languageObject && !user && fbToken !== '')
+    if (status === "failed") {
+      if (error === "not_registered") {
+        if (aoi && languageObject && !user && fbToken !== "")
           createUser({
             deviceId: new DeviceUUID().get(),
             deviceInfo: JSON.stringify(getDeviceInfo()),
@@ -75,12 +75,12 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
         else {
           setFirstOpen(true);
         }
-      } else if (error === 'no_user_found') {
+      } else if (error === "no_user_found") {
         refreshToken();
-      } else if (error === 'first_open') {
+      } else if (error === "first_open") {
         setFirstOpen(true);
       }
-    } else if (status !== 'loading' && aoi && languageObject && !user) {
+    } else if (status !== "loading" && aoi && languageObject && !user) {
       refreshToken();
     }
   }, [
@@ -105,7 +105,7 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
       EventsSocket.setUser(user.id, user.areaOfInterest.id);
       client().setLang(user.language.locale);
       const teamInsider = user.groups.filter(
-        (u) => u.key === GroupEnum.TEAM_INSIDER,
+        (u) => u.key === GroupEnum.TEAM_INSIDER
       );
       if (teamInsider.length !== null) {
         teamInsider.forEach((group) => {
@@ -121,11 +121,11 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
       user
         ? { l: user.language.locale, aoi: user.areaOfInterest.id, user }
         : {
-          l: browserLang(),
-          aoi: -1,
-          user: {} as User,
-        },
-    [user],
+            l: browserLang(),
+            aoi: -1,
+            user: {} as User,
+          },
+    [user]
   );
   const onFirstOpenFinish = useCallback(() => {
     setFirstOpen(false);
@@ -205,7 +205,8 @@ const Main: React.FC<ConnectedProps<typeof connector>> = ({
           <Button
             className="theme-switcher"
             role="button"
-            onClick={toggleTheme}>
+            onClick={toggleTheme}
+          >
             <FontAwesomeIcon icon={faPalette} />
             <span>
               {translate(`theme${theme}` as TranslatorKeys, clavaContext.l)}

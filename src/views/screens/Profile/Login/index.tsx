@@ -1,12 +1,13 @@
 import React, {
   ChangeEventHandler,
+  KeyboardEventHandler,
   useCallback,
   useContext,
   useEffect,
   useMemo,
   useRef,
   useState,
-} from 'react';
+} from "react";
 import {
   Button,
   Col,
@@ -15,16 +16,16 @@ import {
   InputGroup,
   Label,
   Row,
-} from 'reactstrap';
-import { ConnectedProps } from 'react-redux';
-import { useNavigate, useParams } from 'react-router';
-import { NavLink } from 'react-router-dom';
-import { faEnvelope, faEye } from '@fortawesome/pro-regular-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ClavaContext } from '../../../../config/contexts';
-import { translate } from '../../../../config/translator';
-import { connector } from './redux';
-import { isRegistered } from '../../../../config/utils';
+} from "reactstrap";
+import { ConnectedProps } from "react-redux";
+import { useNavigate, useParams } from "react-router";
+import { NavLink } from "react-router-dom";
+import { faEnvelope, faEye } from "@fortawesome/pro-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ClavaContext } from "../../../../config/contexts";
+import { translate } from "../../../../config/translator";
+import { connector } from "./redux";
+import { isRegistered } from "../../../../config/utils";
 
 const Login: React.FC<ConnectedProps<typeof connector>> = ({
   reset,
@@ -36,13 +37,13 @@ const Login: React.FC<ConnectedProps<typeof connector>> = ({
   const { l } = useContext(ClavaContext);
   const { redirectAfter } = useParams();
   const navigate = useNavigate();
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const pwInput = useRef<HTMLInputElement>(null);
   const [pwVisible, setPwVisible] = useState<boolean>(false);
   const mailValid = useMemo(
-    () => loginStatus !== 'mailGiven' && loginStatus !== 'mailInvalid',
-    [loginStatus],
+    () => loginStatus !== "mailGiven" && loginStatus !== "mailInvalid",
+    [loginStatus]
   );
   useEffect(() => {
     reset();
@@ -50,7 +51,7 @@ const Login: React.FC<ConnectedProps<typeof connector>> = ({
   useEffect(() => {
     if (isRegistered(user) && user?.email === email) {
       setTimeout(() => {
-        navigate(redirectAfter || '/profile');
+        navigate(redirectAfter || "/profile");
       }, 2000);
     }
   }, [user, email]);
@@ -64,7 +65,7 @@ const Login: React.FC<ConnectedProps<typeof connector>> = ({
     (e) => {
       setEmail(e.target.value);
     },
-    [],
+    []
   );
   const onChangePw = useCallback<ChangeEventHandler<HTMLInputElement>>((e) => {
     setPassword(e.target.value);
@@ -72,29 +73,35 @@ const Login: React.FC<ConnectedProps<typeof connector>> = ({
   const onTogglePWVisible = useCallback(() => {
     setPwVisible((v) => !v);
   }, []);
+  const onKeyUp = useCallback<KeyboardEventHandler<HTMLInputElement>>(
+    (evet) => {
+      if (evet.key === "Enter") onLogin();
+    },
+    [onLogin]
+  );
   return (
     <div className="container">
       <div className="auth">
         <div className="auth-header">
-          <h5>{translate('login', l)}</h5>
-          {loginStatus !== 'ok' && (
+          <h5>{translate("login", l)}</h5>
+          {loginStatus !== "ok" && (
             <span className="text-danger bold">
               {translate(loginStatus, l)}
             </span>
           )}
           {user && isRegistered(user) && user.email === email && (
             <span className="text-success bold">
-              {translate('logInSuccess', l)}
+              {translate("logInSuccess", l)}
             </span>
           )}
         </div>
         <fieldset className="form">
-          {loginStatus === 'pwWrong' && (
+          {loginStatus === "pwWrong" && (
             <Row className="mb-2">
               <Col xs={12} md={6}>
                 <span className="text-muted">{`${translate(
-                  'pwForgot',
-                  l,
+                  "pwForgot",
+                  l
                 )} `}</span>
               </Col>
               <Col xs={12} md={6}>
@@ -104,16 +111,17 @@ const Login: React.FC<ConnectedProps<typeof connector>> = ({
                   color="secondary"
                   onClick={() => {
                     pwForgot(email);
-                    navigate('/confirm/login/forgot');
-                  }}>
-                  <span>{`${translate('resetPw', l)}`}</span>
+                    navigate("/confirm/login/forgot");
+                  }}
+                >
+                  <span>{`${translate("resetPw", l)}`}</span>
                 </Button>
               </Col>
             </Row>
           )}
 
           <FormGroup>
-            <Label htmlFor="email">{translate('mailAddress', l)}</Label>
+            <Label htmlFor="email">{translate("mailAddress", l)}</Label>
 
             <InputGroup>
               <Input
@@ -121,7 +129,7 @@ const Login: React.FC<ConnectedProps<typeof connector>> = ({
                 name="email"
                 id="email"
                 onSubmit={onSubmitEmail}
-                className={mailValid ? '' : 'invalid'}
+                className={mailValid ? "" : "invalid"}
                 value={email}
                 autoComplete="email-address"
                 onChange={onChangeEmail}
@@ -135,26 +143,28 @@ const Login: React.FC<ConnectedProps<typeof connector>> = ({
             </InputGroup>
           </FormGroup>
           <FormGroup>
-            <Label htmlFor="password"> {translate('password', l)}</Label>
+            <Label htmlFor="password"> {translate("password", l)}</Label>
 
             <InputGroup>
               <Input
-                type={pwVisible ? 'text' : 'password'}
+                type={pwVisible ? "text" : "password"}
                 name="password"
                 id="password"
                 autoComplete="password"
                 value={password}
                 innerRef={pwInput}
+                onKeyUp={onKeyUp}
                 onSubmit={onLogin}
-                className={loginStatus === 'failed' ? 'invalid' : ''}
+                className={loginStatus === "failed" ? "invalid" : ""}
                 onChange={onChangePw}
                 tabIndex={0}
                 placeholder="********"
               />
               <button
-                className={`input-group-addon${pwVisible ? ' active' : ''}`}
+                className={`input-group-addon${pwVisible ? " active" : ""}`}
                 onClick={onTogglePWVisible}
-                type="button">
+                type="button"
+              >
                 <FontAwesomeIcon icon={faEye} />
               </button>
             </InputGroup>
@@ -165,15 +175,16 @@ const Login: React.FC<ConnectedProps<typeof connector>> = ({
                 color="primary"
                 type="button"
                 tabIndex={0}
-                onClick={onLogin}>
-                <span>{translate('login', l)}</span>
+                onClick={onLogin}
+              >
+                <span>{translate("login", l)}</span>
               </Button>
             </Col>
             <Col xs={12} md={6}>
               <NavLink to="/register" className="text-decoration-underline">
-                <span>{`${translate('not_registered', l)}? ${translate(
-                  'registerNow',
-                  l,
+                <span>{`${translate("not_registered", l)}? ${translate(
+                  "registerNow",
+                  l
                 )}`}</span>
               </NavLink>
             </Col>
