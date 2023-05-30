@@ -1,12 +1,7 @@
-import { Reducer } from 'redux';
-import { TeamState } from '../constants';
-import {
-  PLAYERS_PREFIX,
-  SQUAD_PREFIX,
-  TeamActions,
-  TeamActionTypes,
-} from '../actions/types';
-import { replaceOrAddResponseSingle, unique } from '../../config/utils';
+import {Reducer} from 'redux';
+import {TeamState} from '../constants';
+import {PLAYERS_PREFIX, SQUAD_PREFIX, TeamActions, TeamActionTypes,} from '../actions/types';
+import {replaceOrAddResponseSingle, unique} from '../../config/utils';
 
 const initialState: TeamState = {
   value: [],
@@ -221,13 +216,11 @@ const reducer: Reducer<TeamState> = (
       };
     }
     case TeamActionTypes.FETCH_SUCCESS_OF_LEAGUE: {
-      const { ofLeague } = state;
-      ofLeague.push(action.payload);
       const { response } = action.payload;
       return {
         ...state,
         status: 'idle',
-        ofLeague,
+        ofLeague: replaceOrAddResponseSingle(action.payload,state.ofLeague),
         searchValue: unique(state.searchValue.concat(response)),
       };
     }

@@ -128,6 +128,10 @@ body {
     color: var(--bs-white);
   }
 
+  .text-live {
+    color: var(--bs-live);
+  }
+
   abbr {
     font-family: "Lexend", sans-serif;
     font-weight: 200;
@@ -1852,6 +1856,10 @@ body {
         background-color: var(--bs-primary-4);
       }
     }
+  }
+
+  .even-even-odd:nth-child(4n), .even-even-odd:nth-child(4n+1){
+    background-color: var(--bs-gray-900);
   }
 
   @media (max-width: 1919px){

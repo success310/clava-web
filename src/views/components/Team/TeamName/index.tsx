@@ -1,16 +1,11 @@
-import React, { useContext, useMemo } from 'react';
-import { Col, Row } from 'reactstrap';
-import {
-  League,
-  LeagueListElement,
-  Team,
-  TeamListElement,
-} from '../../../../client/api';
-import { getMainLeague, getSeason } from '../../../../config/utils';
+import React, {useContext, useMemo} from 'react';
+import {Col, Row} from 'reactstrap';
+import {League, LeagueListElement, Team, TeamListElement,} from '../../../../client/api';
+import {getMainLeague, getSeason} from '../../../../config/utils';
 
 import MatchScoreDisplay from '../../Match/MatchScoreDisplay';
-import { ClavaContext } from '../../../../config/contexts';
-import { showTranslated } from '../../../../config/translator';
+import {ClavaContext} from '../../../../config/contexts';
+import {showTranslated} from '../../../../config/translator';
 import ClavaImage from '../../ClavaImage';
 
 type TeamNameProps = {
@@ -45,7 +40,7 @@ const TeamName: React.FC<TeamNameProps> = ({
       <Col xs={8} md={10}>
         <span
           className={
-            (primary ? 'text-primary' : '') + (bold ? 'text-bold' : '')
+            (primary ? 'text-primary ' : '') + (bold ? 'text-bold ' : '')+ (live ? 'text-live ' : '')
           }>{`${admin ? `[${team.id}]` : ''}${showTranslated(
           team.name,
           l,

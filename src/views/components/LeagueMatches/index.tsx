@@ -1,18 +1,11 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import { ConnectedProps } from 'react-redux';
-import { DateTimeFormat } from 'intl';
-import { connector } from './redux';
-import { ClavaContext } from '../../../config/contexts';
+import React, {useCallback, useContext, useEffect, useMemo, useRef, useState,} from 'react';
+import {ConnectedProps} from 'react-redux';
+import {DateTimeFormat} from 'intl';
+import {connector} from './redux';
+import {ClavaContext} from '../../../config/contexts';
 import MatchDays from '../MatchDays';
-import { MatchListElement } from '../../../client/api';
-import { showTranslated, translate } from '../../../config/translator';
+import {MatchListElement} from '../../../client/api';
+import {showTranslated, translate} from '../../../config/translator';
 import {
   dayToNumber,
   formatDate,
@@ -25,7 +18,7 @@ import {
   sortMatchesByTime,
 } from '../../../config/utils';
 import Loading from '../Loading';
-import LeagueMatchSection, { Section, SectionItem } from './LeagueMatchSection';
+import LeagueMatchSection, {Section, SectionItem} from './LeagueMatchSection';
 
 const reducer = (
   p: {
@@ -60,7 +53,7 @@ const LeagueMatches: React.FC<ConnectedProps<typeof connector>> = ({
   league,
   small,
 }) => {
-  const { l, aoi, user } = useContext(ClavaContext);
+  const { l, aoi } = useContext(ClavaContext);
   const [selectedDate, setSelectedDate] = useState<Date>();
   const shouldScroll = useRef<boolean>(false);
   const adPositions = useRef<string[]>([]);
@@ -220,5 +213,5 @@ const LeagueMatches: React.FC<ConnectedProps<typeof connector>> = ({
   );
 };
 
-// relo ad
+// reload
 export default connector(LeagueMatches);

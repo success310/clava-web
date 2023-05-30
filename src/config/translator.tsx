@@ -1712,25 +1712,25 @@ const generalKeywords = {
     it: 'Giovanili',
     en: 'Youth',
   },
+  VSS_YOUTH: {
+    de: 'VSS - Jugend',
+    it: 'VSS - Giovanili',
+    en: 'VSS - Youth',
+  },
+  VSS_FREE_TIME: {
+    de: 'VSS - Freizeit',
+    it: 'VSS - Tempo libero',
+    en: 'VSS - Recreational',
+  },
+  VIENNA: {
+    de: 'Wien',
+    it: 'Vienna',
+    en: 'Vienna',
+  },
   WOMEN: {
     de: 'Frauen',
     it: 'Femminile',
     en: 'Women',
-  },
-  VIENNA: {
-    de: 'Wien',
-    it: 'Wien',
-    en: 'Wien',
-  },
-  VSS_YOUTH: {
-    de: 'VSS',
-    it: 'VSS',
-    en: 'VSS',
-  },
-  VSS_FREE_TIME: {
-    de: 'VSS Freizeit',
-    it: 'VSS Freizeit',
-    en: 'VSS Freizeit',
   },
   statsSoonAvailable: {
     de: 'Bald verfügbar',

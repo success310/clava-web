@@ -1,26 +1,16 @@
-import { ThunkDispatch } from 'redux-thunk';
-import { AnyAction } from 'redux';
-import { connect } from 'react-redux';
-import { RootState } from '../../../../../store';
-import {
-  Match,
-  MatchFixEnum,
-  MatchImportResult,
-  MatchListElement,
-} from '../../../../../client/api';
-import {
-  MatchChange,
-  MatchCreateCont,
-  MatchCreateParsed,
-  SortDirections,
-  SortTypes,
-} from '../types';
-import { IDType } from '../../../../../config/types';
-import { fetchTeamsOfLeague } from '../../../../../store/actions/teamActions';
+import {ThunkDispatch} from 'redux-thunk';
+import {AnyAction} from 'redux';
+import {connect} from 'react-redux';
+import {RootState} from '../../../../../store';
+import {Match, MatchFixEnum, MatchImportResult, MatchListElement,} from '../../../../../client/api';
+import {MatchChange, MatchCreateCont, MatchCreateParsed, SortDirections, SortTypes,} from '../types';
+import {IDType} from '../../../../../config/types';
+import {fetchTeamsOfLeague} from '../../../../../store/actions/teamActions';
+import {performAction} from "../../../../../store/actions/all";
 
 const mapper = (dispatch: ThunkDispatch<any, any, AnyAction>) => ({
   getTeams: (leagueId: IDType) => {
-    fetchTeamsOfLeague(dispatch, leagueId);
+    performAction({f:fetchTeamsOfLeague,p:[dispatch, leagueId]});
   },
 });
 

@@ -1,28 +1,17 @@
-import { Button, Col, Input, InputGroup, Modal, Row } from 'reactstrap';
-import React, {
-  ChangeEventHandler,
-  useCallback,
-  useContext,
-  useRef,
-  useState,
-} from 'react';
-import { ConnectedProps } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClose, faInfo } from '@fortawesome/pro-regular-svg-icons';
+import {Button, Col, Input, InputGroup, Modal, Row} from 'reactstrap';
+import React, {ChangeEventHandler, useCallback, useContext, useRef, useState,} from 'react';
+import {ConnectedProps} from 'react-redux';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faClose, faInfo} from '@fortawesome/pro-regular-svg-icons';
 import Papa from 'papaparse';
-import {
-  MatchFixEnum,
-  MatchImportResult,
-  SearchRequest,
-  SearchTypeEnum,
-} from '../../../../../client/api';
-import { connector } from './redux';
-import { translate, TranslatorKeys } from '../../../../../config/translator';
-import { ClavaContext } from '../../../../../config/contexts';
+import {MatchFixEnum, MatchImportResult, SearchRequest, SearchTypeEnum,} from '../../../../../client/api';
+import {connector} from './redux';
+import {translate, TranslatorKeys} from '../../../../../config/translator';
+import {ClavaContext} from '../../../../../config/contexts';
 import Loading from '../../../../components/Loading';
-import { DefaultFadeTrans } from '../../../../../config/constants';
+import {DefaultFadeTrans} from '../../../../../config/constants';
 import client from '../../../../../client';
-import { MatchCreateParsed } from '../types';
+import {MatchCreateParsed} from '../types';
 
 type ParseError = {
   file: string;
@@ -389,6 +378,6 @@ export const ImportError: React.FC<{
     </Col>
   );
 };
-
-export default connector(AdminCreateBulkMatch);
 // reload
+export default connector(AdminCreateBulkMatch);
+

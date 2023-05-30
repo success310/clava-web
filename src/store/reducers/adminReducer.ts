@@ -1,5 +1,5 @@
-import { Reducer } from 'redux';
-import { AdminState } from '../constants';
+import {Reducer} from 'redux';
+import {AdminState} from '../constants';
 import {
   AdminActions,
   AdminActionTypes,
@@ -11,10 +11,7 @@ import {
   SEARCH_USERS,
   SEARCH_VIDEOS,
 } from '../actions/types';
-import {
-  getGoalEvents,
-  replaceOrAddResponseMultiple,
-} from '../../config/utils';
+import {getGoalEvents, replaceOrAddResponseMultiple,} from '../../config/utils';
 
 const initialState: AdminState = {
   user: null,
@@ -249,6 +246,8 @@ const reducer: Reducer<AdminState> = (
     }
   }
 };
+
+
 
 export { reducer as adminReducer };
 // reloa d

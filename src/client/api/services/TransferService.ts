@@ -72,4 +72,25 @@ limit: number = 20,
         });
     }
 
+    /**
+     * Delete Transfer
+     * @param transferId 
+     * @returns number Successful Response
+     * @throws ApiError
+     */
+    public static deleteTransferTransferTransferIdDelete(
+transferId: number,
+): CancelablePromise<number> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/transfer/{transfer_id}',
+            path: {
+                'transfer_id': transferId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
 }

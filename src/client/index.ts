@@ -1,12 +1,7 @@
-import { EnhancedStore } from '@reduxjs/toolkit';
+import {EnhancedStore} from '@reduxjs/toolkit';
 import * as Sentry from '@sentry/react';
-import axios, { AxiosRequestConfig } from 'axios';
-import {
-  IDType,
-  LanguageISO,
-  LineupExtended,
-  LineupPositionPlayersExtended,
-} from '../config/types';
+import axios, {AxiosRequestConfig} from 'axios';
+import {IDType, LanguageISO, LineupExtended, LineupPositionPlayersExtended,} from '../config/types';
 import {
   AdCreate,
   AdministrationService,
@@ -86,11 +81,11 @@ import {
   UserCreate,
   UserService,
 } from './api';
-import { formatDate } from '../config/utils';
-import { AMOUNT_MATCHDAYS, PROD_ENDPOINT } from '../config/constants';
-import { ClavaFile } from '../views/screens/Adminpanel/FileInput';
-import { addLog } from '../store/middleware/logger';
-import { MatchFilterType } from '../views/screens/Adminpanel/AdminMatch/types';
+import {formatDate} from '../config/utils';
+import {AMOUNT_MATCHDAYS, PROD_ENDPOINT} from '../config/constants';
+import {ClavaFile} from '../views/screens/Adminpanel/FileInput';
+import {addLog} from '../store/middleware/logger';
+import {MatchFilterType} from '../views/screens/Adminpanel/AdminMatch/types';
 
 class Client {
   public static token: string | undefined = undefined;
@@ -1311,6 +1306,50 @@ class Client {
 
   bulkSearch(searchType: SearchTypeEnum, searchBody: SearchRequest[]) {
     return SearchService.bulkSearchSearchBulkPost(searchType, searchBody);
+  }
+
+  addTeamToLeague(leagueId: IDType, teamIds: IDType[]){
+    return new CancelablePromise<League>(async (resolve,reject)=>{
+      if(teamIds.length !== 0) {
+        const promises:Promise<League>[] = [];
+        teamIds.forEach(teamId => {
+          promises.push(LeagueService.addTeamToLeagueLeagueAddTeamPost(leagueId, teamId));
+        });
+        Promise.allSettled(promises).then((results)=>{
+          let league:League|undefined;
+          results.forEach((res)=>{
+            if(res.status === "fulfilled")
+              league=res.value;
+          });
+          if(league)
+            resolve(league);
+          else
+            reject("No team added");
+        });
+      }
+    });
+  }
+
+  removeTeamFromLeague(leagueId: IDType, teamIds: IDType[]){
+    return new CancelablePromise<League>(async (resolve,reject)=>{
+      if(teamIds.length !== 0) {
+        const promises:Promise<League>[] = [];
+        teamIds.forEach(teamId => {
+          promises.push(LeagueService.removeTeamFromLeagueLeagueRemoveTeamPost(leagueId, teamId));
+        });
+        Promise.allSettled(promises).then((results)=>{
+          let league:League|undefined;
+          results.forEach((res)=>{
+            if(res.status === "fulfilled")
+              league=res.value;
+          });
+          if(league)
+            resolve(league);
+          else
+            reject("No team removed");
+        });
+      }
+    });
   }
 
   bulkDeleteMatches(ids: IDType[]) {

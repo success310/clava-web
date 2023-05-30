@@ -122,6 +122,54 @@ requestBody: LeagueCreate,
     }
 
     /**
+     * Add Team To League
+     * @param leagueId 
+     * @param teamId 
+     * @returns League Successful Response
+     * @throws ApiError
+     */
+    public static addTeamToLeagueLeagueAddTeamPost(
+leagueId: number,
+teamId: number,
+): CancelablePromise<League> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/league/add_team',
+            query: {
+                'league_id': leagueId,
+                'team_id': teamId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Remove Team From League
+     * @param leagueId 
+     * @param teamId 
+     * @returns League Successful Response
+     * @throws ApiError
+     */
+    public static removeTeamFromLeagueLeagueRemoveTeamPost(
+leagueId: number,
+teamId: number,
+): CancelablePromise<League> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/league/remove_team',
+            query: {
+                'league_id': leagueId,
+                'team_id': teamId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
      * Create Multiple Leagues
      * @param requestBody 
      * @returns League Successful Response

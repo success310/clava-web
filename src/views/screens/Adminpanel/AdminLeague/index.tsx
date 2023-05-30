@@ -1,25 +1,14 @@
-import { ConnectedProps } from 'react-redux';
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-import { useParams } from 'react-router';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown, faChevronUp } from '@fortawesome/pro-regular-svg-icons';
-import { Button } from 'reactstrap';
-import { ClavaContext } from '../../../../config/contexts';
-import { connector } from './redux';
-import { showTranslated, translate } from '../../../../config/translator';
+import {ConnectedProps} from 'react-redux';
+import React, {useCallback, useContext, useEffect, useRef, useState,} from 'react';
+import {useParams} from 'react-router';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faChevronDown, faChevronUp} from '@fortawesome/pro-regular-svg-icons';
+import {Button} from 'reactstrap';
+import {ClavaContext} from '../../../../config/contexts';
+import {connector} from './redux';
+import {showTranslated, translate} from '../../../../config/translator';
 import SearchInput from '../SearchInput';
-import {
-  League,
-  LeagueCreate,
-  LeagueListElement,
-  LeaguePatch,
-} from '../../../../client/api';
+import {League, LeagueCreate, LeagueListElement, LeaguePatch,} from '../../../../client/api';
 import EditCreateLeague from './EditCreate';
 
 const AdminpanelLeague: React.FC<ConnectedProps<typeof connector>> = ({
@@ -173,7 +162,7 @@ const AdminpanelLeague: React.FC<ConnectedProps<typeof connector>> = ({
         </button>
         {method === 'create' && (
           <EditCreateLeague
-            onSubmit={onCreate}
+            onSubmit={onCreate as ((league: LeagueCreate | LeaguePatch) => void)}
             selectedLeague={undefined}
             aois={aois}
           />

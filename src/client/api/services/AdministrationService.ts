@@ -3,7 +3,6 @@
 /* eslint-disable */
 import type { Body_change_team_icon_admin_change_team_icon__team_id__post } from '../models/Body_change_team_icon_admin_change_team_icon__team_id__post';
 import type { Body_create_register_user_admin_create_register_user_post } from '../models/Body_create_register_user_admin_create_register_user_post';
-import type { Body_import_csv_admin_import_csv_post } from '../models/Body_import_csv_admin_import_csv_post';
 import type { GroupEnum } from '../models/GroupEnum';
 import type { ScopeEnum } from '../models/ScopeEnum';
 import type { User } from '../models/User';
@@ -449,12 +448,12 @@ dryRun: boolean = true,
     }
 
     /**
-     * Test New Goal Statistics
+     * New Goal Statistics
      * @param key 
      * @returns any Successful Response
      * @throws ApiError
      */
-    public static testNewGoalStatisticsAdminTestNewGoalStatisticsPost(
+    public static newGoalStatisticsAdminTestNewGoalStatisticsPost(
 key?: string,
 ): CancelablePromise<any> {
         return __request(OpenAPI, {
@@ -463,55 +462,6 @@ key?: string,
             query: {
                 'key': key,
             },
-            errors: {
-                422: `Validation Error`,
-            },
-        });
-    }
-
-    /**
-     * Reset Match Day Cache
-     * @param leagueId 
-     * @param matchDay 
-     * @returns any Successful Response
-     * @throws ApiError
-     */
-    public static resetMatchDayCacheAdminResetMatchDayCachePost(
-leagueId: number,
-matchDay: number,
-): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/admin/reset_match_day_cache',
-            query: {
-                'league_id': leagueId,
-                'match_day': matchDay,
-            },
-            errors: {
-                422: `Validation Error`,
-            },
-        });
-    }
-
-    /**
-     * Import Csv
-     * @param formData 
-     * @param dryRun 
-     * @returns any Successful Response
-     * @throws ApiError
-     */
-    public static importCsvAdminImportCsvPost(
-formData: Body_import_csv_admin_import_csv_post,
-dryRun: boolean = true,
-): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/admin/import_csv',
-            query: {
-                'dry_run': dryRun,
-            },
-            formData: formData,
-            mediaType: 'multipart/form-data',
             errors: {
                 422: `Validation Error`,
             },
